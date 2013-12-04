@@ -16,7 +16,7 @@ func Output(interval float64) {
 	F, Err = os.Create("./table.txt")
 	check(Err)
 	//	defer F.Close()
-	Writeheader()
+	writeheader()
 	Outputinterval = interval
 	twrite = 0.
 }
@@ -40,7 +40,7 @@ func averages(lijst Particles) Vector {
 }
 
 //Writes the header in table.txt
-func Writeheader() {
+func writeheader() {
 	header := fmt.Sprintf("#t\t<mx>\t<my>\t<mz>\n")
 	_, Err = F.WriteString(header)
 	check(Err)
@@ -52,7 +52,7 @@ locations = append (locations,Vector{a,b,c})
 }
 
 //Writes the time and the vector of average magnetisation in the table
-func Write(avg Vector) {
+func write(avg Vector) {
 	if twrite >= Outputinterval && Outputinterval != 0 {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, Err = F.WriteString(string)

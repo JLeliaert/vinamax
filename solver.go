@@ -5,12 +5,12 @@ func Run(time float64) {
 	for i := range Lijst {
 		norm(Lijst[i].M)
 	}
-	Write(averages(Lijst))
+	write(averages(Lijst))
 	for j := T; T < j+time; {
 		calculatedemag()
 		//TODO dit variabel maken tussen euler en heun
 		heunstep(Lijst)
-		Write(averages(Lijst))
+		write(averages(Lijst))
 	}
 }
 

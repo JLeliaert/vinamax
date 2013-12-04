@@ -7,7 +7,7 @@ func (p Particle) tau() Vector {
 	m[1] = p.M[1]
 	m[2] = p.M[2]
 
-	mxB := m.cross(p.B_eff())
+	mxB := m.cross(p.b_eff())
 	mxmxB := m.cross(mxB)
 
 	mxmxB = mxmxB.times(Alpha)
