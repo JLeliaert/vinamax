@@ -36,7 +36,7 @@ func averages(lijst Particles) Vector {
 		avgs[1] += lijst[i].M[1]
 		avgs[2] += lijst[i].M[2]
 	}
-	return avgs.times(1./float64(len(lijst)))
+	return avgs.times(1. / float64(len(lijst)))
 }
 
 //Writes the header in table.txt
@@ -46,8 +46,8 @@ func writeheader() {
 	check(err)
 }
 
-func Tableadd_B_eff_at_location(a,b,c float64){
-locations = append (locations,Vector{a,b,c})
+func Tableadd_B_eff_at_location(a, b, c float64) {
+	locations = append(locations, Vector{a, b, c})
 
 }
 
@@ -57,10 +57,10 @@ func write(avg Vector) {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
-		for i := range locations{
-			string = fmt.Sprintf("\t%v\t%v\t%v", (B_ext[0]+demag(locations[i][0],locations[i][1],locations[i][2])[0]), (B_ext[1]+demag(locations[i][0],locations[i][1],locations[i][2])[1]), (B_ext[2]+demag(locations[i][0],locations[i][1],locations[i][2])[2]))
+		for i := range locations {
+			string = fmt.Sprintf("\t%v\t%v\t%v", (B_ext[0] + demag(locations[i][0], locations[i][1], locations[i][2])[0]), (B_ext[1] + demag(locations[i][0], locations[i][1], locations[i][2])[1]), (B_ext[2] + demag(locations[i][0], locations[i][1], locations[i][2])[2]))
 			_, err = f.WriteString(string)
-		check(err)
+			check(err)
 		}
 		_, err = f.WriteString("\n")
 		check(err)

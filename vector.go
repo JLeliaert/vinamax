@@ -35,7 +35,7 @@ func norm(x Vector) Vector {
 }
 
 //multiply each component of a vector by a float
-func (x Vector)times(i float64) Vector {
+func (x Vector) times(i float64) Vector {
 	x[0] *= i
 	x[1] *= i
 	x[2] *= i
