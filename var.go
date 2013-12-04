@@ -4,7 +4,7 @@ package vinamax
 var (
 	B_ext [3]float64          // External applied field in T
 	Dt    float64             // Timestep in s
-	Lijst particles           // List containing all the particles
+	Lijst Particles           // List containing all the Particles
 	T     float64             // Time in s
 	Alpha float64             // Gilbert damping constant
 	Temp  float64             // Temperature in K

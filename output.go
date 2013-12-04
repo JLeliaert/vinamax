@@ -28,13 +28,13 @@ func check(e error) {
 	}
 }
 
-//calculates the average magnetisation components of all particles
-func averages(lijst particles) [3]float64 {
+//calculates the average magnetisation components of all Particles
+func averages(lijst Particles) [3]float64 {
 	avgs := [3]float64{0, 0, 0}
 	for i := range lijst {
-		avgs[0] += lijst[i].m[0]
-		avgs[1] += lijst[i].m[1]
-		avgs[2] += lijst[i].m[2]
+		avgs[0] += lijst[i].M[0]
+		avgs[1] += lijst[i].M[1]
+		avgs[2] += lijst[i].M[2]
 	}
 	return Times(avgs, 1./float64(len(lijst)))
 }
@@ -46,7 +46,7 @@ func Writeheader() {
 	check(Err)
 }
 
-func tableadd_B_eff_at_location(a,b,c float64){
+func Tableadd_B_eff_at_location(a,b,c float64){
 locations = append (locations,[3]float64{a,b,c})
 
 }

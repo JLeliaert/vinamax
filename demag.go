@@ -23,18 +23,18 @@ func demag(x, y, z float64) [3]float64 {
 	demag := [3]float64{0, 0, 0}
 
 	for i := range Lijst {
-		if Lijst[i].x != x || Lijst[i].y != y || Lijst[i].z != z {
-			r_vect := [3]float64{x - Lijst[i].x, y - Lijst[i].y, z - Lijst[i].z}
+		if Lijst[i].X != x || Lijst[i].Y != y || Lijst[i].Z != z {
+			r_vect := [3]float64{x - Lijst[i].X, y - Lijst[i].Y, z - Lijst[i].Z}
 			r := Lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += prefactor*((3 * Lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].m[0] / r3))
+			demag[0] += prefactor*((3 * Lijst[i].M[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].M[0] / r3))
 
-			demag[1] += prefactor*((3. * Lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].m[1] / r3))
+			demag[1] += prefactor*((3. * Lijst[i].M[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].M[1] / r3))
 
-			demag[2] += prefactor*((3 * Lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].m[2] / r3))
+			demag[2] += prefactor*((3 * Lijst[i].M[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].M[2] / r3))
 
 			
 		}
@@ -44,12 +44,12 @@ func demag(x, y, z float64) [3]float64 {
 	return demag
 }
 
-//demag on a particle
-func (p particle) demag() [3]float64 {
-	return demag(p.x, p.y, p.z)
+//demag on a Particle
+func (p Particle) demag() [3]float64 {
+	return demag(p.X, p.Y, p.Z)
 }
 
-//The distance between a particle and a location
-func (r *particle) dist(x, y, z float64) float64 {
-	return math.Sqrt(math.Pow(float64(r.x-x), 2) + math.Pow(float64(r.y-y), 2) + math.Pow(float64(r.z-z), 2))
+//The distance between a Particle and a location
+func (r *Particle) dist(x, y, z float64) float64 {
+	return math.Sqrt(math.Pow(float64(r.X-x), 2) + math.Pow(float64(r.Y-y), 2) + math.Pow(float64(r.Z-z), 2))
 }
