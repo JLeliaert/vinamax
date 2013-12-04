@@ -6,25 +6,25 @@ import(
 	"fmt"
 )
 
-//A particle essentially constains a position, magnetisation, TODO msat, size?
-type particle struct {
-	x, y, z             float64
-	m                   [3]float64
+//A Particle essentially constains a position, magnetisation, TODO msat, size?
+type Particle struct {
+	X, Y, Z             float64
+	M                   [3]float64
 	demagnetising_field [3]float64
 	u_anis              [3]float64 // Uniaxial anisotropy axis
 }
 
-//particles[] is a list of particles
-type particles []particle
+//Particles[] is a list of Particles
+type Particles []Particle
 
-//add a particle to the list
-func (l *particles) Append(p particle) {
+//add a Particle to the list
+func (l *Particles) Append(p Particle) {
 	(*l) = append(*l, p)
 }
 
-//print position and magnitisation of a particle
-func (p particle) String() string {
-	return fmt.Sprintf("particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
+//print position and magnitisation of a Particle
+func (p Particle) String() string {
+	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.M[0], p.M[1], p.M[2])
 }
 
 func Anisotropy_axis(a, b, c float64) {
