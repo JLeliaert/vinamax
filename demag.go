@@ -1,4 +1,4 @@
-package main
+package vinamax
 
 import (
 	"math"
@@ -9,8 +9,8 @@ import (
 
 
 func calculatedemag(){
-	for i := range lijst {
-		lijst[i].demagnetising_field=lijst[i].demag()
+	for i := range Lijst {
+		Lijst[i].demagnetising_field=Lijst[i].demag()
 	}
 }
 
@@ -22,19 +22,19 @@ func demag(x, y, z float64) [3]float64 {
 	prefactor := (Mu0 * Msat*volume) / (4 * math.Pi)
 	demag := [3]float64{0, 0, 0}
 
-	for i := range lijst {
-		if lijst[i].x != x || lijst[i].y != y || lijst[i].z != z {
-			r_vect := [3]float64{x - lijst[i].x, y - lijst[i].y, z - lijst[i].z}
-			r := lijst[i].dist(x, y, z)
+	for i := range Lijst {
+		if Lijst[i].x != x || Lijst[i].y != y || Lijst[i].z != z {
+			r_vect := [3]float64{x - Lijst[i].x, y - Lijst[i].y, z - Lijst[i].z}
+			r := Lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += prefactor*((3 * lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (lijst[i].m[0] / r3))
+			demag[0] += prefactor*((3 * Lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].m[0] / r3))
 
-			demag[1] += prefactor*((3. * lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (lijst[i].m[1] / r3))
+			demag[1] += prefactor*((3. * Lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].m[1] / r3))
 
-			demag[2] += prefactor*((3 * lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (lijst[i].m[2] / r3))
+			demag[2] += prefactor*((3 * Lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].m[2] / r3))
 
 			
 		}

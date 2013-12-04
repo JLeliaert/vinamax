@@ -1,4 +1,4 @@
-package main
+package vinamax
 
 import(
 	"math"
@@ -18,7 +18,7 @@ type particle struct {
 type particles []particle
 
 //add a particle to the list
-func (l *particles) append(p particle) {
+func (l *particles) Append(p particle) {
 	(*l) = append(*l, p)
 }
 
@@ -27,20 +27,20 @@ func (p particle) String() string {
 	return fmt.Sprintf("particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
 }
 
-func anisotropy_axis(a, b, c float64) {
+func Anisotropy_axis(a, b, c float64) {
 	norm := math.Sqrt(a*a + b*b + c*c)
 	a /= norm
 	b /= norm
 	c /= norm
-	for i := range lijst {
-		lijst[i].u_anis = [3]float64{a, b, c}
+	for i := range Lijst {
+		Lijst[i].u_anis = [3]float64{a, b, c}
 	}
 }
 
-func anisotropy_random() {
-	for i := range lijst {
+func Anisotropy_random() {
+	for i := range Lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		lijst[i].u_anis = [3]float64{math.Sin(theta)*math.Cos(phi),math.Sin(theta)*math.Sin(phi),math.Cos(theta) }
+		Lijst[i].u_anis = [3]float64{math.Sin(theta)*math.Cos(phi),math.Sin(theta)*math.Sin(phi),math.Cos(theta) }
 	}
 }

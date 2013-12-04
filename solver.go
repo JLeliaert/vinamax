@@ -1,56 +1,56 @@
-package main
+package vinamax
 
 //Runs the simulation for a certain time
 func run(time float64) {
-	for i := range lijst {
-		Norm(lijst[i].m)
+	for i := range Lijst {
+		Norm(Lijst[i].m)
 	}
-	Write(averages(lijst))
-	for j := t; t < j+time; {
+	Write(averages(Lijst))
+	for j := T; T < j+time; {
 		calculatedemag()
 		//TODO dit variabel maken tussen euler en heun
-		heunstep(lijst)
-		Write(averages(lijst))
+		heunstep(Lijst)
+		Write(averages(Lijst))
 	}
 }
 
 //perform a timestep using euler forward method
-func eulerstep(lijst particles) particles {
-	for i := range lijst {
-		lijst[i].m[0] += lijst[i].tau()[0] * dt
-		lijst[i].m[1] += lijst[i].tau()[1] * dt
-		lijst[i].m[2] += lijst[i].tau()[2] * dt
-		lijst[i].m = Norm(lijst[i].m)
+func eulerstep(Lijst particles) particles {
+	for i := range Lijst {
+		Lijst[i].m[0] += Lijst[i].tau()[0] * Dt
+		Lijst[i].m[1] += Lijst[i].tau()[1] * Dt
+		Lijst[i].m[2] += Lijst[i].tau()[2] * Dt
+		Lijst[i].m = Norm(Lijst[i].m)
 
 	}
-	t += dt
-	return lijst
+	T += Dt
+	return Lijst
 }
 
 //perform a timestep using heun method
 //http://en.wikipedia.org/wiki/Heun_method
-func heunstep(lijst particles) particles {
-	for i := range lijst {
-		taux1 := lijst[i].tau()[0]
-		tauy1 := lijst[i].tau()[1]
-		tauz1 := lijst[i].tau()[2]
+func heunstep(Lijst particles) particles {
+	for i := range Lijst {
+		taux1 := Lijst[i].tau()[0]
+		tauy1 := Lijst[i].tau()[1]
+		tauz1 := Lijst[i].tau()[2]
 
 		//tau van t+1, positie nadat met tau1 al is doorgevoerd
-		lijst[i].m[0] += taux1 * dt
-		lijst[i].m[1] += tauy1 * dt
-		lijst[i].m[2] += tauz1 * dt
+		Lijst[i].m[0] += taux1 * Dt
+		Lijst[i].m[1] += tauy1 * Dt
+		Lijst[i].m[2] += tauz1 * Dt
 
-		taux2 := lijst[i].tau()[0]
-		tauy2 := lijst[i].tau()[1]
-		tauz2 := lijst[i].tau()[2]
+		taux2 := Lijst[i].tau()[0]
+		tauy2 := Lijst[i].tau()[1]
+		tauz2 := Lijst[i].tau()[2]
 
-		lijst[i].m[0] += ((-taux1 + taux2) * 0.5 * dt)
-		lijst[i].m[1] += ((-tauy1 + tauy2) * 0.5 * dt)
-		lijst[i].m[2] += ((-tauz1 + tauz2) * 0.5 * dt)
+		Lijst[i].m[0] += ((-taux1 + taux2) * 0.5 * Dt)
+		Lijst[i].m[1] += ((-tauy1 + tauy2) * 0.5 * Dt)
+		Lijst[i].m[2] += ((-tauz1 + tauz2) * 0.5 * Dt)
 
-		lijst[i].m = Norm(lijst[i].m)
+		Lijst[i].m = Norm(Lijst[i].m)
 
 	}
-	t += dt
-	return lijst
+	T += Dt
+	return Lijst
 }
