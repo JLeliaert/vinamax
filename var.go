@@ -2,7 +2,7 @@ package vinamax
 
 
 var (
-	B_ext [3]float64          // External applied field in T
+	B_ext Vector          // External applied field in T
 	Dt    float64             // Timestep in s
 	Lijst Particles           // List containing all the Particles
 	T     float64             // Time in s

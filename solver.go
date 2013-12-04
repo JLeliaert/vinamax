@@ -3,7 +3,7 @@ package vinamax
 //Runs the simulation for a certain time
 func Run(time float64) {
 	for i := range Lijst {
-		Norm(Lijst[i].M)
+		norm(Lijst[i].M)
 	}
 	Write(averages(Lijst))
 	for j := T; T < j+time; {
@@ -20,7 +20,7 @@ func eulerstep(Lijst Particles) Particles {
 		Lijst[i].M[0] += Lijst[i].tau()[0] * Dt
 		Lijst[i].M[1] += Lijst[i].tau()[1] * Dt
 		Lijst[i].M[2] += Lijst[i].tau()[2] * Dt
-		Lijst[i].M = Norm(Lijst[i].M)
+		Lijst[i].M = norm(Lijst[i].M)
 
 	}
 	T += Dt
@@ -48,7 +48,7 @@ func heunstep(Lijst Particles) Particles {
 		Lijst[i].M[1] += ((-tauy1 + tauy2) * 0.5 * Dt)
 		Lijst[i].M[2] += ((-tauz1 + tauz2) * 0.5 * Dt)
 
-		Lijst[i].M = Norm(Lijst[i].M)
+		Lijst[i].M = norm(Lijst[i].M)
 
 	}
 	T += Dt
