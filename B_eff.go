@@ -6,13 +6,13 @@ import (
 )
 
 //Sums the individual fields to the effective field working on the Particle
-func (p Particle) B_eff() Vector {
-	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(p.Temp())))
+func (p Particle) b_eff() Vector {
+	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(p.temp())))
 }
 
 //Calculates the the thermal field B_therm working on a Particle
 // TODO factor 4/3pi in "number" omdat ze bol zijn!
-func (p Particle) Temp() Vector {
+func (p Particle) temp() Vector {
 	B_therm := Vector{0., 0., 0.}
 	if Temp != 0. {
 
