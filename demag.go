@@ -16,15 +16,15 @@ func calculatedemag(){
 
 
 //demag is calculated on a position
-func demag(x, y, z float64) [3]float64 {
+func demag(x, y, z float64) Vector {
 	//TODO dit volume beter maken en bolletjes!
 	volume := math.Pow(2e-9, 3)
 	prefactor := (Mu0 * Msat*volume) / (4 * math.Pi)
-	demag := [3]float64{0, 0, 0}
+	demag := Vector{0, 0, 0}
 
 	for i := range Lijst {
 		if Lijst[i].X != x || Lijst[i].Y != y || Lijst[i].Z != z {
-			r_vect := [3]float64{x - Lijst[i].X, y - Lijst[i].Y, z - Lijst[i].Z}
+			r_vect := Vector{x - Lijst[i].X, y - Lijst[i].Y, z - Lijst[i].Z}
 			r := Lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
@@ -45,7 +45,7 @@ func demag(x, y, z float64) [3]float64 {
 }
 
 //demag on a Particle
-func (p Particle) demag() [3]float64 {
+func (p Particle) demag() Vector {
 	return demag(p.X, p.Y, p.Z)
 }
 

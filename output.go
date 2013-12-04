@@ -10,7 +10,7 @@ var F *os.File
 var Err error
 var Outputinterval float64
 var twrite float64
-var locations [][3]float64
+var locations []Vector
 
 func Output(interval float64) {
 	F, Err = os.Create("./table.txt")
@@ -29,14 +29,14 @@ func check(e error) {
 }
 
 //calculates the average magnetisation components of all Particles
-func averages(lijst Particles) [3]float64 {
-	avgs := [3]float64{0, 0, 0}
+func averages(lijst Particles) Vector {
+	avgs := Vector{0, 0, 0}
 	for i := range lijst {
 		avgs[0] += lijst[i].M[0]
 		avgs[1] += lijst[i].M[1]
 		avgs[2] += lijst[i].M[2]
 	}
-	return Times(avgs, 1./float64(len(lijst)))
+	return avgs.times(1./float64(len(lijst)))
 }
 
 //Writes the header in table.txt
@@ -47,12 +47,12 @@ func Writeheader() {
 }
 
 func Tableadd_B_eff_at_location(a,b,c float64){
-locations = append (locations,[3]float64{a,b,c})
+locations = append (locations,Vector{a,b,c})
 
 }
 
 //Writes the time and the vector of average magnetisation in the table
-func Write(avg [3]float64) {
+func Write(avg Vector) {
 	if twrite >= Outputinterval && Outputinterval != 0 {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, Err = F.WriteString(string)

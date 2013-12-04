@@ -9,9 +9,9 @@ import(
 //A Particle essentially constains a position, magnetisation, TODO msat, size?
 type Particle struct {
 	X, Y, Z             float64
-	M                   [3]float64
-	demagnetising_field [3]float64
-	u_anis              [3]float64 // Uniaxial anisotropy axis
+	M                   Vector
+	demagnetising_field Vector
+	u_anis              Vector // Uniaxial anisotropy axis
 }
 
 //Particles[] is a list of Particles
@@ -28,12 +28,13 @@ func (p Particle) String() string {
 }
 
 func Anisotropy_axis(a, b, c float64) {
+	//TODO this can be a lot better
 	norm := math.Sqrt(a*a + b*b + c*c)
 	a /= norm
 	b /= norm
 	c /= norm
 	for i := range Lijst {
-		Lijst[i].u_anis = [3]float64{a, b, c}
+		Lijst[i].u_anis = Vector{a, b, c}
 	}
 }
 
@@ -41,6 +42,6 @@ func Anisotropy_random() {
 	for i := range Lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		Lijst[i].u_anis = [3]float64{math.Sin(theta)*math.Cos(phi),math.Sin(theta)*math.Sin(phi),math.Cos(theta) }
+		Lijst[i].u_anis = Vector{math.Sin(theta)*math.Cos(phi),math.Sin(theta)*math.Sin(phi),math.Cos(theta) }
 	}
 }
