@@ -1,9 +1,9 @@
 package vinamax
 
-import(
+import (
+	"fmt"
 	"math"
 	"math/rand"
-	"fmt"
 )
 
 //A Particle essentially constains a position, magnetisation, TODO msat, size?
@@ -42,6 +42,6 @@ func Anisotropy_random() {
 	for i := range Lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		Lijst[i].u_anis = Vector{math.Sin(theta)*math.Cos(phi),math.Sin(theta)*math.Sin(phi),math.Cos(theta) }
+		Lijst[i].u_anis = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }

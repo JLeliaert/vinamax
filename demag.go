@@ -6,20 +6,17 @@ import (
 
 //zie 2.51 in coey en watweuitrekenen.pdf
 
-
-
-func calculatedemag(){
+func calculatedemag() {
 	for i := range Lijst {
-		Lijst[i].demagnetising_field=Lijst[i].demag()
+		Lijst[i].demagnetising_field = Lijst[i].demag()
 	}
 }
-
 
 //demag is calculated on a position
 func demag(x, y, z float64) Vector {
 	//TODO dit volume beter maken en bolletjes!
 	volume := math.Pow(2e-9, 3)
-	prefactor := (mu0 * Msat*volume) / (4 * math.Pi)
+	prefactor := (mu0 * Msat * volume) / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 
 	for i := range Lijst {
@@ -30,13 +27,12 @@ func demag(x, y, z float64) Vector {
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += prefactor*((3 * Lijst[i].M[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].M[0] / r3))
+			demag[0] += prefactor * ((3 * Lijst[i].M[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].M[0] / r3))
 
-			demag[1] += prefactor*((3. * Lijst[i].M[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].M[1] / r3))
+			demag[1] += prefactor * ((3. * Lijst[i].M[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].M[1] / r3))
 
-			demag[2] += prefactor*((3 * Lijst[i].M[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].M[2] / r3))
+			demag[2] += prefactor * ((3 * Lijst[i].M[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].M[2] / r3))
 
-			
 		}
 
 	}

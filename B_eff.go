@@ -1,4 +1,4 @@
-package vinamax 
+package vinamax
 
 import (
 	"math"
