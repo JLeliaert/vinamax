@@ -13,5 +13,5 @@ func (p Particle) tau() Vector {
 	mxmxB = mxmxB.times(Alpha)
 	mxB = mxB.add(mxmxB)
 	tau := mxB.times(1/(1+Alpha*Alpha))
-	return tau.times(-Gamma0)
+	return tau.times(-gamma0)
 }

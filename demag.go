@@ -19,7 +19,7 @@ func calculatedemag(){
 func demag(x, y, z float64) Vector {
 	//TODO dit volume beter maken en bolletjes!
 	volume := math.Pow(2e-9, 3)
-	prefactor := (Mu0 * Msat*volume) / (4 * math.Pi)
+	prefactor := (mu0 * Msat*volume) / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 
 	for i := range Lijst {
