@@ -1,6 +1,6 @@
 //This file contains some usefull vector operators
 
-package main
+package vinamax
 
 import (
 	"math"

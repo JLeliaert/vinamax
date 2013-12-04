@@ -1,5 +1,5 @@
 //Contains function to control the output of the program
-package main
+package vinamax
 
 import (
 	"fmt"
@@ -54,7 +54,7 @@ locations = append (locations,[3]float64{a,b,c})
 //Writes the time and the vector of average magnetisation in the table
 func Write(avg [3]float64) {
 	if twrite >= Outputinterval && Outputinterval != 0 {
-		string := fmt.Sprintf("%v\t%v\t%v\t%v", t, avg[0], avg[1], avg[2])
+		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, Err = F.WriteString(string)
 		check(Err)
 		for i := range locations{
@@ -66,5 +66,5 @@ func Write(avg [3]float64) {
 		check(Err)
 		twrite = 0.
 	}
-	twrite += dt
+	twrite += Dt
 }

@@ -1,4 +1,4 @@
-package main
+package vinamax 
 
 import (
 	"math"
@@ -7,20 +7,20 @@ import (
 
 //Sums the individual fields to the effective field working on the particle
 func (p particle) B_eff() [3]float64 {
-	return Add(p.demagnetising_field, Add(p.anis(), Add(p.zeeman(), p.temp())))
+	return Add(p.demagnetising_field, Add(p.anis(), Add(p.zeeman(), p.Temp())))
 }
 
 //Calculates the the thermal field B_therm working on a particle
 // TODO factor 4/3pi in "number" omdat ze bol zijn!
-func (p particle) temp() [3]float64 {
+func (p particle) Temp() [3]float64 {
 	B_therm := [3]float64{0., 0., 0.}
-	if temp != 0. {
+	if Temp != 0. {
 
 		etax := rand.NormFloat64()
 		etay := rand.NormFloat64()
 		etaz := rand.NormFloat64()
 		B_therm = [3]float64{etax, etay, etaz}
-		number := math.Sqrt((2 * Kb * alpha * temp) / (Gamma0 * Msat * Dx * Dy * Dz * dt))
+		number := math.Sqrt((2 * Kb * Alpha * Temp) / (Gamma0 * Msat * Dx * Dy * Dz * Dt))
 		B_therm = Times(B_therm, number)
 	}
 	return B_therm

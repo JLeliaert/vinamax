@@ -1,4 +1,4 @@
-package main
+package vinamax
 
 //Calculates the torque working on the magnisation of a particle
 func (p particle) tau() [3]float64 {
@@ -10,8 +10,8 @@ func (p particle) tau() [3]float64 {
 	mxB := Cross(m, p.B_eff())
 	mxmxB := Cross(m, mxB)
 
-	mxmxB = Times(mxmxB, alpha)
+	mxmxB = Times(mxmxB, Alpha)
 	mxB = Add(mxB, mxmxB)
-	tau := Times(mxB, 1/(1+alpha*alpha))
+	tau := Times(mxB, 1/(1+Alpha*Alpha))
 	return Times(tau, -Gamma0)
 }

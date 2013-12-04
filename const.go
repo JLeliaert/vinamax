@@ -1,6 +1,6 @@
 //This file contains all the constants
 
-package main
+package vinamax 
 
 import (
 	"math"
