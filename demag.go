@@ -27,11 +27,11 @@ func demag(x, y, z float64) Vector {
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += prefactor * ((3 * Lijst[i].M[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].M[0] / r3))
+			demag[0] += prefactor * ((3 * Lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].m[0] / r3))
 
-			demag[1] += prefactor * ((3. * Lijst[i].M[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].M[1] / r3))
+			demag[1] += prefactor * ((3. * Lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].m[1] / r3))
 
-			demag[2] += prefactor * ((3 * Lijst[i].M[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].M[2] / r3))
+			demag[2] += prefactor * ((3 * Lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].m[2] / r3))
 
 		}
 

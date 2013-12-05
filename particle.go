@@ -9,7 +9,7 @@ import (
 //A Particle essentially constains a position, magnetisation, TODO msat, size?
 type Particle struct {
 	X, Y, Z             float64
-	M                   Vector
+	m                   Vector
 	demagnetising_field Vector
 	u_anis              Vector // Uniaxial anisotropy axis
 }
@@ -24,17 +24,13 @@ func (l *Particles) Append(p Particle) {
 
 //print position and magnitisation of a Particle
 func (p Particle) String() string {
-	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.M[0], p.M[1], p.M[2])
+	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
 }
 
-func Anisotropy_axis(a, b, c float64) {
-	//TODO this can be a lot better
-	norm := math.Sqrt(a*a + b*b + c*c)
-	a /= norm
-	b /= norm
-	c /= norm
+func Anisotropy_axis(a Vector) {
+	a= norm(a)
 	for i := range Lijst {
-		Lijst[i].u_anis = Vector{a, b, c}
+		Lijst[i].u_anis = a
 	}
 }
 
@@ -43,5 +39,22 @@ func Anisotropy_random() {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
 		Lijst[i].u_anis = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+	}
+}
+
+
+
+func M_random() {
+for i := range Lijst {
+		phi := rand.Float64() * (2 * math.Pi)
+		theta := rand.Float64() * math.Pi
+		Lijst[i].m = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+	}
+}
+
+func M_uniform(a Vector) {
+	a= norm(a)
+	for i := range Lijst {
+		Lijst[i].m = a
 	}
 }

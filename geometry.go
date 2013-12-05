@@ -1,12 +1,12 @@
 package vinamax
 
 import(
-//	"math/rand"
+	"math/rand"
 )
 
 //Adds a single particle 
-func Addsingleparticle(x,y,z float64, m Vector){
-	Lijst.Append(Particle{X:x,Y:y,Z:z,M:m})
+func Addsingleparticle(x,y,z float64){
+	Lijst.Append(Particle{X:x,Y:y,Z:z})
 }
 
 //Deletes all particles
@@ -22,6 +22,11 @@ type Cube struct{
 
 
 //Adds a lot of particles at random locations in a cubic region
-//func (c Cube) Addparticles(N int){
-//
-//}
+func (c Cube) Addparticles(N int){
+	for i:= 0; i<N;i++ {
+		px := c.x+rand.Float64()*c.s/2
+		py := c.y+rand.Float64()*c.s/2
+		pz := c.z+rand.Float64()*c.s/2
+		Addsingleparticle(px,py,pz)
+	}
+}	

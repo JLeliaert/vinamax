@@ -18,7 +18,7 @@ func Output(interval float64) {
 	//	defer f.Close()
 	writeheader()
 	Outputinterval = interval
-	twrite = 0.
+	twrite = interval
 }
 
 //checks the error
@@ -32,9 +32,9 @@ func check(e error) {
 func averages(lijst Particles) Vector {
 	avgs := Vector{0, 0, 0}
 	for i := range lijst {
-		avgs[0] += lijst[i].M[0]
-		avgs[1] += lijst[i].M[1]
-		avgs[2] += lijst[i].M[2]
+		avgs[0] += lijst[i].m[0]
+		avgs[1] += lijst[i].m[1]
+		avgs[2] += lijst[i].m[2]
 	}
 	return avgs.times(1. / float64(len(lijst)))
 }
