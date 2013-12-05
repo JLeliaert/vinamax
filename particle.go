@@ -18,7 +18,7 @@ type Particle struct {
 type Particles []Particle
 
 //add a Particle to the list
-func (l *Particles) Append(p Particle) {
+func (l *Particles) append(p Particle) {
 	(*l) = append(*l, p)
 }
 
@@ -27,8 +27,8 @@ func (p Particle) String() string {
 	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
 }
 
-func Anisotropy_axis(a Vector) {
-	a= norm(a)
+func Anisotropy_axis(x,y,z float64) {
+	a:= norm(Vector{x,y,z})
 	for i := range Lijst {
 		Lijst[i].u_anis = a
 	}
@@ -52,8 +52,8 @@ for i := range Lijst {
 	}
 }
 
-func M_uniform(a Vector) {
-	a= norm(a)
+func M_uniform(x,y,z float64) {
+	a:= norm(Vector{x,y,z})
 	for i := range Lijst {
 		Lijst[i].m = a
 	}

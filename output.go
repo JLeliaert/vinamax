@@ -68,3 +68,12 @@ func write(avg Vector) {
 	}
 	twrite += Dt
 }
+
+//func Save(a string){
+//een file openen met unieke naam (counter voor gebruiken)
+//if a =="geometry"{
+// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
+//}else{ 
+//error
+//}
+//}
