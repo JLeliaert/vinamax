@@ -11,6 +11,7 @@ var err error
 var Outputinterval float64
 var twrite float64
 var locations []Vector
+var filecounter int = 0
 
 func Output(interval float64) {
 	f, err = os.Create("./table.txt")
@@ -69,11 +70,21 @@ func write(avg Vector) {
 	twrite += Dt
 }
 
-//func Save(a string){
-//een file openen met unieke naam (counter voor gebruiken)
-//if a =="geometry"{
-// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
-//}else{ 
-//error
-//}
-//}
+func Save(a string) {
+	//een file openen met unieke naam (counter voor gebruiken)
+	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
+	file, error := os.Create(name)
+	check(error)
+	defer file.Close()
+	filecounter += 1
+	if a == "geometry" {
+		// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
+		for i := range Lijst {
+			string := fmt.Sprintf("%v\t%v\t%v\n", Lijst[i].X, Lijst[i].Y, Lijst[i].Z)
+			_, error = file.WriteString(string)
+			check(error)
+		}
+	} else {
+		fmt.Println("error")
+	}
+}
