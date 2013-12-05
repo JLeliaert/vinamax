@@ -6,7 +6,7 @@ import(
 
 //Adds a single particle 
 func Addsingleparticle(x,y,z float64){
-	Lijst.Append(Particle{X:x,Y:y,Z:z})
+	Lijst.append(Particle{X:x,Y:y,Z:z})
 }
 
 //Deletes all particles
