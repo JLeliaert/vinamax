@@ -16,16 +16,17 @@ func Reset() {
 
 type Cube struct {
 	x, y, z float64 //position
-	s       float64 //diameter
+	S       float64 //diameter
 	N       int     //numberofparticles
 }
 
 //Adds a lot of particles at random locations in a cubic region
-func (c Cube) Addparticles(N int) {
-	for i := 0; i < N; i++ {
-		px := c.x + rand.Float64()*c.s/2
-		py := c.y + rand.Float64()*c.s/2
-		pz := c.z + rand.Float64()*c.s/2
+func (c Cube) Addparticles(n int) {
+	c.N+=n
+	for i := 0; i < n; i++ {
+		px := c.x + (-0.5+rand.Float64())*c.S
+		py := c.y + (-0.5+rand.Float64())*c.S
+		pz := c.z + (-0.5+rand.Float64())*c.S
 		Addsingleparticle(px, py, pz)
 	}
 }
