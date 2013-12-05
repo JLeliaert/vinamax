@@ -35,9 +35,9 @@ func (p Particle) zeeman() Vector {
 func (p Particle) anis() Vector {
 	//2*Ku1*(m.u)*u/Msat
 	var m Vector
-	m[0] = p.M[0]
-	m[1] = p.M[1]
-	m[2] = p.M[2]
+	m[0] = p.m[0]
+	m[1] = p.m[1]
+	m[2] = p.m[2]
 
 	mdotu := m.dot(p.u_anis)
 
