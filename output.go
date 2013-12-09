@@ -48,8 +48,11 @@ func writeheader() {
 }
 
 func Tableadd_B_eff_at_location(a, b, c float64) {
-	locations = append(locations, Vector{a, b, c})
-
+	if Universe.inworld(Vector{a, b, c}) {
+		locations = append(locations, Vector{a, b, c})
+	} else {
+		fmt.Println("error: not in universe")
+	}
 }
 
 //Writes the time and the vector of average magnetisation in the table
