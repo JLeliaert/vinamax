@@ -7,6 +7,11 @@ import (
 //zie 2.51 in coey en watweuitrekenen.pdf
 
 func calculatedemag() {
+	//FMM demag
+
+	//construct tree (eenmalig!!!)
+
+	//O(N**2)
 	for i := range Lijst {
 		Lijst[i].demagnetising_field = Lijst[i].demag()
 	}
