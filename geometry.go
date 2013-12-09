@@ -36,17 +36,12 @@ func (c Cube) Addparticles(n int) {
 	}
 }
 
-type world struct {
-	origin   Vector
-	diameter float64
-}
-
 func World(x, y, z, r float64) {
 	Universe.origin = Vector{x, y, z}
 	Universe.diameter = r
 }
 
-func (w world) inworld(r Vector) bool {
+func (w node) inworld(r Vector) bool {
 	if r[0] < (w.origin[0] - w.diameter) {
 		return false
 	}

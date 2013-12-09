@@ -9,5 +9,5 @@ var (
 	Temp     float64            // Temperature in K
 	Ku1      float64            // Uniaxial anisotropy constant in J/m**3
 	Msat     float64   = 860000 // Saturation magnetisation in A/m
-	Universe world              // The entire universe of the simulation
+	Universe node               // The entire universe of the simulation
 )
