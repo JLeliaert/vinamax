@@ -6,6 +6,7 @@ import (
 
 //zie 2.51 in coey en watweuitrekenen.pdf
 
+//TODO hier nog de keuze laten
 func calculatedemag() {
 	//FMM demag
 
