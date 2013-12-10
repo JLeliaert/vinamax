@@ -42,22 +42,22 @@ func World(x, y, z, r float64) {
 }
 
 func (w node) inworld(r Vector) bool {
-	if r[0] < (w.origin[0] - w.diameter) {
+	if r[0] < (w.origin[0] - w.diameter/2) {
 		return false
 	}
-	if r[0] > (w.origin[0] + w.diameter) {
+	if r[0] > (w.origin[0] + w.diameter/2) {
 		return false
 	}
-	if r[1] < (w.origin[1] - w.diameter) {
+	if r[1] < (w.origin[1] - w.diameter/2) {
 		return false
 	}
-	if r[1] > (w.origin[1] + w.diameter) {
+	if r[1] > (w.origin[1] + w.diameter/2) {
 		return false
 	}
-	if r[2] < (w.origin[2] - w.diameter) {
+	if r[2] < (w.origin[2] - w.diameter/2) {
 		return false
 	}
-	if r[2] > (w.origin[2] + w.diameter) {
+	if r[2] > (w.origin[2] + w.diameter/2) {
 		return false
 	}
 	return true
