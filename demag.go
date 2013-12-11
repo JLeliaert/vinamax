@@ -2,6 +2,7 @@ package vinamax
 
 import (
 	"math"
+//	"fmt"
 )
 
 //zie 2.51 in coey en watweuitrekenen.pdf
@@ -45,7 +46,7 @@ func demag(x, y, z float64) Vector {
 
 //demag on a Particle
 func (p Particle) demag() Vector {
-//TODO hier de keuze laten
+	//TODO hier de keuze laten
 	//return demag(p.X, p.Y, p.Z)
 	return FMMdemag(p.X, p.Y, p.Z)
 }
@@ -66,12 +67,13 @@ func FMMdemag(x, y, z float64) Vector {
 	nodelist := []*node{&Universe}
 	//for lijst!=leeg
 	for len(nodelist) > 0 {
-		for i := range nodelist {
+	//	for i := range nodelist {
+	i:=0
 			//if aantalparticles in box==0: delete van stack
-			if nodelist[i].number == 0 {
-				nodelist[i] = nodelist[len(nodelist)-1]
-				nodelist = nodelist[0 : len(nodelist)-1]
-			}
+			//	if nodelist[i].number == 0 {
+			//		nodelist[i] = nodelist[len(nodelist)-1]
+			//		nodelist = nodelist[0 : len(nodelist)-1]
+			//	}
 			if nodelist[i].number == 1 {
 				//if aantalparticles in box==1:
 				if nodelist[i].lijst[0].X != x || nodelist[i].lijst[0].Y != y || nodelist[i].lijst[0].Z != z {
@@ -90,8 +92,8 @@ func FMMdemag(x, y, z float64) Vector {
 					demag[2] += prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
 
 				}
-				nodelist[i] = nodelist[len(nodelist)-1]
-				nodelist = nodelist[0 : len(nodelist)-1]
+				//	nodelist[i] = nodelist[len(nodelist)-1]
+				//	nodelist = nodelist[0 : len(nodelist)-1]
 			}
 			if nodelist[i].number > 1 {
 				//if aantalparticles in box>1:
@@ -102,7 +104,7 @@ func FMMdemag(x, y, z float64) Vector {
 					//	if voldoet aan criterium: calculate en delete van stack
 					m := Vector{0, 0, 0}
 					//in loopje m berekenen
-					for j := range(nodelist[i].lijst) {
+					for j := range nodelist[i].lijst {
 						m[0] += nodelist[i].lijst[j].m[0]
 						m[1] += nodelist[i].lijst[j].m[1]
 						m[2] += nodelist[i].lijst[j].m[2]
@@ -128,10 +130,11 @@ func FMMdemag(x, y, z float64) Vector {
 					nodelist = append(nodelist, nodelist[i].brb)
 					nodelist = append(nodelist, nodelist[i].brf)
 				}
-				nodelist[i] = nodelist[len(nodelist)-1]
-				nodelist = nodelist[0 : len(nodelist)-1]
 			}
+			copy(nodelist[i:], nodelist[i+1:])
+			nodelist[len(nodelist)-1] = nil // or the zero value of T
+			nodelist = nodelist[:len(nodelist)-1]
 		}
-	}
+	//}
 	return demag
 }

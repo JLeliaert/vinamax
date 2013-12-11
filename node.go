@@ -41,7 +41,7 @@ func (n *node) calculatecom() {
 	n.com = Vector{comx / n.number, comy / n.number, comz / n.number}
 }
 
-func (w node) descend() {
+func (w *node) descend() {
 	w.calculatecom()
 	if w.number > 1 {
 
