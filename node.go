@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	"fmt"
+//	"fmt"
 )
 
 type node struct {
@@ -220,6 +220,6 @@ func (n node) where(position Vector) int {
 		return 5
 	}
 
-	fmt.Println("something went wrong")
+	//if not in node:
 	return -1
 }
