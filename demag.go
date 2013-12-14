@@ -47,8 +47,10 @@ func demag(x, y, z float64) Vector {
 //demag on a Particle
 func (p Particle) demag() Vector {
 	//TODO hier de keuze laten
-	//return demag(p.X, p.Y, p.Z)
+if(FMM){
 	return FMMdemag(p.X, p.Y, p.Z)
+}
+	return demag(p.X, p.Y, p.Z)
 }
 
 //The distance between a Particle and a location
@@ -102,6 +104,7 @@ func FMMdemag(x, y, z float64) Vector {
 
 				if (nodelist[i].where(Vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
 					//	if voldoet aan criterium: calculate en delete van stack
+//fmt.Println(nodelist[i].number)
 					m := Vector{0, 0, 0}
 					//in loopje m berekenen
 					for j := range nodelist[i].lijst {

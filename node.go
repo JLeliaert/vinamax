@@ -179,6 +179,11 @@ func Maketree() {
 }
 
 func (n node) where(position Vector) int {
+	//if not in node
+	if position[0]> n.origin[0]+n.diameter/2 || position[0]< n.origin[0]-n.diameter/2 || position[1]> n.origin[1]+n.diameter/2 || position[1]< n.origin[1]-n.diameter/2  || position[2]> n.origin[2]+n.diameter/2 || position[2]< n.origin[2]-n.diameter/2 {
+
+	return -1
+}
 
 	if position[0] >= n.origin[0] && position[1] >= n.origin[1] && position[2] >= n.origin[2] {
 		//trb
@@ -219,7 +224,5 @@ func (n node) where(position Vector) int {
 		//blf
 		return 5
 	}
-
-	//if not in node:
-	return -1
+return -1
 }

@@ -9,6 +9,7 @@ var (
 	Temp          float64            // Temperature in K
 	Ku1           float64            // Uniaxial anisotropy constant in J/m**3
 	Msat          float64   = 860000 // Saturation magnetisation in A/m
-	Thresholdbeta float64            //The threshold value for the FMM
+	Thresholdbeta float64   =0.7            //The threshold value for the FMM
 	Universe      node               // The entire universe of the simulation
+	FMM	      bool 	=true	 // Calculate demag with FMM method
 )
