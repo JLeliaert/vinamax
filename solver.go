@@ -2,6 +2,7 @@ package vinamax
 
 //Runs the simulation for a certain time
 func Run(time float64) {
+	testinput()
 	for i := range Lijst {
 		norm(Lijst[i].m)
 	}
