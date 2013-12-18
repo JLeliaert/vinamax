@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"log"
 )
 
 //A Particle essentially constains a position, magnetisation, TODO msat, size?
@@ -12,6 +13,7 @@ type Particle struct {
 	m                   Vector
 	demagnetising_field Vector
 	u_anis              Vector // Uniaxial anisotropy axis
+	r		    float64 //radius
 }
 
 //Particles[] is a list of Particles
@@ -55,4 +57,12 @@ func M_uniform(x, y, z float64) {
 	for i := range Lijst {
 		Lijst[i].m = a
 	}
+}
+func Particle_radius(x float64){
+if x<0{
+log.Fatal("particles can't have a negative radius")
+}
+	for i := range Lijst {
+		Lijst[i].r =x
+}
 }
