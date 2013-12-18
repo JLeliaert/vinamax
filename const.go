@@ -22,6 +22,7 @@ const (
 
 func init() {
 
+	fmt.Println()
 	fmt.Println("vinamax: a macrospin model to simulate magnetic nanoparticles")
 	fmt.Println("Copyright (C) 2013  Jonathan Leliaert")
 	fmt.Println()
@@ -37,6 +38,8 @@ func init() {
 	fmt.Println("You should have received a copy of the GNU General Public License")
 	fmt.Println("along with this program.  If not, see [http:fmt.Println(www.gnu.org/licenses/].")
 	fmt.Println()
-	fmt.Println("contact: jonathan dot leliaert at gmail dot com")
+	fmt.Println("contact: jonathan.leliaert@gmail.com")
+	fmt.Println()
+	fmt.Println()
 	fmt.Println()
 }

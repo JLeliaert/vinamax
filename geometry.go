@@ -8,7 +8,7 @@ import (
 //Adds a single particle
 func Addsingleparticle(x, y, z float64) {
 	if Universe.inworld(Vector{x, y, z}) {
-		Lijst.append(Particle{X: x, Y: y, Z: z})
+		Lijst.append(Particle{X: x, Y: y, Z: z,r:20e-9})
 	} else {
 		fmt.Println("error: outside of universe")
 	}
