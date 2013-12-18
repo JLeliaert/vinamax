@@ -23,7 +23,7 @@ func demag(x, y, z float64) Vector {
 
 	for i := range Lijst {
 		if Lijst[i].X != x || Lijst[i].Y != y || Lijst[i].Z != z {
-			volume := 4/3*math.Pi*math.Pow(Lijst[i].r,3)
+			volume := 4./3*math.Pi*math.Pow(Lijst[i].r,3)
 			r_vect := Vector{x - Lijst[i].X, y - Lijst[i].Y, z - Lijst[i].Z}
 			r := Lijst[i].dist(x, y, z)
 			r2 := r * r
@@ -79,7 +79,7 @@ func FMMdemag(x, y, z float64) Vector {
 				if nodelist[i].lijst[0].X != x || nodelist[i].lijst[0].Y != y || nodelist[i].lijst[0].Z != z {
 					//	if ik ben niet die ene: calculate en delete van stack
 					//	CALC
-					volume := 4/3*math.Pi*math.Pow(nodelist[i].lijst[0].r,3)
+					volume := 4./3*math.Pi*math.Pow(nodelist[i].lijst[0].r,3)
 					r_vect := Vector{x - nodelist[i].lijst[0].X, y - nodelist[i].lijst[0].Y, z - nodelist[i].lijst[0].Z}
 					r := nodelist[i].lijst[0].dist(x, y, z)
 					r2 := r * r
@@ -108,7 +108,7 @@ func FMMdemag(x, y, z float64) Vector {
 					volume := 0.
 					//in loopje m en volume berekenen
 					for j := range nodelist[i].lijst {
-						volume += 4/3*math.Pi*math.Pow(nodelist[i].lijst[i].r,3)
+						volume += 4./3*math.Pi*math.Pow(nodelist[i].lijst[i].r,3)
 
 						m[0] += nodelist[i].lijst[j].m[0]
 						m[1] += nodelist[i].lijst[j].m[1]
