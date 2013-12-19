@@ -14,9 +14,27 @@ func Addsingleparticle(x, y, z float64) {
 	}
 }
 
-//Deletes all particles
+// Resets the simulation to all standard values:
+// Deletes all particles
+// Resets B_ext to (0,0,0) T
+// Dt = 1e-15 s
+// T=0 s
+// Alpha=0.02
+// Temp=0K
+// Ku1=0
+// Thresholdbeta=0.7
+// use FMM method
+
 func Reset() {
 	Lijst = nil
+	B_ext = Vector{0.,0.,0.}
+	Dt = 1e-15
+	T=0
+	Alpha=0.02
+	Temp=0.
+	Ku1 = 0
+	Thresholdbeta=0.7
+	FMM=true
 }
 
 type Cube struct {
