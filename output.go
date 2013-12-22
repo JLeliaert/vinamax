@@ -4,6 +4,7 @@ package vinamax
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 var f *os.File
@@ -14,7 +15,11 @@ var locations []Vector
 var filecounter int = 0
 
 func Output(interval float64) {
-	f, err = os.Create("./table.txt")
+fname := os.Args[0] 
+f2name := strings.Split(fname, "/")
+name :=f2name[len(f2name)-1]
+os.Mkdir(name+".out", 0775)
+	f, err = os.Create("./"+name+".out/table.txt")
 	check(err)
 	//	defer f.Close()
 	writeheader()

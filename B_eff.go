@@ -10,6 +10,12 @@ func (p Particle) b_eff() Vector {
 	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(p.temp())))
 }
 
+
+//set the randomseed for the temperatuur
+func SetRandomSeed(a int64){
+rand.Seed(a)
+}
+
 //Calculates the the thermal field B_therm working on a Particle
 // TODO factor 4/3pi in "number" omdat ze bol zijn!
 func (p Particle) temp() Vector {
