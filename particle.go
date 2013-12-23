@@ -31,38 +31,38 @@ func (p Particle) String() string {
 
 func Anisotropy_axis(x, y, z float64) {
 	a := norm(Vector{x, y, z})
-	for i := range Lijst {
-		Lijst[i].u_anis = a
+	for i := range universe.lijst {
+		universe.lijst[i].u_anis = a
 	}
 }
 
 func Anisotropy_random() {
-	for i := range Lijst {
+	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		Lijst[i].u_anis = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		universe.lijst[i].u_anis = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
 
 func M_random() {
-	for i := range Lijst {
+	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		Lijst[i].m = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		universe.lijst[i].m = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
 
 func M_uniform(x, y, z float64) {
 	a := norm(Vector{x, y, z})
-	for i := range Lijst {
-		Lijst[i].m = a
+	for i := range universe.lijst {
+		universe.lijst[i].m = a
 	}
 }
 func Particle_radius(x float64){
 if x<0{
 log.Fatal("particles can't have a negative radius")
 }
-	for i := range Lijst {
-		Lijst[i].r =x
+	for i := range universe.lijst {
+		universe.lijst[i].r =x
 }
 }

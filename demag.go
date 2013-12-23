@@ -11,8 +11,8 @@ func calculatedemag() {
 
 	//TODO: maketree uit main halen construct tree (eenmalig!!!)
 
-	for i := range Lijst {
-		Lijst[i].demagnetising_field = Lijst[i].demag()
+	for i := range universe.lijst {
+		universe.lijst[i].demagnetising_field = universe.lijst[i].demag()
 	}
 }
 
@@ -21,20 +21,20 @@ func demag(x, y, z float64) Vector {
 	prefactor := (mu0 * Msat) / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 
-	for i := range Lijst {
-		if Lijst[i].X != x || Lijst[i].Y != y || Lijst[i].Z != z {
-			volume := 4./3*math.Pi*math.Pow(Lijst[i].r,3)
-			r_vect := Vector{x - Lijst[i].X, y - Lijst[i].Y, z - Lijst[i].Z}
-			r := Lijst[i].dist(x, y, z)
+	for i := range universe.lijst {
+		if universe.lijst[i].X != x || universe.lijst[i].Y != y || universe.lijst[i].Z != z {
+			volume := 4./3*math.Pi*math.Pow(universe.lijst[i].r,3)
+			r_vect := Vector{x - universe.lijst[i].X, y - universe.lijst[i].Y, z - universe.lijst[i].Z}
+			r := universe.lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += volume*prefactor * ((3 * Lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (Lijst[i].m[0] / r3))
+			demag[0] += volume*prefactor * ((3 * universe.lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
 
-			demag[1] += volume*prefactor * ((3. * Lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (Lijst[i].m[1] / r3))
+			demag[1] += volume*prefactor * ((3. * universe.lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
 
-			demag[2] += volume*prefactor * ((3 * Lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (Lijst[i].m[2] / r3))
+			demag[2] += volume*prefactor * ((3 * universe.lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
 
 		}
 
@@ -63,8 +63,8 @@ func FMMdemag(x, y, z float64) Vector {
 	demag := Vector{0, 0, 0}
 
 	//lijst maken met nodes
-	//node Universe in de box steken
-	nodelist := []*node{&Universe}
+	//node universe in de box steken
+	nodelist := []*node{&universe}
 	//for lijst!=leeg
 	for len(nodelist) > 0 {
 	//	for i := range nodelist {
