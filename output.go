@@ -4,7 +4,6 @@ package vinamax
 import (
 	"fmt"
 	"os"
-	"strings"
 )
 
 var f *os.File
@@ -15,11 +14,7 @@ var locations []Vector
 var filecounter int = 0
 
 func Output(interval float64) {
-fname := os.Args[0] 
-f2name := strings.Split(fname, "/")
-name :=f2name[len(f2name)-1]
-os.Mkdir(name+".out", 0775)
-	f, err = os.Create("./"+name+".out/table.txt")
+	f, err = os.Create(outdir+"/table.txt")
 	check(err)
 	//	defer f.Close()
 	writeheader()
@@ -81,7 +76,7 @@ func write(avg Vector) {
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
-	file, error := os.Create(name)
+	file, error := os.Create(outdir+"/"+name)
 	check(error)
 	defer file.Close()
 	filecounter += 1

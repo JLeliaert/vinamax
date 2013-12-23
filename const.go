@@ -5,6 +5,8 @@ package vinamax
 import (
 	"fmt"
 	"math"
+	"os"
+	"strings"
 )
 
 const (
@@ -38,4 +40,11 @@ func init() {
 	fmt.Println()
 	fmt.Println()
 	fmt.Println()
+
+
+fname := os.Args[0] 
+f2name := strings.Split(fname, "/")
+outdir =fmt.Sprint(f2name[len(f2name)-1],".out")
+os.Mkdir(outdir, 0775)
+
 }
