@@ -30,7 +30,7 @@ func check(e error) {
 }
 
 //calculates the average magnetisation components of all Particles
-func averages(lijst Particles) Vector {
+func averages(lijst []*Particle) Vector {
 	avgs := Vector{0, 0, 0}
 	for i := range lijst {
 		avgs[0] += lijst[i].m[0]
@@ -48,7 +48,7 @@ func writeheader() {
 }
 
 func Tableadd_B_eff_at_location(a, b, c float64) {
-	if Universe.inworld(Vector{a, b, c}) {
+	if universe.inworld(Vector{a, b, c}) {
 		locations = append(locations, Vector{a, b, c})
 	} else {
 		fmt.Println("error: not in universe")
@@ -82,8 +82,8 @@ func Save(a string) {
 	filecounter += 1
 	if a == "geometry" {
 		// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
-		for i := range Lijst {
-			string := fmt.Sprintf("%v\t%v\t%v\n", Lijst[i].X, Lijst[i].Y, Lijst[i].Z)
+		for i := range universe.lijst {
+			string := fmt.Sprintf("%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z)
 			_, error = file.WriteString(string)
 			check(error)
 		}

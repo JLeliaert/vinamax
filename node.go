@@ -19,7 +19,7 @@ type node struct {
 	origin   Vector      //the origin of the cube
 	diameter float64     //the diameter
 	com      Vector      //centreofmass
-	number   float64     //numberofparticles
+	number   int64     //numberofparticles
 	lijst    []*Particle //lijst met alle particles
 }
 
@@ -38,7 +38,7 @@ func (n *node) calculatecom() {
 		comy += n.lijst[i].Y
 		comz += n.lijst[i].Z
 	}
-	n.com = Vector{comx / n.number, comy / n.number, comz / n.number}
+	n.com = Vector{comx / float64(n.number), comy / float64(n.number), comz / float64(n.number)}
 }
 
 func (w *node) descend() {
@@ -171,11 +171,11 @@ func (w *node) descend() {
 
 func Maketree() {
 	//werkt dit??
-	for i := range Lijst {
-		Universe.lijst = append(Universe.lijst, &Lijst[i])
-		Universe.number += 1
-	}
-	Universe.descend()
+	//for i := range Lijst {
+	//	universe.lijst = append(universe.lijst, &Lijst[i])
+	//	universe.number += 1
+	//}
+	universe.descend()
 }
 
 func (n node) where(position Vector) int {

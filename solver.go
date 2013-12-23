@@ -3,20 +3,20 @@ package vinamax
 //Runs the simulation for a certain time
 func Run(time float64) {
 	testinput()
-	for i := range Lijst {
-		norm(Lijst[i].m)
+	for i := range universe.lijst {
+		norm(universe.lijst[i].m)
 	}
-	write(averages(Lijst))
+	write(averages(universe.lijst))
 	for j := T; T < j+time; {
 		calculatedemag()
 		//TODO dit variabel maken tussen euler en heun
-		heunstep(Lijst)
-		write(averages(Lijst))
+		heunstep(universe.lijst)
+		write(averages(universe.lijst))
 	}
 }
 
 //perform a timestep using euler forward method
-func eulerstep(Lijst Particles) Particles {
+func eulerstep(Lijst []*Particle) {
 	for i := range Lijst {
 		Lijst[i].m[0] += Lijst[i].tau()[0] * Dt
 		Lijst[i].m[1] += Lijst[i].tau()[1] * Dt
@@ -25,12 +25,11 @@ func eulerstep(Lijst Particles) Particles {
 
 	}
 	T += Dt
-	return Lijst
 }
 
 //perform a timestep using heun method
 //http://en.wikipedia.org/wiki/Heun_method
-func heunstep(Lijst Particles) Particles {
+func heunstep(Lijst []*Particle) {
 	for i := range Lijst {
 		taux1 := Lijst[i].tau()[0]
 		tauy1 := Lijst[i].tau()[1]
@@ -53,5 +52,4 @@ func heunstep(Lijst Particles) Particles {
 
 	}
 	T += Dt
-	return Lijst
 }

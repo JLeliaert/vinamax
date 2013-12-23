@@ -7,8 +7,10 @@ import (
 
 //Adds a single particle
 func Addsingleparticle(x, y, z float64) {
-	if Universe.inworld(Vector{x, y, z}) {
-		Lijst.append(Particle{X: x, Y: y, Z: z,r:20e-9})
+	if universe.inworld(Vector{x, y, z}) {
+		a :=Particle{X: x, Y: y, Z: z,r:20e-9}
+		universe.lijst = append(universe.lijst, &a)
+		universe.number +=1
 	} else {
 		fmt.Println("error: outside of universe")
 	}
@@ -26,7 +28,7 @@ func Addsingleparticle(x, y, z float64) {
 // use FMM method
 
 func Reset() {
-	Lijst = nil
+	universe.lijst = nil
 	B_ext = Vector{0.,0.,0.}
 	Dt = 1e-15
 	T=0
@@ -35,6 +37,7 @@ func Reset() {
 	Ku1 = 0
 	Thresholdbeta=0.7
 	FMM=true
+	//todo de 8 subnodes nil maken
 }
 
 type Cube struct {
@@ -55,8 +58,8 @@ func (c Cube) Addparticles(n int) {
 }
 
 func World(x, y, z, r float64) {
-	Universe.origin = Vector{x, y, z}
-	Universe.diameter = r
+	universe.origin = Vector{x, y, z}
+	universe.diameter = r
 }
 
 func (w node) inworld(r Vector) bool {

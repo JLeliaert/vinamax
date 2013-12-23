@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"strings"
+	"log"
 )
 
 const (
@@ -46,5 +47,10 @@ fname := os.Args[0]
 f2name := strings.Split(fname, "/")
 outdir =fmt.Sprint(f2name[len(f2name)-1],".out")
 os.Mkdir(outdir, 0775)
-
+f, err3 := os.Open(outdir)
+        files, _ := f.Readdir(1)
+        if len(files) != 0 {
+                log.Fatal(outdir, " not empty, clean it")
+        }
+check(err3)
 }
