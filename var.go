@@ -15,6 +15,7 @@ var (
 	Thresholdbeta float64   =0.7            //The threshold value for the FMM
 	universe      node               // The entire universe of the simulation
 	FMM	      bool 	=true	 // Calculate demag with FMM method
+	Demag	      bool      =true    // Calculate demag
 	outdir	      string		 // the output directory
 )
 
