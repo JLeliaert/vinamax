@@ -4,14 +4,13 @@ package vinamax
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"strings"
-	"log"
 )
 
 const (
-
 	gamma0 = 1.7595e11          // Gyromagnetic ratio of electron, in rad/Ts
 	mu0    = 4 * math.Pi * 1e-7 // Permeability of vacuum in Tm/A
 	muB    = 9.2740091523E-24   // Bohr magneton in J/T
@@ -42,15 +41,14 @@ func init() {
 	fmt.Println()
 	fmt.Println()
 
-
-fname := os.Args[0] 
-f2name := strings.Split(fname, "/")
-outdir =fmt.Sprint(f2name[len(f2name)-1],".out")
-os.Mkdir(outdir, 0775)
-f, err3 := os.Open(outdir)
-        files, _ := f.Readdir(1)
-        if len(files) != 0 {
-                log.Fatal(outdir, " not empty, clean it")
-        }
-check(err3)
+	fname := os.Args[0]
+	f2name := strings.Split(fname, "/")
+	outdir = fmt.Sprint(f2name[len(f2name)-1], ".out")
+	os.Mkdir(outdir, 0775)
+	f, err3 := os.Open(outdir)
+	files, _ := f.Readdir(1)
+	if len(files) != 0 {
+		log.Fatal(outdir, " not empty, clean it")
+	}
+	check(err3)
 }

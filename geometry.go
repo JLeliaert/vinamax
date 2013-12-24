@@ -8,9 +8,9 @@ import (
 //Adds a single particle
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(Vector{x, y, z}) {
-		a :=Particle{X: x, Y: y, Z: z,r:20e-9}
+		a := Particle{X: x, Y: y, Z: z, r: 20e-9}
 		universe.lijst = append(universe.lijst, &a)
-		universe.number +=1
+		universe.number += 1
 	} else {
 		fmt.Println("error: outside of universe")
 	}
@@ -29,14 +29,14 @@ func Addsingleparticle(x, y, z float64) {
 
 func Reset() {
 	universe.lijst = nil
-	B_ext = Vector{0.,0.,0.}
+	B_ext = Vector{0., 0., 0.}
 	Dt = 1e-15
-	T=0
-	Alpha=0.02
-	Temp=0.
+	T = 0
+	Alpha = 0.02
+	Temp = 0.
 	Ku1 = 0
-	Thresholdbeta=0.7
-	FMM=true
+	Thresholdbeta = 0.7
+	FMM = true
 	//todo de 8 subnodes nil maken
 }
 
