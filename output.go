@@ -14,7 +14,7 @@ var locations []Vector
 var filecounter int = 0
 
 func Output(interval float64) {
-	f, err = os.Create(outdir+"/table.txt")
+	f, err = os.Create(outdir + "/table.txt")
 	check(err)
 	//	defer f.Close()
 	writeheader()
@@ -76,14 +76,14 @@ func write(avg Vector) {
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
-	file, error := os.Create(outdir+"/"+name)
+	file, error := os.Create(outdir + "/" + name)
 	check(error)
 	defer file.Close()
 	filecounter += 1
 	if a == "geometry" {
 		// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
 		for i := range universe.lijst {
-			string := fmt.Sprintf("%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z)
+			string := fmt.Sprintf("%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r)
 			_, error = file.WriteString(string)
 			check(error)
 		}

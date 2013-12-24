@@ -8,8 +8,8 @@ func Run(time float64) {
 	}
 	write(averages(universe.lijst))
 	for j := T; T < j+time; {
-		if Demag{
-		calculatedemag()
+		if Demag {
+			calculatedemag()
 		}
 		//TODO dit variabel maken tussen euler en heun
 		heunstep(universe.lijst)
