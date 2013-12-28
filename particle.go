@@ -16,14 +16,6 @@ type Particle struct {
 	r                   float64 //radius
 }
 
-//Particles[] is a list of Particles
-type Particles []Particle
-
-//add a Particle to the list
-func (l *Particles) append(p Particle) {
-	(*l) = append(*l, p)
-}
-
 //print position and magnitisation of a Particle
 func (p Particle) String() string {
 	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
