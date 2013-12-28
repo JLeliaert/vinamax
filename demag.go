@@ -18,7 +18,7 @@ func calculatedemag() {
 
 //demag is calculated on a position
 func demag(x, y, z float64) Vector {
-	prefactor := (mu0 * Msat) / (4 * math.Pi)
+	prefactor := mu0 / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 
 	for i := range universe.lijst {
@@ -30,11 +30,11 @@ func demag(x, y, z float64) Vector {
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += volume * prefactor * ((3 * universe.lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
+			demag[0] += universe.lijst[i].msat * volume * prefactor * ((3 * universe.lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
 
-			demag[1] += volume * prefactor * ((3. * universe.lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
+			demag[1] += universe.lijst[i].msat * volume * prefactor * ((3. * universe.lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
 
-			demag[2] += volume * prefactor * ((3 * universe.lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
+			demag[2] += universe.lijst[i].msat * volume * prefactor * ((3 * universe.lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
 
 		}
 
@@ -59,7 +59,7 @@ func (r *Particle) dist(x, y, z float64) float64 {
 
 //demag is calculated on a position
 func FMMdemag(x, y, z float64) Vector {
-	prefactor := (mu0 * Msat) / (4 * math.Pi)
+	prefactor := mu0 / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 
 	//lijst maken met nodes
@@ -86,11 +86,11 @@ func FMMdemag(x, y, z float64) Vector {
 				r3 := r * r2
 				r5 := r3 * r2
 
-				demag[0] += volume * prefactor * ((3 * nodelist[i].lijst[0].m[0] * r_vect[0] * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
+				demag[0] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * nodelist[i].lijst[0].m[0] * r_vect[0] * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
 
-				demag[1] += volume * prefactor * ((3. * nodelist[i].lijst[0].m[1] * r_vect[1] * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
+				demag[1] += nodelist[i].lijst[0].msat * volume * prefactor * ((3. * nodelist[i].lijst[0].m[1] * r_vect[1] * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
 
-				demag[2] += volume * prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
+				demag[2] += nodelist[i].lijst[0].msat *  volume * prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
 
 			}
 			//	nodelist[i] = nodelist[len(nodelist)-1]
@@ -110,19 +110,19 @@ func FMMdemag(x, y, z float64) Vector {
 				for j := range nodelist[i].lijst {
 					volume += 4. / 3 * math.Pi * math.Pow(nodelist[i].lijst[i].r, 3)
 
-					m[0] += nodelist[i].lijst[j].m[0]
-					m[1] += nodelist[i].lijst[j].m[1]
-					m[2] += nodelist[i].lijst[j].m[2]
+					m[0] += nodelist[i].lijst[j].m[0]*nodelist[i].lijst[j].msat
+					m[1] += nodelist[i].lijst[j].m[1]*nodelist[i].lijst[j].msat
+					m[2] += nodelist[i].lijst[j].m[2]*nodelist[i].lijst[j].msat
 				}
 				r2 := r * r
 				r3 := r * r2
 				r5 := r3 * r2
 
-				demag[0] += volume * prefactor * ((3 * m[0] * r_vect[0] * r_vect[0] / r5) - (m[0] / r3))
+				demag[0] +=  volume * prefactor * ((3 * m[0] * r_vect[0] * r_vect[0] / r5) - (m[0] / r3))
 
-				demag[1] += volume * prefactor * ((3 * m[1] * r_vect[1] * r_vect[1] / r5) - (m[1] / r3))
+				demag[1] +=  volume * prefactor * ((3 * m[1] * r_vect[1] * r_vect[1] / r5) - (m[1] / r3))
 
-				demag[2] += volume * prefactor * ((3 * m[2] * r_vect[2] * r_vect[2] / r5) - (m[2] / r3))
+				demag[2] +=  volume * prefactor * ((3 * m[2] * r_vect[2] * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
 				//	if not: add subboxen en delete van stack
