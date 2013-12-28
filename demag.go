@@ -90,7 +90,7 @@ func FMMdemag(x, y, z float64) Vector {
 
 				demag[1] += nodelist[i].lijst[0].msat * volume * prefactor * ((3. * nodelist[i].lijst[0].m[1] * r_vect[1] * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
 
-				demag[2] += nodelist[i].lijst[0].msat *  volume * prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
+				demag[2] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
 
 			}
 			//	nodelist[i] = nodelist[len(nodelist)-1]
@@ -110,19 +110,19 @@ func FMMdemag(x, y, z float64) Vector {
 				for j := range nodelist[i].lijst {
 					volume += 4. / 3 * math.Pi * math.Pow(nodelist[i].lijst[i].r, 3)
 
-					m[0] += nodelist[i].lijst[j].m[0]*nodelist[i].lijst[j].msat
-					m[1] += nodelist[i].lijst[j].m[1]*nodelist[i].lijst[j].msat
-					m[2] += nodelist[i].lijst[j].m[2]*nodelist[i].lijst[j].msat
+					m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat
+					m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat
+					m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat
 				}
 				r2 := r * r
 				r3 := r * r2
 				r5 := r3 * r2
 
-				demag[0] +=  volume * prefactor * ((3 * m[0] * r_vect[0] * r_vect[0] / r5) - (m[0] / r3))
+				demag[0] += volume * prefactor * ((3 * m[0] * r_vect[0] * r_vect[0] / r5) - (m[0] / r3))
 
-				demag[1] +=  volume * prefactor * ((3 * m[1] * r_vect[1] * r_vect[1] / r5) - (m[1] / r3))
+				demag[1] += volume * prefactor * ((3 * m[1] * r_vect[1] * r_vect[1] / r5) - (m[1] / r3))
 
-				demag[2] +=  volume * prefactor * ((3 * m[2] * r_vect[2] * r_vect[2] / r5) - (m[2] / r3))
+				demag[2] += volume * prefactor * ((3 * m[2] * r_vect[2] * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
 				//	if not: add subboxen en delete van stack
