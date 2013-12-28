@@ -81,7 +81,7 @@ func Save(a string) {
 	defer file.Close()
 	filecounter += 1
 	if a == "geometry" {
-		// heel de lijst met particles aflopen en de locatie (en magnetisatie?) printen
+		// heel de lijst met particles aflopen en de locatie en straal printen
 		for i := range universe.lijst {
 			string := fmt.Sprintf("%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r)
 			_, error = file.WriteString(string)
