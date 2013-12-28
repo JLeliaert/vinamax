@@ -8,7 +8,7 @@ import (
 //Adds a single particle
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(Vector{x, y, z}) {
-		a := Particle{X: x, Y: y, Z: z, r: 20e-9}
+		a := Particle{X: x, Y: y, Z: z, r: 20e-9, msat: 860e3}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 	} else {

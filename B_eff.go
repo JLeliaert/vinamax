@@ -25,7 +25,7 @@ func (p Particle) temp() Vector {
 		etay := rand.NormFloat64()
 		etaz := rand.NormFloat64()
 		B_therm = Vector{etax, etay, etaz}
-		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * Msat * 4. / 3. * math.Pi * math.Pow(p.r, 3) * Dt))
+		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * math.Pow(p.r, 3) * Dt))
 		B_therm = B_therm.times(number)
 	}
 	return B_therm
@@ -38,7 +38,7 @@ func (p Particle) zeeman() Vector {
 
 //Calculates the anisotropy field working on a Particle
 func (p Particle) anis() Vector {
-	//2*Ku1*(m.u)*u/Msat
+	//2*Ku1*(m.u)*u/p.msat
 	var m Vector
 	m[0] = p.m[0]
 	m[1] = p.m[1]
@@ -46,5 +46,5 @@ func (p Particle) anis() Vector {
 
 	mdotu := m.dot(p.u_anis)
 
-	return p.u_anis.times(2 * Ku1 * mdotu / Msat)
+	return p.u_anis.times(2 * Ku1 * mdotu / p.msat)
 }

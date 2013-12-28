@@ -14,6 +14,7 @@ type Particle struct {
 	demagnetising_field Vector
 	u_anis              Vector  // Uniaxial anisotropy axis
 	r                   float64 //radius
+	msat		    float64 // Saturation magnetisation in A/m
 }
 
 //print position and magnitisation of a Particle
