@@ -1,15 +1,8 @@
 package vinamax
 
-import( 
-	"runtime"
-) 
 
 //Runs the simulation for a certain time
 func Run(time float64) {
-
-	np := 4
-	runtime.GOMAXPROCS(np)
-
 	testinput()
 	for i := range universe.lijst {
 		norm(universe.lijst[i].m)
@@ -20,15 +13,8 @@ func Run(time float64) {
 			calculatedemag()
 		}
 
-		//een aantal verschillende lijsten maken (met var aantal)
-		lijstenmaken(np)
-
-		//var channels maken		
-		//binnen elke channel heunstep uitvoeren op een van de sublijsten
-
 		//TODO variabel maken tussen euler en heun
 		heunstep(universe.lijst)
-
 
 		write(averages(universe.lijst))
 	}
