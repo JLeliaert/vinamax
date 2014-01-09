@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
 )
 
 const (
@@ -49,13 +49,13 @@ contact: jonathan.leliaert@gmail.com
 	files, _ := f.Readdir(1)
 	// clean output dir, copied from mumax
 	if len(files) != 0 {
-                filepath.Walk(outdir, func(path string, i os.FileInfo, err error) error {
-                        if path != outdir {
-                                os.RemoveAll(path)
-                        }
-                        return nil
-                })
-        }	
-	
+		filepath.Walk(outdir, func(path string, i os.FileInfo, err error) error {
+			if path != outdir {
+				os.RemoveAll(path)
+			}
+			return nil
+		})
+	}
+
 	check(err3)
 }

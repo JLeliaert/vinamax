@@ -1,6 +1,5 @@
 package vinamax
 
-
 //Runs the simulation for a certain time
 func Run(time float64) {
 	testinput()
@@ -15,6 +14,7 @@ func Run(time float64) {
 
 		//TODO variabel maken tussen euler en heun
 		heunstep(universe.lijst)
+		T += Dt
 
 		write(averages(universe.lijst))
 	}
@@ -22,15 +22,16 @@ func Run(time float64) {
 
 //perform a timestep using euler forward method
 func eulerstep(Lijst []*Particle) {
-	for _,p  := range Lijst {
-		tau := p.tau()
+	for _, p := range Lijst {
+		temp := p.temp()
+
+		tau := p.tau(temp)
 		p.m[0] += tau[0] * Dt
 		p.m[1] += tau[1] * Dt
 		p.m[2] += tau[2] * Dt
 		p.m = norm(p.m)
 
 	}
-	T += Dt
 }
 
 //perform a timestep using heun method
@@ -38,7 +39,8 @@ func eulerstep(Lijst []*Particle) {
 func heunstep(Lijst []*Particle) {
 	for _, p := range Lijst {
 
-		tau1 := p.tau()
+		temp := p.temp()
+		tau1 := p.tau(temp)
 
 		//tau van t+1, positie nadat met tau1 al is doorgevoerd
 		p.m[0] += tau1[0] * Dt
@@ -46,7 +48,7 @@ func heunstep(Lijst []*Particle) {
 		p.m[2] += tau1[2] * Dt
 
 		//FOUT!! DIt moet hetzelfde termische veld zijn als in tau1
-		tau2 := p.tau()
+		tau2 := p.tau(temp)
 
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
 		p.m[1] += ((-tau1[1] + tau2[1]) * 0.5 * Dt)
@@ -55,5 +57,4 @@ func heunstep(Lijst []*Particle) {
 		p.m = norm(p.m)
 
 	}
-	T += Dt
 }

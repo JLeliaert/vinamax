@@ -6,8 +6,8 @@ import (
 )
 
 //Sums the individual fields to the effective field working on the Particle
-func (p *Particle) b_eff() Vector {
-	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(p.temp())))
+func (p *Particle) b_eff(temp Vector) Vector {
+	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(temp)))
 }
 
 //set the randomseed for the temperatuur
@@ -18,7 +18,7 @@ func SetRandomSeed(a int64) {
 var rng = rand.New(rand.NewSource(0))
 
 //Calculates the the thermal field B_therm working on a Particle
-// TODO factor 4/3pi in "number" omdat ze bol zijn!
+// factor 4/3pi in "number" because they are spherical
 func (p *Particle) temp() Vector {
 	B_therm := Vector{0., 0., 0.}
 	if Temp != 0. {
