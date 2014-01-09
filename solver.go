@@ -14,6 +14,7 @@ func Run(time float64) {
 
 		//TODO variabel maken tussen euler en heun
 		heunstep(universe.lijst)
+		//eulerstep(universe.lijst)
 		T += Dt
 
 		write(averages(universe.lijst))
@@ -47,7 +48,6 @@ func heunstep(Lijst []*Particle) {
 		p.m[1] += tau1[1] * Dt
 		p.m[2] += tau1[2] * Dt
 
-		//FOUT!! DIt moet hetzelfde termische veld zijn als in tau1
 		tau2 := p.tau(temp)
 
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
