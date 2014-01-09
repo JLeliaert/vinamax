@@ -49,3 +49,11 @@ func (x Vector) add(i Vector) Vector {
 	x[2] += i[2]
 	return x
 }
+
+func cube(x float64) float64 {
+	return x * x * x
+}
+
+func sqr(x float64) float64 {
+	return x * x
+}

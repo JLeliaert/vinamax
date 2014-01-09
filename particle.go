@@ -70,12 +70,12 @@ func Particle_radius(x float64) {
 func Lognormal_radius(m float64) {
 	mean := m
 	s := 0.5
-	norm := 1. / (math.Sqrt(2*math.Pi) * s * mean) * math.Exp(-math.Pow(math.Log(mean/mean), 2)/(2.*s*s))
+	norm := 1. / (math.Sqrt(2*math.Pi) * s * mean) * math.Exp(-sqr(math.Log(mean/mean))/(2.*s*s))
 
 	for i := range universe.lijst {
 		for {
 			x := rand.Float64() * 5 * mean
-			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-math.Pow(math.Log(x/mean), 2)/(2.*s*s))
+			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-sqr(math.Log(x/mean))/(2.*s*s))
 			if rand.Float64() > f_x/norm {
 				universe.lijst[i].r = x
 				break
