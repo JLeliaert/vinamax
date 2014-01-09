@@ -38,7 +38,7 @@ func main() {
 
 	World(0, 0, 0, 1e-6)
 	test := Cube{S: 1e-8}
-	test.Addparticles(800)
+	test.Addparticles(500)
 	Maketree()
 
 	Particle_radius(7.0e-9)
@@ -47,7 +47,7 @@ func main() {
 	//	B_ext = Vector{0, 0, 0.01}
 	Demag = false
 	FMM = false
-	Dt = 1e-13
+	Dt = 1e-10
 	T = 0.
 	Temp = 300.
 	SetRandomSeed(2)
@@ -58,13 +58,9 @@ func main() {
 	Anisotropy_random()
 	M_uniform(0, 0, 1)
 
-	Run(1e-9)
-	T = 0.
-	Dt = 1e-10
-
-	Output(1e-9)
+	Output(5e-8)
 	//Tableadd_B_eff_at_location(0,0.0,0)
 	Save("geometry")
 
-	Run(1e-3)
+	Run(1e-6)
 }
