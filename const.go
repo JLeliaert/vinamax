@@ -4,10 +4,10 @@ package vinamax
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"os"
 	"strings"
+	"path/filepath"
 )
 
 const (
@@ -47,8 +47,15 @@ contact: jonathan.leliaert@gmail.com
 	os.Mkdir(outdir, 0775)
 	f, err3 := os.Open(outdir)
 	files, _ := f.Readdir(1)
+	// clean output dir, copied from mumax
 	if len(files) != 0 {
-		log.Fatal(outdir, " not empty, clean it")
-	}
+                filepath.Walk(outdir, func(path string, i os.FileInfo, err error) error {
+                        if path != outdir {
+                                os.RemoveAll(path)
+                        }
+                        return nil
+                })
+        }	
+	
 	check(err3)
 }
