@@ -1,7 +1,15 @@
 package vinamax
 
+import( 
+	"runtime"
+) 
+
 //Runs the simulation for a certain time
 func Run(time float64) {
+
+	np := 4
+	runtime.GOMAXPROCS(np)
+
 	testinput()
 	for i := range universe.lijst {
 		norm(universe.lijst[i].m)
@@ -11,19 +19,29 @@ func Run(time float64) {
 		if Demag {
 			calculatedemag()
 		}
-		//TODO dit variabel maken tussen euler en heun
+
+		//een aantal verschillende lijsten maken (met var aantal)
+		lijstenmaken(np)
+
+		//var channels maken		
+		//binnen elke channel heunstep uitvoeren op een van de sublijsten
+
+		//TODO variabel maken tussen euler en heun
 		heunstep(universe.lijst)
+
+
 		write(averages(universe.lijst))
 	}
 }
 
 //perform a timestep using euler forward method
 func eulerstep(Lijst []*Particle) {
-	for i := range Lijst {
-		Lijst[i].m[0] += Lijst[i].tau()[0] * Dt
-		Lijst[i].m[1] += Lijst[i].tau()[1] * Dt
-		Lijst[i].m[2] += Lijst[i].tau()[2] * Dt
-		Lijst[i].m = norm(Lijst[i].m)
+	for _,p  := range Lijst {
+		tau := p.tau()
+		p.m[0] += tau[0] * Dt
+		p.m[1] += tau[1] * Dt
+		p.m[2] += tau[2] * Dt
+		p.m = norm(p.m)
 
 	}
 	T += Dt
@@ -41,6 +59,7 @@ func heunstep(Lijst []*Particle) {
 		p.m[1] += tau1[1] * Dt
 		p.m[2] += tau1[2] * Dt
 
+		//FOUT!! DIt moet hetzelfde termische veld zijn als in tau1
 		tau2 := p.tau()
 
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
