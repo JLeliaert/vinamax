@@ -62,5 +62,5 @@ func main() {
 	//Tableadd_B_eff_at_location(0,0.0,0)
 	Save("geometry")
 
-	Run(1e-6 * 500)
+	Run(1e-5)
 }
