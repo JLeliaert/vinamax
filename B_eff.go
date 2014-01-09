@@ -12,7 +12,7 @@ func (p *Particle) b_eff() Vector {
 
 //set the randomseed for the temperatuur
 func SetRandomSeed(a int64) {
-	rand.Seed(a)
+	rng = rand.New(rand.NewSource(a))
 }
 
 var rng = rand.New(rand.NewSource(0))
