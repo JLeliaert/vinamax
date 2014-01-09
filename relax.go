@@ -38,7 +38,7 @@ func main() {
 
 	World(0, 0, 0, 1e-6)
 	test := Cube{S: 1e-7}
-	test.Addparticles(500)
+	test.Addparticles(1)
 	Maketree()
 
 	Particle_radius(7.0e-9)
@@ -62,5 +62,5 @@ func main() {
 	//Tableadd_B_eff_at_location(0,0.0,0)
 	Save("geometry")
 
-	Run(1e-6)
+	Run(1e-6 * 500)
 }
