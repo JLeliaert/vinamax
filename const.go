@@ -20,26 +20,26 @@ const (
 
 func init() {
 
-	fmt.Println()
-	fmt.Println("vinamax: a macrospin model to simulate magnetic nanoparticles")
-	fmt.Println("Copyright (C) 2013  Jonathan Leliaert")
-	fmt.Println()
-	fmt.Println("This program is free software: you can redistribute it and/or modify")
-	fmt.Println("it under the terms of the GNU General Public License as published by")
-	fmt.Println("the Free Software Foundation, version 3 of the License")
-	fmt.Println()
-	fmt.Println("This program is distributed in the hope that it will be useful,")
-	fmt.Println("but WITHOUT ANY WARRANTY; without even the implied warranty of")
-	fmt.Println("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the")
-	fmt.Println("GNU General Public License for more details.")
-	fmt.Println()
-	fmt.Println("You should have received a copy of the GNU General Public License")
-	fmt.Println("along with this program.  If not, see [http:fmt.Println(www.gnu.org/licenses/].")
-	fmt.Println()
-	fmt.Println("contact: jonathan.leliaert@gmail.com")
-	fmt.Println()
-	fmt.Println()
-	fmt.Println()
+	fmt.Println(`
+vinamax: a macrospin model to simulate magnetic nanoparticles
+Copyright (C) 2013  Jonathan Leliaert
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see [http:fmt.Println(www.gnu.org/licenses/].
+
+contact: jonathan.leliaert@gmail.com
+
+
+`)
 
 	fname := os.Args[0]
 	f2name := strings.Split(fname, "/")
