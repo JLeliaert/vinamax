@@ -10,18 +10,12 @@ type Vector [3]float64
 
 //Dot product between two vectors
 func (x Vector) dot(y Vector) float64 {
-
 	return (x[0]*y[0] + x[1]*y[1] + x[2]*y[2])
-
 }
 
 //cross product between two vectors
 func (x Vector) cross(y Vector) Vector {
-	var z Vector
-	z[0] = x[1]*y[2] - x[2]*y[1]
-	z[1] = y[0]*x[2] - y[2]*x[0]
-	z[2] = x[0]*y[1] - x[1]*y[0]
-	return z
+	return Vector{x[1]*y[2] - x[2]*y[1], y[0]*x[2] - y[2]*x[0], x[0]*y[1] - x[1]*y[0]}
 }
 
 //Set norm of a vector to one
@@ -48,4 +42,12 @@ func (x Vector) add(i Vector) Vector {
 	x[1] += i[1]
 	x[2] += i[2]
 	return x
+}
+
+func cube(x float64) float64 {
+	return x * x * x
+}
+
+func sqr(x float64) float64 {
+	return x * x
 }
