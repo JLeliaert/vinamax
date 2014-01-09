@@ -26,7 +26,7 @@ func (p *Particle) temp() Vector {
 		etay := rng.NormFloat64()
 		etaz := rng.NormFloat64()
 		B_therm = Vector{etax, etay, etaz}
-		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * math.Pow(p.r, 3) * Dt))
+		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
 		B_therm = B_therm.times(number)
 	}
 	return B_therm
