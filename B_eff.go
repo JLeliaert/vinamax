@@ -40,12 +40,7 @@ func (p *Particle) zeeman() Vector {
 //Calculates the anisotropy field working on a Particle
 func (p *Particle) anis() Vector {
 	//2*Ku1*(m.u)*u/p.msat
-	var m Vector
-	m[0] = p.m[0]
-	m[1] = p.m[1]
-	m[2] = p.m[2]
 
-	mdotu := m.dot(p.u_anis)
-
+	mdotu := p.m.dot(p.u_anis)
 	return p.u_anis.times(2 * Ku1 * mdotu / p.msat)
 }
