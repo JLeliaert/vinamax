@@ -47,7 +47,7 @@ func main() {
 	//	B_ext = Vector{0, 0, 0.01}
 	Demag = false
 	FMM = false
-	Dt = 1e-10
+	Dt = 1e-11
 	T = 0.
 	Temp = 300.
 	SetRandomSeed(2)
