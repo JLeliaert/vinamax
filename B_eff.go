@@ -22,9 +22,14 @@ var rng = rand.New(rand.NewSource(0))
 func (p *Particle) temp() Vector {
 	B_therm := Vector{0., 0., 0.}
 	if Temp != 0. {
-		etax := rng.NormFloat64()
-		etay := rng.NormFloat64()
-		etaz := rng.NormFloat64()
+			etax := rng.NormFloat64()
+			etay := rng.NormFloat64()
+			etaz := rng.NormFloat64()
+
+		//marsaglia polar method 
+		//etax := normfloat()
+		//etay := normfloat()
+		//etaz := normfloat()
 		B_therm = Vector{etax, etay, etaz}
 		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
 		B_therm = B_therm.times(number)
