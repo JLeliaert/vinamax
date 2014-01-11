@@ -19,10 +19,10 @@ func (x Vector) cross(y Vector) Vector {
 }
 
 //Set norm of a vector to one
-// uses the taylor expansion of sqrt because it's close to 1 anyway, and adds lots of speed 
+// uses the taylor expansion of sqrt because it's close to 1 anyway, and adds lots of speed
 func norm(x Vector) Vector {
 	//magnitude := math.Sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2])
-	magnitude := ((x[0]*x[0] + x[1]*x[1] + x[2]*x[2])-1)/2+1
+	magnitude := ((x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-1)/2 + 1
 	return x.times(1 / magnitude)
 }
 
