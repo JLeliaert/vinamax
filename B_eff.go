@@ -22,14 +22,15 @@ var rng = rand.New(rand.NewSource(0))
 func (p *Particle) temp() Vector {
 	B_therm := Vector{0., 0., 0.}
 	if Temp != 0. {
-			etax := rng.NormFloat64()
-			etay := rng.NormFloat64()
-			etaz := rng.NormFloat64()
+		etax := rng.NormFloat64()
+		etay := rng.NormFloat64()
+		etaz := rng.NormFloat64()
 
-		//marsaglia polar method 
+		//marsaglia polar method, don't use
 		//etax := normfloat()
 		//etay := normfloat()
 		//etaz := normfloat()
+
 		B_therm = Vector{etax, etay, etaz}
 		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
 		B_therm = B_therm.times(number)
@@ -39,7 +40,8 @@ func (p *Particle) temp() Vector {
 
 //Calculates the zeeman field working on a Particle
 func (p *Particle) zeeman() Vector {
-	return B_ext
+	x, y, z := B_ext(T)
+	return Vector{x, y, z}
 }
 
 //Calculates the anisotropy field working on a Particle
