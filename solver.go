@@ -11,7 +11,6 @@ func Run(time float64) {
 		if Demag {
 			calculatedemag()
 		}
-
 		//TODO variabel maken tussen euler en heun
 		heunstep(universe.lijst)
 		//eulerstep(universe.lijst)

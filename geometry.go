@@ -8,7 +8,7 @@ import (
 //Adds a single particle
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(Vector{x, y, z}) {
-		a := Particle{X: x, Y: y, Z: z, r: 20e-9, msat: 860e3}
+		a := Particle{X: x, Y: y, Z: z, r: 20e-9, msat: 400e3} //magnetite
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 	} else {
@@ -29,7 +29,7 @@ func Addsingleparticle(x, y, z float64) {
 
 func Reset() {
 	universe.lijst = nil
-	B_ext = Vector{0., 0., 0.}
+	B_ext = func(t float64) (float64, float64, float64) { return 0., 0., 0. }
 	Dt = 1e-15
 	T = 0
 	Alpha = 0.02

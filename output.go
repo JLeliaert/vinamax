@@ -3,6 +3,7 @@ package vinamax
 
 import (
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -12,6 +13,7 @@ var Outputinterval float64
 var twrite float64
 var locations []Vector
 var filecounter int = 0
+var output_B_ext = false
 
 func Output(interval float64) {
 	f, err = os.Create(outdir + "/table.txt")
@@ -42,9 +44,18 @@ func averages(lijst []*Particle) Vector {
 
 //Writes the header in table.txt
 func writeheader() {
-	header := fmt.Sprintf("#t\t<mx>\t<my>\t<mz>\n")
+	header := fmt.Sprintf("#t\t<mx>\t<my>\t<mz>")
 	_, err = f.WriteString(header)
 	check(err)
+	if output_B_ext {
+		header := fmt.Sprintf("\tB_ext_x\tB_ext_y\t<B_ext_z")
+		_, err = f.WriteString(header)
+		check(err)
+	}
+	header = fmt.Sprintf("\n")
+	_, err = f.WriteString(header)
+	check(err)
+
 }
 
 func Tableadd_B_eff_at_location(a, b, c float64) {
@@ -61,8 +72,18 @@ func write(avg Vector) {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
+
+		if output_B_ext {
+			B_ext_x, B_ext_y, B_ext_z := B_ext(T)
+			string = fmt.Sprintf("\t%v\t%v\t%v", B_ext_x, B_ext_y, B_ext_z)
+			_, err = f.WriteString(string)
+			check(err)
+		}
+
 		for i := range locations {
-			string = fmt.Sprintf("\t%v\t%v\t%v", (B_ext[0] + demag(locations[i][0], locations[i][1], locations[i][2])[0]), (B_ext[1] + demag(locations[i][0], locations[i][1], locations[i][2])[1]), (B_ext[2] + demag(locations[i][0], locations[i][1], locations[i][2])[2]))
+			B_ext_x, B_ext_y, B_ext_z := B_ext(T)
+
+			string = fmt.Sprintf("\t%v\t%v\t%v", (B_ext_x + demag(locations[i][0], locations[i][1], locations[i][2])[0]), (B_ext_y + demag(locations[i][0], locations[i][1], locations[i][2])[1]), (B_ext_z + demag(locations[i][0], locations[i][1], locations[i][2])[2]))
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -89,5 +110,13 @@ func Save(a string) {
 		}
 	} else {
 		fmt.Println("error")
+	}
+}
+
+func Tableadd(a string) {
+	if a == "B_ext" {
+		output_B_ext = true
+	} else {
+		log.Fatal(a, " is currently not addable to table")
 	}
 }

@@ -16,6 +16,7 @@ import (
 	. "."
 	"flag"
 	"log"
+	"math"
 	"os"
 	"runtime/pprof"
 )
@@ -44,7 +45,9 @@ func main() {
 	Particle_radius(7.0e-9)
 	//	Lognormal_radius(1.6e-9)
 
-	//	B_ext = Vector{0, 0, 0.01}
+	//An example of an external field (in Tesla, t in seconds)
+	B_ext = func(t float64) (float64, float64, float64) { return 0.01, 0.001*math.Sin(t), t / 2 }
+
 	Demag = false
 	FMM = false
 	Dt = 1e-11
@@ -58,9 +61,12 @@ func main() {
 	Anisotropy_random()
 	M_uniform(0, 0, 1)
 
-	Output(5e-8)
 	//Tableadd_B_eff_at_location(0,0.0,0)
+	Tableadd("B_ext")
+	Output(5e-10)
 	Save("geometry")
 
-	Run(1e-6)
+	for i := 0; i < 10; i++ {
+		Run(1e-8)
+	}
 }
