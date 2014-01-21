@@ -53,7 +53,7 @@ func main() {
 	Dt = 1e-11
 	T = 0.
 	Temp = 300.
-	SetRandomSeed(2)
+	SetRandomSeed(3)
 	Alpha = 0.01
 	Ku1 = 10000
 
@@ -66,7 +66,5 @@ func main() {
 	Output(5e-10)
 	Save("geometry")
 
-	for i := 0; i < 10; i++ {
-		Run(1e-8)
-	}
+	Run(1e-8)
 }
