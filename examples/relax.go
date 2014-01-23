@@ -13,7 +13,7 @@
 package main
 
 import (
-	. "."
+	. "github.com/JLeliaert/vinamax"
 	"flag"
 	"log"
 	"math"
@@ -56,6 +56,7 @@ func main() {
 	SetRandomSeed(3)
 	Alpha = 0.01
 	Ku1 = 10000
+	Msat(400000)
 
 	//Anisotropy_axis(0, 0, 1)
 	Anisotropy_random()

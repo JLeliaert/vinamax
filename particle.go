@@ -83,3 +83,10 @@ func Lognormal_radius(m float64) {
 		}
 	}
 }
+
+//Sets the saturation magnetisation of all particles
+func Msat(x float64) {
+	for i := range universe.lijst {
+		universe.lijst[i].msat = x
+	}
+}
