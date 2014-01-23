@@ -16,6 +16,7 @@ var (
 	FMM           bool                                        = true  // Calculate demag with FMM method
 	Demag         bool                                        = true  // Calculate demag
 	outdir        string                                              // the output directory
+	Outputinterval float64
 )
 
 func testinput() {

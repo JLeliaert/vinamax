@@ -45,7 +45,7 @@ func main() {
 	Particle_radius(7.0e-9)
 	//	Lognormal_radius(1.6e-9)
 
-	//An example of an external field (in Tesla, t in seconds)
+	//An example of an arbitrary function for the external field (in Tesla, t in seconds)
 	B_ext = func(t float64) (float64, float64, float64) { return 0.01, 0.001*math.Sin(t), t / 2 }
 
 	Demag = false

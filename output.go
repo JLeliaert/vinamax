@@ -9,7 +9,6 @@ import (
 
 var f *os.File
 var err error
-var Outputinterval float64
 var twrite float64
 var locations []Vector
 var filecounter int = 0
@@ -59,6 +58,9 @@ func writeheader() {
 }
 
 func Tableadd_B_eff_at_location(a, b, c float64) {
+	if outputinterval !=0{
+		log.Fatal("Output() should always come AFTER Tableadd_B_eff_at_location()")
+	}
 	if universe.inworld(Vector{a, b, c}) {
 		locations = append(locations, Vector{a, b, c})
 	} else {
@@ -114,6 +116,9 @@ func Save(a string) {
 }
 
 func Tableadd(a string) {
+	if outputinterval !=0{
+		log.Fatal("Output() should always come AFTER Tableadd()")
+	}
 	if a == "B_ext" {
 		output_B_ext = true
 	} else {
