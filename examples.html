@@ -34,9 +34,8 @@
 
 <h3>
 <a name="first example" class="anchor" href="#first-example"><span class="octicon octicon-link"></span></a>First example</h3>
-
-TODO: de uitleg
-
+<p>
+In this first example a single particle is created without anisotropy. It starts off with a magnetisation along the x-direction and an external field along the z-direction is applied. The magnetisation should gyrate around this axis with a frequency of 28 GHz/T and damp slowly towards the z-direction, as dictated by the Landau-Lifshitz equation.</p>
 <pre><code>
 package main
 
@@ -91,12 +90,13 @@ func main() {
         Run(5.e-9)
 }
 </code></pre>
-
-TODO: Referentie naar mumax, maar ik weet nog niet hoe
+<p>
+The results of the simulation are visualised below and to validate the code, the comparison with <a href="http://mumax.github.io">Mumax3</a> of (<a href="https://github.com/barnex" class="user-mention">@barnex</a>) has been made.
+</p>
 
 <figure style="float:left">
         <img src="examples/example1.png"/>
-	        <figcaption> The output of the first example plotted with GNUPLOT </figcaption>
+	        <figcaption> <p>The output of the first example plotted with GNUPLOT </p></figcaption>
 		</figure>
 
   
