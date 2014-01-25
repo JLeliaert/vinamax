@@ -1,3 +1,3 @@
 vinamax
 =======
-Vinamax
+A macrospin simulation tool for nanoparticles
