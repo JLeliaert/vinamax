@@ -32,14 +32,16 @@ func main() {
 	//Don't calculate demag at all
 	Demag=false
 
+	//TODO MSAT!
+
 	//timestep : 1fs
 	Dt = 1e-15
 	//initialise time at zero
 	T = 0.
 	//temperature=0
 	Temp = 0.
-	//damping constant=0.01
-	Alpha = 0.01
+	//Gilbert damping constant=0.02
+	Alpha = 0.02
 	//anisotropy constant=0
 	Ku1 = 0 
 
