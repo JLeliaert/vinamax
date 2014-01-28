@@ -2,10 +2,6 @@
 
 package vinamax
 
-import (
-//	"math"
-)
-
 type Vector [3]float64
 
 //Dot product between two vectors

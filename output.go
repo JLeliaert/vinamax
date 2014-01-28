@@ -57,6 +57,11 @@ func writeheader() {
 
 }
 
+//prints the suggested timestep for the simulation
+func printsuggestedtimestep() {
+	fmt.Println("A good timestep would be: ", 0.001/maxtauwitht)
+}
+
 func Tableadd_B_eff_at_location(a, b, c float64) {
 	if Outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_B_eff_at_location()")
@@ -124,4 +129,8 @@ func Tableadd(a string) {
 	} else {
 		log.Fatal(a, " is currently not addable to table")
 	}
+}
+
+func SuggestTimestep() {
+	suggest_timestep = true
 }

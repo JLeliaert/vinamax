@@ -1,5 +1,9 @@
 package vinamax
 
+import (
+	"math"
+)
+
 //Runs the simulation for a certain time
 func Run(time float64) {
 	testinput()
@@ -17,6 +21,9 @@ func Run(time float64) {
 		T += Dt
 
 		write(averages(universe.lijst))
+	}
+	if suggest_timestep {
+		printsuggestedtimestep()
 	}
 }
 
@@ -55,5 +62,14 @@ func heunstep(Lijst []*Particle) {
 
 		p.m = norm(p.m)
 
+		if suggest_timestep {
+			taux := (-tau1[0] + tau2[0]) * 0.5
+			tauy := (-tau1[1] + tau2[1]) * 0.5
+			tauz := (-tau1[2] + tau2[2]) * 0.5
+			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+			if torq > maxtauwitht {
+				maxtauwitht = torq
+			}
+		}
 	}
 }
