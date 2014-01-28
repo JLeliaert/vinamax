@@ -156,7 +156,14 @@ aside a.button {
   margin-bottom: 20px;
   font-size: 21px;
 }
-
+jonathan a.button {
+  width: 168px;
+  padding-left: 40px;
+  display: inline-block;
+  background: transparent url(../images/button.png) 0 0 no-repeat;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
 code, pre {
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   color: #222;
