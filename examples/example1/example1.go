@@ -1,7 +1,7 @@
-//This example adds a single particle without anisotropy
-//gives it a well defined magnetisation direction
+//This example adds a single particle without anisotropy,
+//gives it a well defined magnetisation direction,
 //applies an external field and sees how the magnetisation
-//rotates around and damps towards this field
+//rotates around and damps towards this field.
 //The gyration frequency should be 28 GHz/T
 
 

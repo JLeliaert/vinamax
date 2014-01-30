@@ -1,4 +1,4 @@
-//test to try demag
+//TODO deze commentaar test to try demag
 package main
 
 import (
