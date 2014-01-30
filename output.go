@@ -110,8 +110,9 @@ func Save(a string) {
 	filecounter += 1
 	if a == "geometry" {
 		// heel de lijst met particles aflopen en de locatie en straal printen
+		//TODO header
 		for i := range universe.lijst {
-			string := fmt.Sprintf("%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r)
+			string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat)
 			_, error = file.WriteString(string)
 			check(error)
 		}

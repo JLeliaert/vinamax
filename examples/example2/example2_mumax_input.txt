@@ -1,0 +1,20 @@
+setgridsize(6, 3, 3)
+setcellsize(25.792e-9, 25.792e-9, 25.792e-9)
+
+a :=cell(0, 1, 1)
+b :=cell(5, 1, 1)
+
+setgeom(a.add(b))
+
+Msat    = 860e3
+Aex     = 13e-12
+m       = uniform(0,1,0)
+
+Alpha = 0.1
+
+tableautosave(1e-10)
+
+B_ext = vector(0.001, 0, 0)
+
+Run(100e-9)
+

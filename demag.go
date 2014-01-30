@@ -30,16 +30,17 @@ func demag(x, y, z float64) Vector {
 			r3 := r * r2
 			r5 := r3 * r2
 
-			demag[0] += universe.lijst[i].msat * volume * prefactor * ((3 * universe.lijst[i].m[0] * r_vect[0] * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
+			dotproduct := universe.lijst[i].m.dot(r_vect)
 
-			demag[1] += universe.lijst[i].msat * volume * prefactor * ((3. * universe.lijst[i].m[1] * r_vect[1] * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
+			demag[0] += universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
 
-			demag[2] += universe.lijst[i].msat * volume * prefactor * ((3 * universe.lijst[i].m[2] * r_vect[2] * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
+			demag[1] += universe.lijst[i].msat * volume * prefactor * ((3. * dotproduct * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
+
+			demag[2] += universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
 
 		}
 
 	}
-	//demag = Times(demag, prefactor)
 	return demag
 }
 
