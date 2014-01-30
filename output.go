@@ -15,6 +15,7 @@ var filecounter int = 0
 var output_B_ext = false
 
 func Output(interval float64) {
+	outputcalled=true
 	f, err = os.Create(outdir + "/table.txt")
 	check(err)
 	//	defer f.Close()

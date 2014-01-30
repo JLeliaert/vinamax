@@ -87,7 +87,7 @@ func FMMdemag(x, y, z float64) Vector {
 				r3 := r * r2
 				r5 := r3 * r2
 
-				dotproduct := nodelist.lijst[i].m.dot(r_vect)
+				dotproduct := nodelist[i].lijst[i].m.dot(r_vect)
 
 				demag[0] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
 

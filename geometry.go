@@ -58,6 +58,7 @@ func (c Cube) Addparticles(n int) {
 }
 
 func World(x, y, z, r float64) {
+worldcalled=true
 	universe.origin = Vector{x, y, z}
 	universe.diameter = r
 }
