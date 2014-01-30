@@ -87,11 +87,13 @@ func FMMdemag(x, y, z float64) Vector {
 				r3 := r * r2
 				r5 := r3 * r2
 
-				demag[0] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * nodelist[i].lijst[0].m[0] * r_vect[0] * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
+				dotproduct := nodelist.lijst[i].m.dot(r_vect)
 
-				demag[1] += nodelist[i].lijst[0].msat * volume * prefactor * ((3. * nodelist[i].lijst[0].m[1] * r_vect[1] * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
+				demag[0] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
 
-				demag[2] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * nodelist[i].lijst[0].m[2] * r_vect[2] * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
+				demag[1] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
+
+				demag[2] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
 
 			}
 			//	nodelist[i] = nodelist[len(nodelist)-1]
