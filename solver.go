@@ -7,6 +7,7 @@ import (
 //Runs the simulation for a certain time
 func Run(time float64) {
 	testinput()
+	syntaxrun()
 	for i := range universe.lijst {
 		norm(universe.lijst[i].m)
 	}

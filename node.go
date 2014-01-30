@@ -175,7 +175,7 @@ func Maketree() {
 	//	universe.lijst = append(universe.lijst, &Lijst[i])
 	//	universe.number += 1
 	//}
-	treecalled=true
+	treecalled = true
 	universe.descend()
 }
 

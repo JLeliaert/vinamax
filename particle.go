@@ -24,7 +24,7 @@ func (p Particle) String() string {
 
 //Gives all particles the same specifiekd anisotropy-axis
 func Anisotropy_axis(x, y, z float64) {
-	uaniscalled =true
+	uaniscalled = true
 	a := norm(Vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].u_anis = a
@@ -33,7 +33,7 @@ func Anisotropy_axis(x, y, z float64) {
 
 //Gives all particles a random anisotropy-axis
 func Anisotropy_random() {
-	uaniscalled =true
+	uaniscalled = true
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
@@ -43,7 +43,7 @@ func Anisotropy_random() {
 
 //Gives all particles with random magnetisation orientation
 func M_random() {
-	magnetisationcalled =true
+	magnetisationcalled = true
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
@@ -53,7 +53,7 @@ func M_random() {
 
 //Gives all particles a specified magnetisation direction
 func M_uniform(x, y, z float64) {
-	magnetisationcalled =true
+	magnetisationcalled = true
 	a := norm(Vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].m = a
@@ -62,7 +62,7 @@ func M_uniform(x, y, z float64) {
 
 //Sets the radius of all particles to a consant value
 func Particle_radius(x float64) {
-radiuscalled=true
+	radiuscalled = true
 	if x < 0 {
 		log.Fatal("particles can't have a negative radius")
 	}
@@ -73,7 +73,7 @@ radiuscalled=true
 
 //Gives all particles a radius taken out of a lognormal distribution (mean is specified)
 func Lognormal_radius(m float64) {
-radiuscalled=true
+	radiuscalled = true
 	mean := m
 	s := 0.5
 	norm := 1. / (math.Sqrt(2*math.Pi) * s * mean) * math.Exp(-sqr(math.Log(mean/mean))/(2.*s*s))
@@ -92,7 +92,7 @@ radiuscalled=true
 
 //Sets the saturation magnetisation of all particles
 func Msat(x float64) {
-msatcalled=true
+	msatcalled = true
 	for i := range universe.lijst {
 		universe.lijst[i].msat = x
 	}

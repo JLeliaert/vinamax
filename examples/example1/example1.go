@@ -32,7 +32,7 @@ func main() {
 	//Don't calculate demag at all
 	Demag=false
 
-	//TODO MSAT!
+	Msat(860e3)	
 
 	//timestep : 1fs
 	Dt = 1e-15
