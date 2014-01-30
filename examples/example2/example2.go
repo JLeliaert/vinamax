@@ -46,7 +46,7 @@ func main() {
 	Tableadd("B_ext")
 
 	//write output every 1e-13s 
-	Output(1e-12)
+	Output(1e-10)
 //	SuggestTimestep()
 	Save("geometry")
 
