@@ -3,11 +3,14 @@ package vinamax
 import (
 	"math"
 	"math/rand"
-	//	"fmt"
+	"fmt"
 )
 
 //Sums the individual fields to the effective field working on the Particle
 func (p *Particle) b_eff(temp Vector) Vector {
+	fmt.Println(p.X,p.Y)
+	fmt.Println(p.demagnetising_field)
+	fmt.Println("")
 	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(temp)))
 }
 

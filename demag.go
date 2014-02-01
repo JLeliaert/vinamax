@@ -2,7 +2,7 @@ package vinamax
 
 import (
 	"math"
-	//	"fmt"
+//	"fmt"
 )
 
 //zie 2.51 in coey en watweuitrekenen.pdf
@@ -39,7 +39,6 @@ func demag(x, y, z float64) Vector {
 			demag[2] += universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
 
 		}
-
 	}
 	return demag
 }
@@ -100,33 +99,32 @@ func FMMdemag(x, y, z float64) Vector {
 			//	nodelist = nodelist[0 : len(nodelist)-1]
 		}
 		if nodelist[i].number > 1 {
+			demag = Vector{0,0,0}
 			//if aantalparticles in box>1:
 			r_vect := Vector{x - nodelist[i].com[0], y - nodelist[i].com[1], z - nodelist[i].com[2]}
 			r := math.Sqrt(r_vect[0]*r_vect[0] + r_vect[1]*r_vect[1] + r_vect[2]*r_vect[2])
 
 			if (nodelist[i].where(Vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
 				//	if voldoet aan criterium: calculate en delete van stack
-				//fmt.Println(nodelist[i].number)
 				m := Vector{0, 0, 0}
 				volume := 0.
 				//in loopje m en volume berekenen
 				for j := range nodelist[i].lijst {
-					volume += 4. / 3 * math.Pi * cube(nodelist[i].lijst[i].r)
-
-					m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat
-					m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat
-					m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat
+					volume = 4. / 3. * math.Pi * cube(nodelist[i].lijst[i].r)
+					m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat*volume
+					m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat*volume
+					m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat*volume
 				}
 				r2 := r * r
 				r3 := r * r2
 				r5 := r3 * r2
 				dotproduct := m.dot(r_vect)
 
-				demag[0] += volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (m[0] / r3))
+				demag[0] +=  prefactor * ((3 * dotproduct * r_vect[0] / r5) - (m[0] / r3))
 
-				demag[1] += volume * prefactor * ((3 * dotproduct * r_vect[1] / r5) - (m[1] / r3))
+				demag[1] +=  prefactor * ((3 * dotproduct * r_vect[1] / r5) - (m[1] / r3))
 
-				demag[2] += volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
+				demag[2] +=  prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
 				//	if not: add subboxen en delete van stack
