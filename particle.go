@@ -71,19 +71,17 @@ func Particle_radius(x float64) {
 	}
 }
 
-//Gives all particles a radius taken out of a lognormal distribution (mean is specified)
-func Lognormal_radius(m float64) {
+//Gives all particles a diameter taken out of a lognormal distribution
+func Lognormal_diameter(me, st float64) {
+	m := me * 1e9
+	s := st * 1e9
 	radiuscalled = true
-	mean := m
-	s := 0.5
-	norm := 1. / (math.Sqrt(2*math.Pi) * s * mean) * math.Exp(-sqr(math.Log(mean/mean))/(2.*s*s))
-
 	for i := range universe.lijst {
 		for {
-			x := rand.Float64() * 5 * mean
-			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-sqr(math.Log(x/mean))/(2.*s*s))
-			if rand.Float64() > f_x/norm {
-				universe.lijst[i].r = x
+			x := rand.Float64() * 200 * m
+			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-1./(2.*s*s)*sqr(math.Log(x/m)))
+			if rand.Float64() < f_x {
+				universe.lijst[i].r = x * 1e-9 / 2.
 				break
 			}
 		}

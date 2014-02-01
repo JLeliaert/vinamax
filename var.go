@@ -29,6 +29,10 @@ var (
 	outputcalled        bool = false
 )
 
+func init() {
+	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 0 } // External applied field in T
+}
+
 func testinput() {
 	if Dt < 0 {
 		log.Fatal("Dt cannot be smaller than 0, did you forget to initialise?")
