@@ -120,12 +120,13 @@ func FMMdemag(x, y, z float64) Vector {
 				r2 := r * r
 				r3 := r * r2
 				r5 := r3 * r2
+				dotproduct := m.dot(r_vect)
 
-				demag[0] += volume * prefactor * ((3 * m[0] * r_vect[0] * r_vect[0] / r5) - (m[0] / r3))
+				demag[0] += volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (m[0] / r3))
 
-				demag[1] += volume * prefactor * ((3 * m[1] * r_vect[1] * r_vect[1] / r5) - (m[1] / r3))
+				demag[1] += volume * prefactor * ((3 * dotproduct * r_vect[1] / r5) - (m[1] / r3))
 
-				demag[2] += volume * prefactor * ((3 * m[2] * r_vect[2] * r_vect[2] / r5) - (m[2] / r3))
+				demag[2] += volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
 				//	if not: add subboxen en delete van stack
