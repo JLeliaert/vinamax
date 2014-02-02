@@ -2,7 +2,7 @@ package vinamax
 
 import (
 	"math"
-//	"fmt"
+	//	"fmt"
 )
 
 //zie 2.51 in coey en watweuitrekenen.pdf
@@ -108,20 +108,20 @@ func FMMdemag(x, y, z float64) Vector {
 				//in loopje m en volume berekenen
 				for j := range nodelist[i].lijst {
 					volume = 4. / 3. * math.Pi * cube(nodelist[i].lijst[i].r)
-					m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat*volume
-					m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat*volume
-					m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat*volume
+					m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat * volume
+					m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat * volume
+					m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat * volume
 				}
 				r2 := r * r
 				r3 := r * r2
 				r5 := r3 * r2
 				dotproduct := m.dot(r_vect)
 
-				demag[0] +=  prefactor * ((3 * dotproduct * r_vect[0] / r5) - (m[0] / r3))
+				demag[0] += prefactor * ((3 * dotproduct * r_vect[0] / r5) - (m[0] / r3))
 
-				demag[1] +=  prefactor * ((3 * dotproduct * r_vect[1] / r5) - (m[1] / r3))
+				demag[1] += prefactor * ((3 * dotproduct * r_vect[1] / r5) - (m[1] / r3))
 
-				demag[2] +=  prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
+				demag[2] += prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
 				//	if not: add subboxen en delete van stack
