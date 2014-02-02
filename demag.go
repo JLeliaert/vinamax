@@ -61,7 +61,6 @@ func (r *Particle) dist(x, y, z float64) float64 {
 func FMMdemag(x, y, z float64) Vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
-
 	//lijst maken met nodes
 	//node universe in de box steken
 	nodelist := []*node{&universe}
@@ -93,13 +92,11 @@ func FMMdemag(x, y, z float64) Vector {
 				demag[1] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[1] / r5) - (nodelist[i].lijst[0].m[1] / r3))
 
 				demag[2] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
-
 			}
 			//	nodelist[i] = nodelist[len(nodelist)-1]
 			//	nodelist = nodelist[0 : len(nodelist)-1]
 		}
 		if nodelist[i].number > 1 {
-			demag = Vector{0,0,0}
 			//if aantalparticles in box>1:
 			r_vect := Vector{x - nodelist[i].com[0], y - nodelist[i].com[1], z - nodelist[i].com[2]}
 			r := math.Sqrt(r_vect[0]*r_vect[0] + r_vect[1]*r_vect[1] + r_vect[2]*r_vect[2])
