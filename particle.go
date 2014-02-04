@@ -7,7 +7,7 @@ import (
 	"math/rand"
 )
 
-//A Particle essentially constains a position, magnetisation, TODO msat, size?
+//A Particle essentially constains a position, magnetisation
 type Particle struct {
 	X, Y, Z             float64
 	m                   Vector

@@ -44,6 +44,7 @@ func eulerstep(Lijst []*Particle) {
 
 //perform a timestep using heun method
 //http://en.wikipedia.org/wiki/Heun_method
+//TODO, demag in predictor AND corrector?
 func heunstep(Lijst []*Particle) {
 	for _, p := range Lijst {
 

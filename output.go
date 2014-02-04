@@ -124,7 +124,7 @@ func Save(a string) {
 	} else {
 		if a == "m" {
 			// heel de lijst met particles aflopen en de locatie en straal en magnetisatie printen
-			//TODO, header met tijdstap
+			//TODO, header met tijdstip in
 			for i := range universe.lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].m[0], universe.lijst[i].m[1], universe.lijst[i].m[2])
 				_, error = file.WriteString(string)
