@@ -18,7 +18,7 @@ type node struct {
 
 	origin   Vector      //the origin of the cube
 	diameter float64     //the diameter
-	com      Vector      //centreofmass
+	com      Vector      //centreofmagnetisation
 	number   int64       //numberofparticles
 	lijst    []*Particle //lijst met alle particles
 }
@@ -27,8 +27,9 @@ func (n *node) add(p *Particle) {
 	n.lijst = append(n.lijst, p)
 }
 
+//center of magnetisation
+//TODO: this is wrong, take msat and volume into account!
 func (n *node) calculatecom() {
-	//TODO: hiermee oppassen als de deeltjes een verschillende grootte kunnen hebben
 	comx := 0.
 	comy := 0.
 	comz := 0.
