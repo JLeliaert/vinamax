@@ -9,8 +9,6 @@ import (
 
 func calculatedemag() {
 
-	//TODO: maketree uit main halen construct tree (eenmalig!!!)
-
 	for i := range universe.lijst {
 		universe.lijst[i].demagnetising_field = universe.lijst[i].demag()
 	}
@@ -45,7 +43,6 @@ func demag(x, y, z float64) Vector {
 
 //demag on a Particle
 func (p Particle) demag() Vector {
-	//TODO hier de keuze laten
 	if FMM {
 		return FMMdemag(p.X, p.Y, p.Z)
 	}

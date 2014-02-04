@@ -16,30 +16,6 @@ func Addsingleparticle(x, y, z float64) {
 	}
 }
 
-// Resets the simulation to all standard values:
-// Deletes all particles
-// Resets B_ext to (0,0,0) T
-// Dt = 1e-15 s
-// T=0 s
-// Alpha=0.02
-// Temp=0K
-// Ku1=0
-// Thresholdbeta=0.7
-// use FMM method
-
-func Reset() {
-	universe.lijst = nil
-	B_ext = func(t float64) (float64, float64, float64) { return 0., 0., 0. }
-	Dt = 1e-15
-	T = 0
-	Alpha = 0.02
-	Temp = 0.
-	Ku1 = 0
-	Thresholdbeta = 0.7
-	FMM = true
-	//todo de 8 subnodes nil maken
-}
-
 type Cube struct {
 	x, y, z float64 //position
 	S       float64 //diameter
