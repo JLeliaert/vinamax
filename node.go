@@ -20,11 +20,11 @@ type node struct {
 	diameter float64     //the diameter
 	com      Vector      //centreofmagnetisation
 	number   int64       //numberofparticles
-	lijst    []*Particle //lijst met alle particles
+	lijst    []*particle //lijst met alle particles
 }
 
 //adds particle to node
-func (n *node) add(p *Particle) {
+func (n *node) add(p *particle) {
 	n.lijst = append(n.lijst, p)
 }
 

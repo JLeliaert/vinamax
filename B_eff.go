@@ -6,21 +6,22 @@ import (
 	//"fmt"
 )
 
-//Sums the individual fields to the effective field working on the Particle
-func (p *Particle) b_eff(temp Vector) Vector {
+//Sums the individual fields to the effective field working on the particle
+func (p *particle) b_eff(temp Vector) Vector {
 	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(temp)))
 }
 
 //Set the randomseed for the temperature
-func SetRandomSeed(a int64) {
+func Setrandomseed(a int64) {
+	randomseedcalled = true
 	rng = rand.New(rand.NewSource(a))
 }
 
 var rng = rand.New(rand.NewSource(0))
 
-//Calculates the the thermal field B_therm working on a Particle
+//Calculates the the thermal field B_therm working on a particle
 // factor 4/3pi in "number" because they are spherical
-func (p *Particle) temp() Vector {
+func (p *particle) temp() Vector {
 	B_therm := Vector{0., 0., 0.}
 	if Temp != 0. {
 		etax := rng.NormFloat64()
@@ -39,14 +40,14 @@ func (p *Particle) temp() Vector {
 	return B_therm
 }
 
-//Calculates the zeeman field working on a Particle
-func (p *Particle) zeeman() Vector {
+//Calculates the zeeman field working on a particle
+func (p *particle) zeeman() Vector {
 	x, y, z := B_ext(T)
 	return Vector{x, y, z}
 }
 
-//Calculates the anisotropy field working on a Particle
-func (p *Particle) anis() Vector {
+//Calculates the anisotropy field working on a particle
+func (p *particle) anis() Vector {
 	//2*Ku1*(m.u)*u/p.msat
 
 	mdotu := p.m.dot(p.u_anis)

@@ -41,16 +41,16 @@ func demag(x, y, z float64) Vector {
 	return demag
 }
 
-//demag on a Particle
-func (p Particle) demag() Vector {
+//demag on a particle
+func (p particle) demag() Vector {
 	if FMM {
 		return fMMdemag(p.x, p.y, p.z)
 	}
 	return demag(p.x, p.y, p.z)
 }
 
-//The distance between a Particle and a location
-func (r *Particle) dist(x, y, z float64) float64 {
+//The distance between a particle and a location
+func (r *particle) dist(x, y, z float64) float64 {
 	return math.Sqrt(sqr(float64(r.x-x)) + sqr(float64(r.y-y)) + sqr(float64(r.z-z)))
 }
 

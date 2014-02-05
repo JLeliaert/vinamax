@@ -28,6 +28,7 @@ var (
 	magnetisationcalled bool = false
 	treecalled          bool = false
 	outputcalled        bool = false
+	randomseedcalled    bool = false
 )
 
 //initialised B_ext function
@@ -66,6 +67,9 @@ func syntaxrun() {
 		log.Fatal("You have specify the initial magnetisation")
 	}
 	if treecalled == false && FMM == true {
-		log.Fatal("You have run Maketree() as last command in front of Run() when using the FMM method")
+		log.Fatal("You have to run Maketree() as last command in front of Run() when using the FMM method")
+	}
+	if Temp != 0 && randomseedcalled == false {
+		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
 	}
 }

@@ -4,7 +4,6 @@
 //rotates around and damps towards this field.
 //The gyration frequency should be 28 GHz/T
 
-
 package main
 
 import (
@@ -13,7 +12,7 @@ import (
 
 func main() {
 
-	//comment TODO	
+	//Defines the world at location 0,0,0 and with a side of 1e-8 m	
 	World(0,0,0,1e-8)
 	//Adds a single particle in the origin
 	Addsingleparticle(0,0,0)
@@ -24,14 +23,15 @@ func main() {
 	//the particle has radius 10 nm
 	Particle_radius(10.e-9)
 
-	//external field along the z direction of 10mT
+	//apply an external field along the z direction of 10mT
 	//B_ext can be an arbitrary function of time
 	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 0.1 }
+	//Don't calculate demag 
+	Demag=false
 	//Don't use the fast multipole method
 	FMM=false
-	//Don't calculate demag at all
-	Demag=false
 
+	//sets the saturation magnetisaton of the particles at 860e3 A/m
 	Msat(860e3)	
 
 	//timestep : 1fs
@@ -51,9 +51,9 @@ func main() {
 	//initialise the magnetisation along the x direction
 	M_uniform(1,0,0)
 
-	//write output every 1e-13s 
+	//write output every 5e-12s 
 	Output(5e-12)
 
-	//run for 1 ns
+	//run for 5 ns
 	Run(5.e-9)
 }

@@ -29,7 +29,7 @@ func Run(time float64) {
 }
 
 //perform a timestep using euler forward method
-func eulerstep(Lijst []*Particle) {
+func eulerstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 
@@ -45,7 +45,7 @@ func eulerstep(Lijst []*Particle) {
 //perform a timestep using heun method
 //http://en.wikipedia.org/wiki/Heun_method
 //TODO, demag in predictor AND corrector?
-func heunstep(Lijst []*Particle) {
+func heunstep(Lijst []*particle) {
 	for _, p := range Lijst {
 
 		temp := p.temp()

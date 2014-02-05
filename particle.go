@@ -7,8 +7,8 @@ import (
 	"math/rand"
 )
 
-//A Particle essentially constains a position, magnetisation
-type Particle struct {
+//A particle essentially constains a position, magnetisation
+type particle struct {
 	x, y, z             float64
 	m                   Vector
 	demagnetising_field Vector
@@ -17,9 +17,9 @@ type Particle struct {
 	msat                float64 // Saturation magnetisation in A/m
 }
 
-//print position and magnitisation of a Particle
-func (p Particle) string() string {
-	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
+//print position and magnitisation of a particle
+func (p particle) string() string {
+	return fmt.Sprintf("particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
 }
 
 //Gives all particles the same specified anisotropy-axis

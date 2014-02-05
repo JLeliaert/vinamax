@@ -33,8 +33,8 @@ func check(e error) {
 	}
 }
 
-//calculates the average magnetisation components of all Particles
-func averages(lijst []*Particle) Vector {
+//calculates the average magnetisation components of all particles
+func averages(lijst []*particle) Vector {
 	avgs := Vector{0, 0, 0}
 	for i := range lijst {
 		avgs[0] += lijst[i].m[0]
@@ -68,9 +68,9 @@ func printsuggestedtimestep() {
 }
 
 //Adds the effective field at a specific location to the output table
-func Tableadd_B_eff_at_location(a, b, c float64) {
+func Tableadd_b_eff_at_location(a, b, c float64) {
 	if outputinterval != 0 {
-		log.Fatal("Output() should always come AFTER Tableadd_B_eff_at_location()")
+		log.Fatal("Output() should always come AFTER Tableadd_b_eff_at_location()")
 	}
 	if universe.inworld(Vector{a, b, c}) {
 		locations = append(locations, Vector{a, b, c})
@@ -168,6 +168,6 @@ func Tableadd(a string) {
 }
 
 //returns a suggested timestep at the end of the simulation
-func SuggestTimestep() {
+func Suggesttimestep() {
 	suggest_timestep = true
 }
