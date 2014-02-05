@@ -8,9 +8,11 @@ import (
 //Adds a single particle at specified coordinates
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(Vector{x, y, z}) {
-		a := Particle{X: x, Y: y, Z: z, r: 20e-9, msat: 400e3} //magnetite
+		a := Particle{x: x, y: y, z: z}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
+		msatcalled = false
+		radiuscalled = false
 	} else {
 		fmt.Println("error: outside of universe")
 	}
@@ -18,17 +20,20 @@ func Addsingleparticle(x, y, z float64) {
 
 type Cube struct {
 	x, y, z float64 //position
-	S       float64 //diameter
-	N       int     //numberofparticles
+	s       float64 //diameter
+	n       int     //numberofparticles
 }
 
 //Adds a number of particles at random locations in a cubic region
 func (c Cube) Addparticles(n int) {
-	c.N += n
+	msatcalled = false
+	radiuscalled = false
+
+	c.n += n
 	for i := 0; i < n; i++ {
-		px := c.x + (-0.5+rand.Float64())*c.S
-		py := c.y + (-0.5+rand.Float64())*c.S
-		pz := c.z + (-0.5+rand.Float64())*c.S
+		px := c.x + (-0.5+rand.Float64())*c.s
+		py := c.y + (-0.5+rand.Float64())*c.s
+		pz := c.z + (-0.5+rand.Float64())*c.s
 		Addsingleparticle(px, py, pz)
 	}
 }

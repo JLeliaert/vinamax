@@ -9,7 +9,7 @@ import (
 
 //A Particle essentially constains a position, magnetisation
 type Particle struct {
-	X, Y, Z             float64
+	x, y, z             float64
 	m                   Vector
 	demagnetising_field Vector
 	u_anis              Vector  // Uniaxial anisotropy axis
@@ -19,7 +19,7 @@ type Particle struct {
 
 //print position and magnitisation of a Particle
 func (p Particle) string() string {
-	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
+	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
 }
 
 //Gives all particles the same specified anisotropy-axis

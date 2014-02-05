@@ -20,9 +20,9 @@ func demag(x, y, z float64) Vector {
 	demag := Vector{0, 0, 0}
 
 	for i := range universe.lijst {
-		if universe.lijst[i].X != x || universe.lijst[i].Y != y || universe.lijst[i].Z != z {
+		if universe.lijst[i].x != x || universe.lijst[i].y != y || universe.lijst[i].z != z {
 			volume := 4. / 3 * math.Pi * cube(universe.lijst[i].r)
-			r_vect := Vector{x - universe.lijst[i].X, y - universe.lijst[i].Y, z - universe.lijst[i].Z}
+			r_vect := Vector{x - universe.lijst[i].x, y - universe.lijst[i].y, z - universe.lijst[i].z}
 			r := universe.lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
@@ -44,14 +44,14 @@ func demag(x, y, z float64) Vector {
 //demag on a Particle
 func (p Particle) demag() Vector {
 	if FMM {
-		return fMMdemag(p.X, p.Y, p.Z)
+		return fMMdemag(p.x, p.y, p.z)
 	}
-	return demag(p.X, p.Y, p.Z)
+	return demag(p.x, p.y, p.z)
 }
 
 //The distance between a Particle and a location
 func (r *Particle) dist(x, y, z float64) float64 {
-	return math.Sqrt(sqr(float64(r.X-x)) + sqr(float64(r.Y-y)) + sqr(float64(r.Z-z)))
+	return math.Sqrt(sqr(float64(r.x-x)) + sqr(float64(r.y-y)) + sqr(float64(r.z-z)))
 }
 
 //demag is calculated on a position
@@ -72,11 +72,11 @@ func fMMdemag(x, y, z float64) Vector {
 		//	}
 		if nodelist[i].number == 1 {
 			//if aantalparticles in box==1:
-			if nodelist[i].lijst[0].X != x || nodelist[i].lijst[0].Y != y || nodelist[i].lijst[0].Z != z {
+			if nodelist[i].lijst[0].x != x || nodelist[i].lijst[0].y != y || nodelist[i].lijst[0].z != z {
 				//	if ik ben niet die ene: calculate en delete van stack
 				//	CALC
 				volume := 4. / 3 * math.Pi * cube(nodelist[i].lijst[0].r)
-				r_vect := Vector{x - nodelist[i].lijst[0].X, y - nodelist[i].lijst[0].Y, z - nodelist[i].lijst[0].Z}
+				r_vect := Vector{x - nodelist[i].lijst[0].x, y - nodelist[i].lijst[0].y, z - nodelist[i].lijst[0].z}
 				r := nodelist[i].lijst[0].dist(x, y, z)
 				r2 := r * r
 				r3 := r * r2
