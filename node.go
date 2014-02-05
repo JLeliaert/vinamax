@@ -33,11 +33,16 @@ func (n *node) calculatecom() {
 	comx := 0.
 	comy := 0.
 	comz := 0.
+	total := 0.
+	prefactor := 0.
 
 	for i := range n.lijst {
-		comx += n.lijst[i].X
-		comy += n.lijst[i].Y
-		comz += n.lijst[i].Z
+		prefactor = n.lijst[i].msat * cube(n.lijst[i].r)
+		comx += n.lijst[i].X * prefactor
+		comy += n.lijst[i].Y * prefactor
+		comz += n.lijst[i].Z * prefactor
+		total += prefactor
+
 	}
 	n.com = Vector{comx / float64(n.number), comy / float64(n.number), comz / float64(n.number)}
 }
