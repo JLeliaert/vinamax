@@ -105,7 +105,7 @@ func write(avg Vector) {
 	twrite += Dt
 }
 
-//TODO switch van maken ipv else if statements
+//Saves different quantities. At the moment only "geometry" and "m" are possible
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
@@ -113,16 +113,20 @@ func Save(a string) {
 	check(error)
 	defer file.Close()
 	filecounter += 1
-	if a == "geometry" {
-		// heel de lijst met particles aflopen en de locatie en straal printen
-		//TODO header
-		for i := range universe.lijst {
-			string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat)
-			_, error = file.WriteString(string)
-			check(error)
+	switch a {
+
+	case "geometry":
+		{
+			// heel de lijst met particles aflopen en de locatie en straal printen
+			//TODO header
+			for i := range universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat)
+				_, error = file.WriteString(string)
+				check(error)
+			}
 		}
-	} else {
-		if a == "m" {
+	case "m":
+		{
 			// heel de lijst met particles aflopen en de locatie en straal en magnetisatie printen
 			//TODO, header met tijdstip in
 			for i := range universe.lijst {
@@ -130,7 +134,9 @@ func Save(a string) {
 				_, error = file.WriteString(string)
 				check(error)
 			}
-		} else {
+		}
+	default:
+		{
 			fmt.Println("error")
 		}
 	}
