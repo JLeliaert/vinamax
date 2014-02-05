@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	//These variables can be set in the input files
 	B_ext            func(t float64) (float64, float64, float64)         // External applied field in T
 	Dt               float64                                     = -1    // Timestep in s
 	T                float64                                             // Time in s
