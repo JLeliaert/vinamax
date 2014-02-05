@@ -71,7 +71,7 @@ func Particle_radius(x float64) {
 	}
 }
 
-//Gives all particles a diameter taken out of a lognormal distribution
+//Gives all particles a diameter taken from a lognormal distribution with specified mean and std
 func Lognormal_diameter(me, st float64) {
 	m := me * 1e9
 	s := st * 1e9
