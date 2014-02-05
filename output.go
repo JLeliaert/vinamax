@@ -22,7 +22,7 @@ func Output(interval float64) {
 	check(err)
 	//	defer f.Close()
 	writeheader()
-	Outputinterval = interval
+	outputinterval = interval
 	twrite = interval
 }
 
@@ -69,7 +69,7 @@ func printsuggestedtimestep() {
 
 //Adds the effective field at a specific location to the output table
 func Tableadd_B_eff_at_location(a, b, c float64) {
-	if Outputinterval != 0 {
+	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_B_eff_at_location()")
 	}
 	if universe.inworld(Vector{a, b, c}) {
@@ -81,7 +81,7 @@ func Tableadd_B_eff_at_location(a, b, c float64) {
 
 //Writes the time and the vector of average magnetisation in the table
 func write(avg Vector) {
-	if twrite >= Outputinterval && Outputinterval != 0 {
+	if twrite >= outputinterval && outputinterval != 0 {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
@@ -152,7 +152,7 @@ func Save(a string) {
 
 //adds a quantity to the output table, at the moment only "B_ext" is possible
 func Tableadd(a string) {
-	if Outputinterval != 0 {
+	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd()")
 	}
 	switch a {

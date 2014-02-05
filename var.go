@@ -16,7 +16,7 @@ var (
 	FMM              bool                                        = false // Calculate demag with FMM method
 	Demag            bool                                        = true  // Calculate demag
 	outdir           string                                              // the output directory
-	Outputinterval   float64
+	outputinterval   float64
 	maxtauwitht      float64 = 0. //maximum torque during the simulations with temperature
 	suggest_timestep bool    = false
 
