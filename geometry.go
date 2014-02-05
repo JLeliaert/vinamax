@@ -5,7 +5,7 @@ import (
 	"math/rand"
 )
 
-//Adds a single particle
+//Adds a single particle at specified coordinates
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(Vector{x, y, z}) {
 		a := Particle{X: x, Y: y, Z: z, r: 20e-9, msat: 400e3} //magnetite

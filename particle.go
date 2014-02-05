@@ -22,7 +22,7 @@ func (p Particle) string() string {
 	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
 }
 
-//Gives all particles the same specifiekd anisotropy-axis
+//Gives all particles the same specified anisotropy-axis
 func Anisotropy_axis(x, y, z float64) {
 	uaniscalled = true
 	a := norm(Vector{x, y, z})
