@@ -5,7 +5,7 @@ import (
 	//	"fmt"
 )
 
-//zie 2.51 in coey en watweuitrekenen.pdf
+//cfr. 2.51 in coey en watweuitrekenen.pdf
 
 func calculatedemag() {
 
@@ -44,7 +44,7 @@ func demag(x, y, z float64) Vector {
 //demag on a Particle
 func (p Particle) demag() Vector {
 	if FMM {
-		return FMMdemag(p.X, p.Y, p.Z)
+		return fMMdemag(p.X, p.Y, p.Z)
 	}
 	return demag(p.X, p.Y, p.Z)
 }
@@ -55,7 +55,7 @@ func (r *Particle) dist(x, y, z float64) float64 {
 }
 
 //demag is calculated on a position
-func FMMdemag(x, y, z float64) Vector {
+func fMMdemag(x, y, z float64) Vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := Vector{0, 0, 0}
 	//lijst maken met nodes

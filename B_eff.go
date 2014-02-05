@@ -11,7 +11,7 @@ func (p *Particle) b_eff(temp Vector) Vector {
 	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(temp)))
 }
 
-//set the randomseed for the temperatuur
+//Set the randomseed for the temperature
 func SetRandomSeed(a int64) {
 	rng = rand.New(rand.NewSource(a))
 }

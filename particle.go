@@ -18,7 +18,7 @@ type Particle struct {
 }
 
 //print position and magnitisation of a Particle
-func (p Particle) String() string {
+func (p Particle) string() string {
 	return fmt.Sprintf("Particle@(%v, %v, %v), %v %v %v", p.X, p.Y, p.Z, p.m[0], p.m[1], p.m[2])
 }
 
