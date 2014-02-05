@@ -117,8 +117,11 @@ func Save(a string) {
 
 	case "geometry":
 		{
-			// heel de lijst met particles aflopen en de locatie en straal printen
-			//TODO header
+			// heel de lijst met particles aflopen en de locatie, straal en msat printen
+			header := fmt.Sprintf("#position_x\tposition_y\tposition_z\tradius\tmsat\n")
+			_, err = file.WriteString(header)
+			check(err)
+
 			for i := range universe.lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat)
 				_, error = file.WriteString(string)
@@ -127,8 +130,11 @@ func Save(a string) {
 		}
 	case "m":
 		{
-			// heel de lijst met particles aflopen en de locatie en straal en magnetisatie printen
-			//TODO, header met tijdstip in
+			// heel de lijst met particles aflopen en de locatie straal,msat en magnetisatie printen
+			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tm_x\tm_y\tm_z\n", T)
+			_, err = file.WriteString(header)
+			check(err)
+
 			for i := range universe.lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].X, universe.lijst[i].Y, universe.lijst[i].Z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].m[0], universe.lijst[i].m[1], universe.lijst[i].m[2])
 				_, error = file.WriteString(string)
@@ -137,7 +143,7 @@ func Save(a string) {
 		}
 	default:
 		{
-			fmt.Println("error")
+			fmt.Println(a, " is not a quantitity that can be saved")
 		}
 	}
 }
@@ -146,10 +152,15 @@ func Tableadd(a string) {
 	if Outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd()")
 	}
-	if a == "B_ext" {
-		output_B_ext = true
-	} else {
-		log.Fatal(a, " is currently not addable to table")
+	switch a {
+	case "B_ext":
+		{
+			output_B_ext = true
+		}
+	default:
+		{
+			log.Fatal(a, " is currently not addable to table")
+		}
 	}
 }
 
