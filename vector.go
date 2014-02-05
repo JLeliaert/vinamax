@@ -1,4 +1,4 @@
-//This file contains some usefull vector operators
+//This file contains some useful vector operators
 
 package vinamax
 
@@ -35,10 +35,12 @@ func (x Vector) add(i Vector) Vector {
 	return x
 }
 
+//cubes a number
 func cube(x float64) float64 {
 	return x * x * x
 }
 
+//squares a number
 func sqr(x float64) float64 {
 	return x * x
 }

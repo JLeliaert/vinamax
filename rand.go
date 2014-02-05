@@ -1,7 +1,8 @@
 package vinamax
 
+//this file is obsolete
 //normal random number generator using marsaglias polar method
-//but is slower than the standar golang generator
+//but is slower than the standard golang generator
 // http://en.wikipedia.org/wiki/Marsaglia_polar_method
 // math/rand uses ziggurat method for normfloat and is faster
 

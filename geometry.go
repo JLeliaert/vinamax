@@ -22,7 +22,7 @@ type Cube struct {
 	N       int     //numberofparticles
 }
 
-//Adds a lot of particles at random locations in a cubic region
+//Adds a number of particles at random locations in a cubic region
 func (c Cube) Addparticles(n int) {
 	c.N += n
 	for i := 0; i < n; i++ {
@@ -33,6 +33,7 @@ func (c Cube) Addparticles(n int) {
 	}
 }
 
+//Defines the universe, its center and its diameter
 func World(x, y, z, r float64) {
 	worldcalled = true
 	universe.origin = Vector{x, y, z}

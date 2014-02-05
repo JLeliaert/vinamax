@@ -23,6 +23,7 @@ type node struct {
 	lijst    []*Particle //lijst met alle particles
 }
 
+//adds particle to node
 func (n *node) add(p *Particle) {
 	n.lijst = append(n.lijst, p)
 }
@@ -46,6 +47,7 @@ func (n *node) calculatecom() {
 	n.com = Vector{comx / float64(n.number), comy / float64(n.number), comz / float64(n.number)}
 }
 
+//descends into the tree, needed for Maketree()
 func (w *node) descend() {
 	w.calculatecom()
 	if w.number > 1 {
@@ -174,16 +176,13 @@ func (w *node) descend() {
 	}
 }
 
+//Build the tree needed for the FMM method, descends in the "universe" node
 func Maketree() {
-	//werkt dit??
-	//for i := range Lijst {
-	//	universe.lijst = append(universe.lijst, &Lijst[i])
-	//	universe.number += 1
-	//}
 	treecalled = true
 	universe.descend()
 }
 
+//returns the position of a particle in a node (in terms of subnode position), or -1 if the particle is not in the node
 func (n node) where(position Vector) int {
 	//if not in node
 	if position[0] > n.origin[0]+n.diameter/2 || position[0] < n.origin[0]-n.diameter/2 || position[1] > n.origin[1]+n.diameter/2 || position[1] < n.origin[1]-n.diameter/2 || position[2] > n.origin[2]+n.diameter/2 || position[2] < n.origin[2]-n.diameter/2 {

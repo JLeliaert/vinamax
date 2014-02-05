@@ -15,6 +15,7 @@ var locations []Vector
 var filecounter int = 0
 var output_B_ext = false
 
+//Sets the interval at which times the output table has to be written
 func Output(interval float64) {
 	outputcalled = true
 	f, err = os.Create(outdir + "/table.txt")
@@ -66,6 +67,7 @@ func printsuggestedtimestep() {
 	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/2.))
 }
 
+//Adds the effective field at a specific location to the output table
 func Tableadd_B_eff_at_location(a, b, c float64) {
 	if Outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_B_eff_at_location()")
@@ -148,6 +150,7 @@ func Save(a string) {
 	}
 }
 
+//adds a quantity to the output table, at the moment only "B_ext" is possible
 func Tableadd(a string) {
 	if Outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd()")
@@ -164,6 +167,7 @@ func Tableadd(a string) {
 	}
 }
 
+//returns a suggested timestep at the end of the simulation
 func SuggestTimestep() {
 	suggest_timestep = true
 }

@@ -29,10 +29,12 @@ var (
 	outputcalled        bool = false
 )
 
+//initialised B_ext function
 func init() {
 	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 0 } // External applied field in T
 }
 
+//test the inputvalues for unnatural things
 func testinput() {
 	if Dt < 0 {
 		log.Fatal("Dt cannot be smaller than 0, did you forget to initialise?")
@@ -45,6 +47,7 @@ func testinput() {
 	}
 }
 
+//checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {
 	if msatcalled == false {
 		log.Fatal("You have to specify msat")
