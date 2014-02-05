@@ -56,4 +56,5 @@ func main() {
 
 	//run for 10 ns
 	Run(100.e-9)
+	Save("m")
 }

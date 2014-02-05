@@ -28,7 +28,6 @@ func (n *node) add(p *Particle) {
 }
 
 //center of magnetisation
-//TODO: this is wrong, take msat and volume into account!
 func (n *node) calculatecom() {
 	comx := 0.
 	comy := 0.
