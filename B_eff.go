@@ -3,7 +3,7 @@ package vinamax
 import (
 	"math"
 	"math/rand"
-	//"fmt"
+//	"fmt"
 )
 
 //Sums the individual fields to the effective field working on the particle
