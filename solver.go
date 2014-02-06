@@ -54,9 +54,9 @@ func heunstep(Lijst []*particle) {
 		p.m[0] += tau1[0] * Dt
 		p.m[1] += tau1[1] * Dt
 		p.m[2] += tau1[2] * Dt
-//		if Demag {
-//			calculatedemag()
-//		}
+		//		if Demag {
+		//			calculatedemag()
+		//		}
 		tau2 := p.tau(temp)
 
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
