@@ -20,7 +20,7 @@ func Addsingleparticle(x, y, z float64) {
 
 type Cube struct {
 	x, y, z float64 //position
-	s       float64 //diameter
+	S       float64 //diameter
 	n       int     //numberofparticles
 }
 
@@ -31,9 +31,9 @@ func (c Cube) Addparticles(n int) {
 
 	c.n += n
 	for i := 0; i < n; i++ {
-		px := c.x + (-0.5+rand.Float64())*c.s
-		py := c.y + (-0.5+rand.Float64())*c.s
-		pz := c.z + (-0.5+rand.Float64())*c.s
+		px := c.x + (-0.5+rand.Float64())*c.S
+		py := c.y + (-0.5+rand.Float64())*c.S
+		pz := c.z + (-0.5+rand.Float64())*c.S
 		Addsingleparticle(px, py, pz)
 	}
 }

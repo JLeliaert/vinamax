@@ -44,7 +44,7 @@ func (n *node) calculatecom() {
 		total += prefactor
 
 	}
-	n.com = Vector{comx / float64(n.number), comy / float64(n.number), comz / float64(n.number)}
+	n.com = Vector{comx / total, comy / total, comz / total}
 }
 
 //descends into the tree, needed for Maketree()
