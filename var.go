@@ -30,6 +30,7 @@ var (
 	treecalled          bool = false
 	outputcalled        bool = false
 	randomseedcalled    bool = false
+	tableaddcalled      bool = false
 )
 
 //initialised B_ext function
@@ -47,6 +48,9 @@ func testinput() {
 	}
 	if Temp < 0 {
 		log.Fatal("Temp cannot be smaller than 0, did you forget to initialise?")
+	}
+	if universe.number == 0 {
+		log.Fatal("There are no particles in the geometry")
 	}
 }
 
@@ -73,4 +77,8 @@ func syntaxrun() {
 	if Temp != 0 && randomseedcalled == false {
 		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
 	}
+	if tableaddcalled == true && outputcalled == false {
+		log.Fatal("You have to run Output(interval) when calling tableadd")
+	}
+
 }

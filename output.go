@@ -50,7 +50,7 @@ func writeheader() {
 	_, err = f.WriteString(header)
 	check(err)
 	if output_B_ext {
-		header := fmt.Sprintf("\tB_ext_x\tB_ext_y\t<B_ext_z")
+		header := fmt.Sprintf("\tB_ext_x\tB_ext_y\tB_ext_z")
 		_, err = f.WriteString(header)
 		check(err)
 	}
@@ -76,6 +76,7 @@ func printsuggestedtimestep() {
 
 //Adds the field at a specific location to the output table
 func Tableadd_b_at_location(a, b, c float64) {
+	tableaddcalled = true
 	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_b_at_location()")
 	}
@@ -155,6 +156,7 @@ func Save(a string) {
 
 //adds a quantity to the output table, at the moment only "B_ext" is possible
 func Tableadd(a string) {
+	tableaddcalled = true
 	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd()")
 	}
