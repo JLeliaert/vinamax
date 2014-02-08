@@ -20,7 +20,8 @@ rm example2.eps
 
 cd ../example3
 go run example3.go
-go run fmm.go
+go run nofmm.go
+go run wode.go
 gnuplot example3.gnu
 epstopdf example3.eps
 rm example3.eps

@@ -2,8 +2,7 @@
 //To check this, we let 2 particles relax in the presence of an external field
 //and check the output versus mumax. We also do the same simulation without
 //calculating the demagnetising field to see if this problem is suited to 
-//check the implementation; i.e. to see that the demagnetising field
-//makes a difference. 
+//check the implementation; i.e. to see that it makes a difference. 
 
 package main
 
@@ -29,7 +28,7 @@ func main() {
 
 	//We calculate demag, but not with the FMM method
 	FMM=false
-	Demag=true
+	Demag=false
 
 	//set the saturation magnetisation of the particles
 	Msat (860e3)
@@ -57,6 +56,9 @@ func main() {
 
 	//Saves the geometry of the simulation
 	Save("geometry")
+
+	//calculates the tree for the FMM demag
+	Maketree()
 
 	//run for 100 ns
 	Run(100.e-9)
