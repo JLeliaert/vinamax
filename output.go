@@ -54,7 +54,13 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
-//TODO: hier header voor tableadd()
+	for i := range locations {
+
+		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
+		_, err = f.WriteString(header)
+		check(err)
+	}
+
 	header = fmt.Sprintf("\n")
 	_, err = f.WriteString(header)
 	check(err)
@@ -68,15 +74,15 @@ func printsuggestedtimestep() {
 	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/2.))
 }
 
-//Adds the effective field at a specific location to the output table
-func Tableadd_b_eff_at_location(a, b, c float64) {
+//Adds the field at a specific location to the output table
+func Tableadd_b_at_location(a, b, c float64) {
 	if outputinterval != 0 {
-		log.Fatal("Output() should always come AFTER Tableadd_b_eff_at_location()")
+		log.Fatal("Output() should always come AFTER Tableadd_b_at_location()")
 	}
 	if universe.inworld(Vector{a, b, c}) {
 		locations = append(locations, Vector{a, b, c})
 	} else {
-		fmt.Println("error: not in universe")
+		log.Fatal("error: not in universe")
 	}
 }
 
@@ -95,9 +101,8 @@ func write(avg Vector) {
 		}
 
 		for i := range locations {
-			B_ext_x, B_ext_y, B_ext_z := B_ext(T)
 
-			string = fmt.Sprintf("\t%v\t%v\t%v", (B_ext_x + demag(locations[i][0], locations[i][1], locations[i][2])[0]), (B_ext_y + demag(locations[i][0], locations[i][1], locations[i][2])[1]), (B_ext_z + demag(locations[i][0], locations[i][1], locations[i][2])[2]))
+			string = fmt.Sprintf("\t%v\t%v\t%v", (demag(locations[i][0], locations[i][1], locations[i][2])[0]), (demag(locations[i][0], locations[i][1], locations[i][2])[1]), (demag(locations[i][0], locations[i][1], locations[i][2])[2]))
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -146,7 +151,7 @@ func Save(a string) {
 		}
 	default:
 		{
-			fmt.Println(a, " is not a quantitity that can be saved")
+			log.Fatal(a, " is not a quantitity that can be saved")
 		}
 	}
 }
