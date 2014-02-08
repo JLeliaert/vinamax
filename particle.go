@@ -10,9 +10,9 @@ import (
 //A particle essentially constains a position, magnetisation
 type particle struct {
 	x, y, z             float64
-	m                   Vector
-	demagnetising_field Vector
-	u_anis              Vector  // Uniaxial anisotropy axis
+	m                   vector
+	demagnetising_field vector
+	u_anis              vector  // Uniaxial anisotropy axis
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
 }
@@ -25,7 +25,7 @@ func (p particle) string() string {
 //Gives all particles the same specified anisotropy-axis
 func Anisotropy_axis(x, y, z float64) {
 	uaniscalled = true
-	a := norm(Vector{x, y, z})
+	a := norm(vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].u_anis = a
 	}
@@ -37,7 +37,7 @@ func Anisotropy_random() {
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		universe.lijst[i].u_anis = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		universe.lijst[i].u_anis = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
 
@@ -47,14 +47,14 @@ func M_random() {
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
 		theta := rand.Float64() * math.Pi
-		universe.lijst[i].m = Vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
 
 //Gives all particles a specified magnetisation direction
 func M_uniform(x, y, z float64) {
 	magnetisationcalled = true
-	a := norm(Vector{x, y, z})
+	a := norm(vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].m = a
 	}

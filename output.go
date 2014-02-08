@@ -11,7 +11,7 @@ import (
 var f *os.File
 var err error
 var twrite float64
-var locations []Vector
+var locations []vector
 var filecounter int = 0
 var output_B_ext = false
 
@@ -34,8 +34,8 @@ func check(e error) {
 }
 
 //calculates the average magnetisation components of all particles
-func averages(lijst []*particle) Vector {
-	avgs := Vector{0, 0, 0}
+func averages(lijst []*particle) vector {
+	avgs := vector{0, 0, 0}
 	for i := range lijst {
 		avgs[0] += lijst[i].m[0]
 		avgs[1] += lijst[i].m[1]
@@ -79,12 +79,12 @@ func Tableadd_b_at_location(a, b, c float64) {
 	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_b_at_location()")
 	}
-	locations = append(locations, Vector{a, b, c})
+	locations = append(locations, vector{a, b, c})
 
 }
 
 //Writes the time and the vector of average magnetisation in the table
-func write(avg Vector) {
+func write(avg vector) {
 	if twrite >= outputinterval && outputinterval != 0 {
 		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)

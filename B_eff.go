@@ -7,7 +7,7 @@ import (
 )
 
 //Sums the individual fields to the effective field working on the particle
-func (p *particle) b_eff(temp Vector) Vector {
+func (p *particle) b_eff(temp vector) vector {
 	return p.demagnetising_field.add(p.anis().add(p.zeeman().add(temp)))
 }
 
@@ -21,8 +21,8 @@ var rng = rand.New(rand.NewSource(0))
 
 //Calculates the the thermal field B_therm working on a particle
 // factor 4/3pi in "number" because they are spherical
-func (p *particle) temp() Vector {
-	B_therm := Vector{0., 0., 0.}
+func (p *particle) temp() vector {
+	B_therm := vector{0., 0., 0.}
 	if Temp != 0. {
 		etax := rng.NormFloat64()
 		etay := rng.NormFloat64()
@@ -33,7 +33,7 @@ func (p *particle) temp() Vector {
 		//etay := normfloat()
 		//etaz := normfloat()
 
-		B_therm = Vector{etax, etay, etaz}
+		B_therm = vector{etax, etay, etaz}
 		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
 		B_therm = B_therm.times(number)
 	}
@@ -41,13 +41,13 @@ func (p *particle) temp() Vector {
 }
 
 //Calculates the zeeman field working on a particle
-func (p *particle) zeeman() Vector {
+func (p *particle) zeeman() vector {
 	x, y, z := B_ext(T)
-	return Vector{x, y, z}
+	return vector{x, y, z}
 }
 
 //Calculates the anisotropy field working on a particle
-func (p *particle) anis() Vector {
+func (p *particle) anis() vector {
 	//2*Ku1*(m.u)*u/p.msat
 
 	mdotu := p.m.dot(p.u_anis)

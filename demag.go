@@ -15,14 +15,14 @@ func calculatedemag() {
 }
 
 //demag is calculated on a position
-func demag(x, y, z float64) Vector {
+func demag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
-	demag := Vector{0, 0, 0}
+	demag := vector{0, 0, 0}
 
 	for i := range universe.lijst {
 		if universe.lijst[i].x != x || universe.lijst[i].y != y || universe.lijst[i].z != z {
 			volume := 4. / 3 * math.Pi * cube(universe.lijst[i].r)
-			r_vect := Vector{x - universe.lijst[i].x, y - universe.lijst[i].y, z - universe.lijst[i].z}
+			r_vect := vector{x - universe.lijst[i].x, y - universe.lijst[i].y, z - universe.lijst[i].z}
 			r := universe.lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
@@ -42,7 +42,7 @@ func demag(x, y, z float64) Vector {
 }
 
 //demag on a particle
-func (p particle) demag() Vector {
+func (p particle) demag() vector {
 	if FMM {
 		return fMMdemag(p.x, p.y, p.z)
 	}
@@ -55,9 +55,9 @@ func (r *particle) dist(x, y, z float64) float64 {
 }
 
 //demag is calculated on a position
-func fMMdemag(x, y, z float64) Vector {
+func fMMdemag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
-	demag := Vector{0, 0, 0}
+	demag := vector{0, 0, 0}
 	//lijst maken met nodes
 	//node universe in de box steken
 	nodelist := []*node{&universe}
@@ -76,7 +76,7 @@ func fMMdemag(x, y, z float64) Vector {
 				//	if ik ben niet die ene: calculate en delete van stack
 				//	CALC
 				volume := 4. / 3 * math.Pi * cube(nodelist[i].lijst[0].r)
-				r_vect := Vector{x - nodelist[i].lijst[0].x, y - nodelist[i].lijst[0].y, z - nodelist[i].lijst[0].z}
+				r_vect := vector{x - nodelist[i].lijst[0].x, y - nodelist[i].lijst[0].y, z - nodelist[i].lijst[0].z}
 				r := nodelist[i].lijst[0].dist(x, y, z)
 				r2 := r * r
 				r3 := r * r2
@@ -95,12 +95,12 @@ func fMMdemag(x, y, z float64) Vector {
 		}
 		if nodelist[i].number > 1 {
 			//if aantalparticles in box>1:
-			r_vect := Vector{x - nodelist[i].com[0], y - nodelist[i].com[1], z - nodelist[i].com[2]}
+			r_vect := vector{x - nodelist[i].com[0], y - nodelist[i].com[1], z - nodelist[i].com[2]}
 			r := math.Sqrt(r_vect[0]*r_vect[0] + r_vect[1]*r_vect[1] + r_vect[2]*r_vect[2])
 
-			if (nodelist[i].where(Vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
+			if (nodelist[i].where(vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
 				//	if voldoet aan criterium: calculate en delete van stack
-				m := Vector{0, 0, 0}
+				m := vector{0, 0, 0}
 				volume := 0.
 				//in loopje m en volume berekenen
 				for j := range nodelist[i].lijst {

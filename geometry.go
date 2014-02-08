@@ -7,7 +7,7 @@ import (
 
 //Adds a single particle at specified coordinates
 func Addsingleparticle(x, y, z float64) {
-	if universe.inworld(Vector{x, y, z}) {
+	if universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
@@ -41,11 +41,11 @@ func (c Cube) Addparticles(n int) {
 //Defines the universe, its center and its diameter
 func World(x, y, z, r float64) {
 	worldcalled = true
-	universe.origin = Vector{x, y, z}
+	universe.origin = vector{x, y, z}
 	universe.diameter = r
 }
 
-func (w node) inworld(r Vector) bool {
+func (w node) inworld(r vector) bool {
 	if r[0] < (w.origin[0] - w.diameter/2) {
 		return false
 	}
