@@ -54,6 +54,7 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+//TODO: hier header voor tableadd()
 	header = fmt.Sprintf("\n")
 	_, err = f.WriteString(header)
 	check(err)
