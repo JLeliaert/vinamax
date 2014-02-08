@@ -79,11 +79,11 @@ func Tableadd_b_at_location(a, b, c float64) {
 	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_b_at_location()")
 	}
+	//todo deze check mag weg? testen met voorbeeld epr
 	if universe.inworld(Vector{a, b, c}) {
 		locations = append(locations, Vector{a, b, c})
-	} else {
-		log.Fatal("error: not in universe")
 	}
+
 }
 
 //Writes the time and the vector of average magnetisation in the table

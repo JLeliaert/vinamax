@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	"fmt"
+	"log"
 	"math/rand"
 )
 
@@ -14,7 +14,7 @@ func Addsingleparticle(x, y, z float64) {
 		msatcalled = false
 		radiuscalled = false
 	} else {
-		fmt.Println("error: outside of universe")
+		log.Fatal("Trying to add particle at locataion (%v,%v,%v) which lies outside of universe", x, y, z)
 	}
 }
 
