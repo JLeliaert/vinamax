@@ -14,7 +14,7 @@ func Addsingleparticle(x, y, z float64) {
 		msatcalled = false
 		radiuscalled = false
 	} else {
-		log.Fatal("Trying to add particle at locataion (%v,%v,%v) which lies outside of universe", x, y, z)
+		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
 	}
 }
 
