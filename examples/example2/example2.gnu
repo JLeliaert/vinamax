@@ -31,7 +31,7 @@ plot file using ($1*1e9):2 ls 1 w l title "vinamax <m_x>",\
  filemumax u ($1*1e9):2 every 10 pt 7 lc 1 w p t "mumax <m_x>",\
  filemumax u ($1*1e9):3 every 10 pt 7 lc 2 w p t "mumax <m_y>",\
  filemumax u ($1*1e9):4 every 10 pt 7 lc 3 w p t "mumax <m_z>",\
- filewode u ($1*1e9):2 ls 4 w l title "nodemag <m_x>",\
- filewode u ($1*1e9):3 ls 5 w l title "nodemag <m_y>",\
- filewode u ($1*1e9):4 ls 6 w l title "nodemag <m_z>"
+ filewode u ($1*1e9):2 ls 4 w l title "no demag <m_x>",\
+ filewode u ($1*1e9):3 ls 5 w l title "no demag <m_y>",\
+ filewode u ($1*1e9):4 ls 6 w l title "no demag <m_z>"
 

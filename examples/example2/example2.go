@@ -57,9 +57,6 @@ func main() {
 	//Saves the geometry of the simulation
 	Save("geometry")
 
-	//calculates the tree for the FMM demag
-	Maketree()
-
 	//run for 100 ns
 	Run(100.e-9)
 

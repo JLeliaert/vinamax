@@ -17,9 +17,6 @@ func main() {
 	//Adds a single particle in the origin
 	Addsingleparticle(0,0,0)
 
-	//calculates the tree for the FMM demag
-	Maketree()
-
 	//the particle has radius 10 nm
 	Particle_radius(10.e-9)
 
