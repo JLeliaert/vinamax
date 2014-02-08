@@ -12,7 +12,7 @@ var (
 	Alpha            float64                                     = -1     // Gilbert damping constant
 	Temp             float64                                     = -1     // Temperature in K
 	Ku1              float64                                     = 0      // Uniaxial anisotropy constant in J/m**3
-	Thresholdbeta    float64                                     = 0.7    // The threshold value for the FMM
+	Thresholdbeta    float64                                     = 0.3    // The threshold value for the FMM
 	universe         node                                                 // The entire universe of the simulation
 	FMM              bool                                        = false  // Calculate demag with FMM method
 	Demag            bool                                        = true   // Calculate demag
