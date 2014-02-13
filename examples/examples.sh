@@ -36,4 +36,4 @@ epstopdf example4.eps
 rm example4.eps
 
 #only to update the figures for the webpage
-#convert -verbose -density 125 -trim example3.pdf -quality 100 -sharpen 0x1.0 example3.png
+#convert -verbose -density 125 -trim example4.pdf -quality 100 -sharpen 0x1.0 example4.png
