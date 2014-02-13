@@ -28,3 +28,12 @@ rm example3.eps
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example3.pdf -quality 100 -sharpen 0x1.0 example3.png
+
+cd ../example4
+go run example4.go
+gnuplot example4.gnu
+epstopdf example4.eps
+rm example4.eps
+
+#only to update the figures for the webpage
+#convert -verbose -density 125 -trim example3.pdf -quality 100 -sharpen 0x1.0 example3.png
