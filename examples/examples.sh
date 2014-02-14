@@ -4,6 +4,7 @@ go run example1.go
 gnuplot example1.gnu
 epstopdf example1.eps
 rm example1.eps
+rm -r example1.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example1.pdf -quality 100 -sharpen 0x1.0 example1.png
@@ -14,6 +15,7 @@ go run without_demag.go
 gnuplot example2.gnu
 epstopdf example2.eps
 rm example2.eps
+rm -r example2.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example2.pdf -quality 100 -sharpen 0x1.0 example2.png
@@ -25,6 +27,9 @@ go run wode.go
 gnuplot example3.gnu
 epstopdf example3.eps
 rm example3.eps
+rm -r example3.out
+rm -r wode.out
+rm -r nofmm.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example3.pdf -quality 100 -sharpen 0x1.0 example3.png
@@ -34,6 +39,7 @@ go run example4.go
 gnuplot example4.gnu
 epstopdf example4.eps
 rm example4.eps
+rm -r example4.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example4.pdf -quality 100 -sharpen 0x1.0 example4.png
