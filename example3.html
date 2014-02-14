@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Vinamax by JLeliaert</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Vinamax</h1>
+        <h2>A macrospin simulation tool for nanoparticles</h2>
+        <a href="https://github.com/JLeliaert/vinamax" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+
+
+<a href="http://jleliaert.github.io/vinamax/examples.html">Back to examples</a>
+<h2>
+<a name="third example" class="anchor" href="#third-example"><span class="octicon octicon-link"></span></a>Third example: Fast Multipole Method</h2>
+<p>
+This example shows the agreement between the Fast Multipole Method implementation and the brute force implementation of the magnetostatic interaction. The same problem is also solved without taking this interaction into account so to show that it is of importance in this system.<br>
+
+
+<pre><code>
+package main
+
+import (
+        . "github.com/JLeliaert/vinamax"
+)
+
+func main() {
+
+        //Defines the world at location 0,0,0 and with a side of 5e-7 m  
+        World(0,0,0,5e-7)
+
+        //Adds a cube to the word with side 5e-7 m
+        test := Cube{S:5e-7}
+
+        //Adds 20 particles to the cube
+        test.Addparticles(20)
+
+        //the particle have radius 16 nm
+        Particle_radius(16e-9)
+
+        //external field along the x direction of 1mT 
+        //B_ext can be an arbitrary function of time
+
+        B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
+     //Calculate the demagnetsing field using the fast multipole method
+        //the tresholdbeta= 0.3 is a good compromise between speed and accuracy
+        FMM=true
+        Thresholdbeta=0.3
+        Demag=true
+
+        //saturation magnetisation
+        Msat (860e3)
+
+        //timestep : 3e-13s
+        Dt = 3e-13
+        //initialise time at zero
+        T = 0.
+        //temperature=0
+        Temp = 0.00
+        //Gilbert damping constant=0.1
+        Alpha = 0.1
+        //anisotropy constant=0
+        Ku1 = 0
+
+        //anisotropy axis along the z-direction
+        Anisotropy_axis(0, 0, 1)
+
+        //initialise the magnetisation along the y direction
+        M_uniform(0,1,0)
+        //Adds the external field to the outputtable
+        Tableadd("B_ext")
+
+        //write output every 2e-12s
+        Output(2e-12)
+
+        //saves the geometry of the simulation
+        Save("geometry")
+        //calculates the tree for the FMM demag
+        Maketree()
+
+        //run for 1 ns
+        Run(1.e-9)
+        //saves the magnetisation of particles in the simulation
+        Save("m")
+}
+
+
+
+</code></pre>
+<p>
+The results of the simulation are visualised below TODO 
+</p>
+
+<figure style="float:left">
+        <img src="examples/example3/example3.png"/>
+	        <figcaption> <p>The output of the second example plotted with GNUPLOT </p></figcaption>
+		</figure>
+
+  
+  </body>
+</html>
