@@ -61,8 +61,6 @@ func main() {
 	//calculates the tree for the FMM demag
 	Maketree()
 
-	Suggesttimestep()
-
 	//run for 2 ns
 	Run(1.e-9)
 	//saves the magnetisation of the simulation
