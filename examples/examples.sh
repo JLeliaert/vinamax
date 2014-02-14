@@ -37,3 +37,14 @@ rm example4.eps
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example4.pdf -quality 100 -sharpen 0x1.0 example4.png
+
+cd ../example5
+go build example5.go
+./example5 -cpuprofile=run.prof
+go tool pprof --pdf ./example5 run.prof >profile.pdf
+rm example5
+rm -r example5.out
+rm run.prof
+#only to update the figures for the webpage
+#convert -verbose -density 125 -trim profile.pdf -quality 100 -sharpen 0x1.0 profile.png
+
