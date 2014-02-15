@@ -75,12 +75,12 @@ func printsuggestedtimestep() {
 }
 
 //Adds the field at a specific location to the output table
-func Tableadd_b_at_location(a, b, c float64) {
+func Tableadd_b_at_location(x, y, z float64) {
 	tableaddcalled = true
 	if outputinterval != 0 {
 		log.Fatal("Output() should always come AFTER Tableadd_b_at_location()")
 	}
-	locations = append(locations, vector{a, b, c})
+	locations = append(locations, vector{x, y, z})
 
 }
 
