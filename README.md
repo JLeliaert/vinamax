@@ -1,3 +1,3 @@
 vinamax
 =======
-A macrospin simulation tool for nanoparticles
+Vinamax is a macrospin simulation tool for nanoparticles.
