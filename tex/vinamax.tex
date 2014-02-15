@@ -1,0 +1,24 @@
+\documentclass[12pt,fleqn]{article}
+
+\usepackage{a4wide}
+\usepackage{amsmath}
+
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{eqnarray*}
+	\frac{d\mathbf{m}}{dt}=\frac{-\gamma_0}{1+\alpha^2}\left(\mathbf{m}\times\mathbf{B}_{eff}+\alpha\mathbf{m}\times\mathbf{m}\times\mathbf{B}_{eff}\right)
+\end{eqnarray*}
+with
+\begin{eqnarray*}
+	\begin{aligned}
+&\mathbf{B}_{eff}=\mathbf{B}_{demag}+\mathbf{B}_{anis}+\mathbf{B}_{zeeman}+\mathbf{B}_{thermal}\\
+&\mathbf{B}_{demag}=\frac{\mu_0}{1+\alpha^2}\int_V{M_{sat}\left[3\frac{\left(\mathbf{m}\cdot\mathbf{r}\right)\mathbf{r}}{\|\mathbf{r}\|^5}-\frac{\mathbf{m}}{\|\mathbf{r}\|^3}\right]}d\mathbf{r}\\
+&\mathbf{B}_{anis}=\frac{2K_{u1}}{M_{sat}}\left(\mathbf{m}\cdot\mathbf{u}\right)\mathbf{u}\\
+&\mathbf{B}_{zeeman}=\mathbf{B}_{external}\\
+&\mathbf{B}_{thermal}=\eta\sqrt{\frac{2kT\alpha}{\gamma_0 M_{sat} dxdydzdt}}\\
+\end{aligned}
+\end{eqnarray*}
+
+\end{document}
