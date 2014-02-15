@@ -1,4 +1,4 @@
-//TODO deze commentaar test to try demag
+//This example shows the agreement between the Fast Multipole Method implementation and the brute force implementation of the magnetostatic interaction. The same problem is also solved without taking this interaction into account so to show that it is of importance in this system.
 package main
 
 import (
