@@ -62,7 +62,7 @@ func main() {
         //B_ext can be an arbitrary function of time
 
         B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
-     //Calculate the demagnetsing field using the fast multipole method
+        //Calculate the demagnetsing field using the fast multipole method
         //the tresholdbeta= 0.3 is a good compromise between speed and accuracy
         FMM=true
         Thresholdbeta=0.3
