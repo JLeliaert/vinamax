@@ -88,7 +88,7 @@ func Lognormal_diameter(mean, stdev float64) {
 	}
 }
 
-//Sets the saturation magnetisation of all particles
+//Sets the saturation magnetisation of all particles in A/m
 func Msat(x float64) {
 	msatcalled = true
 	for i := range universe.lijst {
