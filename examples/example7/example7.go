@@ -1,4 +1,4 @@
-//TODO
+//In this example 10 particles are initialised with a random magnetisation. They have a negative anisotropy constant along the z-axis, which means that the magnetisation prefers to lie in the xy-plane. This relaxation is shown at a zero and nonzero temperature.
 
 package main
 
