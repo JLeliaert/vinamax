@@ -32,82 +32,29 @@
 
 <a href="http://jleliaert.github.io/vinamax/examples.html">Back to examples</a>
 <h2>
-<a name="second example" class="anchor" href="#second-example"><span class="octicon octicon-link"></span></a>Second example: Magnetostatic Interaction</h2>
+<a name="sixth example" class="anchor" href="#sixth-example"><span class="octicon octicon-link"></span></a>Sixth example: Relaxation</h2>
 <p>
 
-This second example is a test if the demagnetising field is implemented correctly. To check this, we let 2 particles relax in the presence of an external field and check the output versus mumax. We also do the same simulation without calculating the demagnetising field to see if this problem is suited to check the implementation; i.e. to see that the demagnetising field
-makes a difference. 
-
+The diameter of the particles can be given a lognormal distribution. This example shows how an ensemble of 20000 particles which are initially magnetised in the z-direction relaxes towards a random (per particle) anisotropy direction.
 
 <pre><code>
-package main
-
-import (
-        . "github.com/JLeliaert/vinamax"
-)
-
-func main() {
-
-        //Defines the world at location 0,0,0 and with a side of 2e-6 m 
-        World(0,0,0,2e-6)
-        //Adds two particles
-        Addsingleparticle(-64.48e-9,0,0)
-        Addsingleparticle(64.48e-9,0,0)
-
-        //the particles have radius 16 nm
-        Particle_radius(16e-9)
-
-        //external field along the x direction of 1mT 
-        //B_ext can be an arbitrary function of time
-
-        B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
-
-        //We calculate demag, but not with the FMM method
-        FMM=false
-        Demag=true
-
-        //set the saturation magnetisation of the particles
-        Msat (860e3)
-
-        //timestep : 1ps 
-        Dt = 1e-12
-        //initialise time at zero
-        T = 0.
-        //temperature=0
-        Temp = 0.0
-        //Gilbert damping constant=0.1
-        Alpha = 0.1
-        //anisotropy constant=0
-        Ku1 = 0
-
-        //anisotropy axis along the z-direction
-        Anisotropy_axis(0, 0, 1)
-
-        //initialise the magnetisation along the y direction
-        M_uniform(0,1,0)
-        Tableadd("B_ext")
-
-        //write output every 1e-10s
-        Output(1e-10)
-
-        //Saves the geometry of the simulation
-        Save("geometry")
-
-        //run for 100 ns
-        Run(100.e-9)
-
-}
-
-
 </code></pre>
 <p>
-The results of the simulation are visualised below and to validate the code, the comparison with <a href="http://mumax.github.io">Mumax3</a> of (<a href="https://github.com/barnex" class="user-mention">@barnex</a>) has been made. Also the solution to the same problem without including the demagnetising field is included to see that it makes a difference in this problem.
-</p>
+The results of the simulation are visualised below. The particles are initialised with their magnetisation parallel to the z-axis. They have a random anisotropy axis, so they relax towards this axis (above the horizontal plane) The average magnetisation thus relaxes towards 2/Pi. This value is the mean of cos(x) between O and pi.</p>
 
 <figure style="float:left">
-        <img src="examples/example2/example2.png"/>
-	        <figcaption> <p>The output of the second example plotted with GNUPLOT </p></figcaption>
+        <img src="examples/example6/example6.png"/>
+	        <figcaption> <p>The output of the sixth example plotted with GNUPLOT </p></figcaption>
 		</figure>
+		<BR clear=all>
+<p>
+The diameters of the particles was taken from a lognormal distribution, to prove that this is implemented correctly, the distribution of the particles is shown, together with the theoretical curve they are supposed to follow.</p>
+
+<figure style="float:left">
+        <img src="examples/example6/lognormal.png"/>
+	        <figcaption> <p>The distribution of the diameters of the particles in the sixth example plotted with GNUPLOT </p></figcaption>
+		</figure>
+		<BR clear=all>
 
   
   </body>
