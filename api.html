@@ -36,18 +36,108 @@
 <h2>
 <a name="Syntax" class="anchor" href="#syntax"><span class="octicon octicon-link"></span></a>Syntax</h2>
 <p>
-
-<h2>
-<a name="Inputfiles" class="anchor" href="#inputfiles"><span class="octicon octicon-link"></span></a>Inputfiles</h2>
+Vinamax uses a go-like syntax. The program is built in such a way, that the "inputfiles" are actually the main function of the program. This means that apart from the functions defined in the rest of the package (e.g. Addsingleparticle) all other go functionalities are available.<br>
 <p>
-
-
+This includes mathematical functions like math.Sin(), which can be useful in defining time-dependent external fields (<a href="http://jleliaert.github.io/vinamax/example4.html">Example 4</a>). <br>
+<p>
+What also can be useful is the functionality of defining your own variables:
+<pre><code>
+	a:=1.e-5
+        Run(a)
+</code></pre>
+also taken from <a href="http://jleliaert.github.io/vinamax/example4.html">Example 4</a>. This can of course also be used in a loop.
+<p>
 
 <h2>
 <a name="Godoc" class="anchor" href="#godoc"><span class="octicon octicon-link"></span></a>Godoc</h2>
 <p>
 
-On <a href="http://godoc.org/github.com/JLeliaert/vinamax">Godoc</a> you can find all functions that can be used in the inputfiles.
-  
+The full overview of all possible functions can be found on <a href="http://godoc.org/github.com/JLeliaert/vinamax">Godoc</a>.
+ 
+<h2>
+<a name="Inputfiles" class="anchor" href="#inputfiles"><span class="octicon octicon-link"></span></a>Inputfiles</h2>
+<p>
+The inputfiles are the main functions of a go program, and should be written as such. The best way to get started is to copy one of the inputfiles from the <a href="http://jleliaert.github.io/vinamax/examples.html">examples page</a>.<br>
+<p>
+In the following, an overview is given of what functions MUST be called in order to make the inputfile run properly. Not doing so will result in an error message.<br>
+<p>
+Variables that must get a value:
+<pre><code>
+	Dt	// The timestep (in s)
+	Alpha	// The damping constant
+	Temp	// The temperature (in K)
+</code></pre>
+<p>
+Functions that must be called:<br>
+<p>
+You have to define the size of the simulation
+<pre><code>
+	World(x,y,z,r float64)	
+
+//This geometry may not be empty so you have to add particles to it.
+//There are 2 possibilities:
+	//OR you add single particles at specified locations:
+	Addsingleparticle(x,y,z float64)
+	//OR you specify a cube and add uniformly distributed particles to it 
+        a_cube := Cube{S:5e-7} 		//here with a side of 500 nm
+        a_cube.Addparticles(100)	//In this case 100 particles
+</code></pre>
+
+Once the particles are defined, you have to define their properties:
+<p>
+
+<pre><code>
+//Anisotropy
+//IF the anisotropy constant Ku1 is defined !=0 J/m^3
+//than you have to specify the anisotropy axis:
+	//OR a fixed axis
+	Anisotropy_axis(x,y,z float64)
+	//OR a random uniform distribution of axes
+	Anisotropy_random()
+
+//Saturation magnetisation
+Msat(x float64) 	//in A/m
+
+//The size of the particles
+	//OR can be fixed
+	Particle_radius(x float64) //in m
+	//OR can be lognormally distributed
+	Lognormal_diameter(mean, stdev float64) //in m
+
+//Also the initial magnetisation of the particles has to be specified:
+	//OR a fixed direction
+	M_uniform(x,y,z float64)
+	//OR a random uniform distribution
+	M_random()
+</code></pre>
+
+When simulating at nonzero temperature, you also have to set the randomseed
+<p>
+
+<pre><code>
+Setrandomseed(a float64)
+</code></pre>
+
+When the "Output" function is not called, no outputtable will be made, and when it is called it will save the average magnetisation components at the specified interval. However, when the "Tableadd" function is called, you also HAVE to specify the outputinterval. <br>
+<p>
+<pre><code>
+Output(interval float64)	//in s
+</code></pre>
+
+When using the Fast Multipole method to calculate the magnetostatic interaction (FMM= true), than you have to call Maketree() after the particles are completely defined. It is always the safest to do this as the last function before Run(). <br>
+<p>
+
+<pre><code>
+Maketree()
+</code></pre>
+
+Finally, it is obliged to actually run the simulation.<br>
+<p>
+
+<pre><code>
+Run(time float64)		//in s
+</code></pre>
+
+ 
   </body>
 </html>
