@@ -66,3 +66,16 @@ rm -r example6.out
 #convert -verbose -density 125 -trim example6.pdf -quality 100 -sharpen 0x1.0 example6.png
 #convert -verbose -density 125 -trim lognormal.pdf -quality 100 -sharpen 0x1.0 lognormal.png
 
+cd ../example7
+go run example7.go
+go run notemp.go
+gnuplot example7.gnu
+epstopdf example7.eps
+rm example7.eps
+rm -r example7.out
+rm -r notemp.out
+
+#only to update the figures for the webpage
+#convert -verbose -density 125 -trim example7.pdf -quality 100 -sharpen 0x1.0 example7.png
+
+
