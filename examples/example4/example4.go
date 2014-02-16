@@ -53,6 +53,9 @@ func main() {
 	//write output every nanosecond
 	Output(1e-9)
 
+	//Ask for a suggested timestep
+	Suggesttimestep()
+
 	//run for 1 microsecond
 	//Here we show how you can define your own variables and use them in the inputfiles:
 	//A variable "a" is defined which is equal to 1e-5
