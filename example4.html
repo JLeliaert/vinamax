@@ -91,6 +91,9 @@ func main() {
         //write output every nanosecond
         Output(1e-9)
 
+        //Ask for a suggested timestep
+        Suggesttimestep()
+
         //run for 1 microsecond
         //Here we show how you can define your own variables and use them in the inputfiles:
         //A variable "a" is defined which is equal to 1e-5
@@ -108,7 +111,16 @@ The results of the simulation are visualised below. In the figure it can indeed 
         <img src="examples/example4/example4.png"/>
 	        <figcaption> <p>The output of the fourth example plotted with GNUPLOT </p></figcaption>
 		</figure>
-
-  
+		<BR clear=all>
+  <h3>
+<a name="suggesttimestep" class="anchor" href="#suggesttimestep"><span class="octicon octicon-link"></span></a>Suggested Timestep</h3>
+<p>
+In the inputfile the function "Suggesttimestep()" is called At the end of the simulation this function returns an estimate of the timestep that would be ideal to perform this simulation. Smaller timesteps would result in larger simulation times, but not in a more accurate result, while larger timesteps would result into less accurate results.<br>
+<p>
+In this example
+<pre><code>
+A good timestep would be:  3.9062789055674464e-13
+</code></pre>
+is returned, which is close to the timestep of 2e-13 that was actually used.
   </body>
 </html>
