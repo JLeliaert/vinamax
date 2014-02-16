@@ -54,3 +54,15 @@ rm run.prof
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim profile.pdf -quality 100 -sharpen 0x1.0 profile.png
 
+cd ../example6
+go run example6.go
+gnuplot example6.gnu
+epstopdf example6.eps
+epstopdf lognormal.eps
+rm example6.eps
+rm lognormal.eps
+rm -r example6.out
+#only to update the figures for the webpage
+#convert -verbose -density 125 -trim example6.pdf -quality 100 -sharpen 0x1.0 example6.png
+#convert -verbose -density 125 -trim lognormal.pdf -quality 100 -sharpen 0x1.0 lognormal.png
+
