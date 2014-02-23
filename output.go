@@ -176,3 +176,10 @@ func Tableadd(a string) {
 func Suggesttimestep() {
 	suggest_timestep = true
 }
+
+
+func Writeintable(a string) {
+	string := fmt.Sprintf("%v\n",a)
+	_, err = f.WriteString(string)
+	check(err)
+}
