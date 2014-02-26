@@ -36,7 +36,7 @@ func Anisotropy_random() {
 	uaniscalled = true
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
-		theta := rand.Float64() * math.Pi
+		theta := 2* math.Asin(math.Sqrt(rand.Float64()))
 		universe.lijst[i].u_anis = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
@@ -46,7 +46,7 @@ func M_random() {
 	magnetisationcalled = true
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
-		theta := rand.Float64() * math.Pi
+		theta := math.Asin(math.Sqrt(rand.Float64()))
 		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }

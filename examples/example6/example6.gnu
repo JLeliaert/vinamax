@@ -21,9 +21,9 @@ unset grid
 set size 1.15,1
 
 file="./example6.out/table.txt"
-g(x)=2/pi
+g(x)=0.5
 
-plot file using ($1*1e9):(sqrt($2*$2+$3*$3+$4*$4)) ls 1 w l title " <m>", g(x) ls 2 w l title "2/{/Symbol p}"
+plot file using ($1*1e9):(sqrt($2*$2+$3*$3+$4*$4)) ls 1 w l title " <m>", g(x) ls 2 w l title "0.5}"
 ########################################################################
 datafile="./example6.out/m000000.txt"
 
