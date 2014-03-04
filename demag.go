@@ -2,7 +2,7 @@ package vinamax
 
 import (
 	"math"
-	//	"fmt"
+//	"fmt"
 )
 
 //cfr. 2.51 in coey en watweuitrekenen.pdf
@@ -66,8 +66,8 @@ func fMMdemag(x, y, z float64) vector {
 	nodelist := []*node{&universe}
 	//for lijst!=leeg
 	for len(nodelist) > 0 {
-		//	for i := range nodelist {
 		i := 0
+		//	for i := range nodelist {
 		//if aantalparticles in box==0: delete van stack
 		//	if nodelist[i].number == 0 {
 		//		nodelist[i] = nodelist[len(nodelist)-1]
@@ -79,7 +79,6 @@ func fMMdemag(x, y, z float64) vector {
 				//	if ik ben niet die ene: calculate en delete van stack
 				//	CALC
 
-				//check!######################
 				volume := nodelist[i].volume
 
 				r_vect := vector{x - nodelist[i].lijst[0].x, y - nodelist[i].lijst[0].y, z - nodelist[i].lijst[0].z}
@@ -88,7 +87,7 @@ func fMMdemag(x, y, z float64) vector {
 				r3 := r * r2
 				r5 := r3 * r2
 
-				dotproduct := nodelist[i].lijst[i].m.dot(r_vect)
+				dotproduct := nodelist[i].lijst[0].m.dot(r_vect)
 
 				demag[0] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (nodelist[i].lijst[0].m[0] / r3))
 
@@ -107,20 +106,7 @@ func fMMdemag(x, y, z float64) vector {
 			if (nodelist[i].where(vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
 				//	if voldoet aan criterium: calculate en delete van stack
 
-				//m and v not here################################
 				m := nodelist[i].m
-				//	m := vector{0, 0, 0}
-				//	volume := 0.
-				//	//in loopje m en volume berekenen
-				//	for j := range nodelist[i].lijst {
-				//		volume = 4. / 3. * math.Pi * cube(nodelist[i].lijst[i].r)
-				//		m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat * volume
-				//		m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat * volume
-				//		m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat * volume
-				//	}
-
-				//##########################################
-				//M FROM NODE!!
 
 				r2 := r * r
 				r3 := r * r2
@@ -145,9 +131,9 @@ func fMMdemag(x, y, z float64) vector {
 				nodelist = append(nodelist, nodelist[i].brf)
 			}
 		}
-		copy(nodelist[i:], nodelist[i+1:])
-		nodelist[len(nodelist)-1] = nil // or the zero value of T
-		nodelist = nodelist[:len(nodelist)-1]
+//		copy(nodelist[i:], nodelist[i+1:])
+//		nodelist[len(nodelist)-1] = nil 
+	nodelist[i],nodelist = nodelist[len(nodelist)-1],nodelist[:len(nodelist)-1]
 	}
 	//}
 	return demag
