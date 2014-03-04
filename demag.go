@@ -2,7 +2,7 @@ package vinamax
 
 import (
 	"math"
-//	"fmt"
+	//	"fmt"
 )
 
 //cfr. 2.51 in coey en watweuitrekenen.pdf
@@ -56,7 +56,7 @@ func (r *particle) dist(x, y, z float64) float64 {
 
 //demag is calculated on a position
 func fMMdemag(x, y, z float64) vector {
-//THISISNEW
+	//THISISNEW
 	universe.calculatem()
 
 	prefactor := mu0 / (4 * math.Pi)
@@ -79,11 +79,8 @@ func fMMdemag(x, y, z float64) vector {
 				//	if ik ben niet die ene: calculate en delete van stack
 				//	CALC
 
-
-//check!######################
+				//check!######################
 				volume := nodelist[i].volume
-
-
 
 				r_vect := vector{x - nodelist[i].lijst[0].x, y - nodelist[i].lijst[0].y, z - nodelist[i].lijst[0].z}
 				r := nodelist[i].lijst[0].dist(x, y, z)
@@ -110,20 +107,20 @@ func fMMdemag(x, y, z float64) vector {
 			if (nodelist[i].where(vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
 				//	if voldoet aan criterium: calculate en delete van stack
 
-//m and v not here################################
-				m :=nodelist[i].m
-			//	m := vector{0, 0, 0}
-			//	volume := 0.
-			//	//in loopje m en volume berekenen
-			//	for j := range nodelist[i].lijst {
-			//		volume = 4. / 3. * math.Pi * cube(nodelist[i].lijst[i].r)
-			//		m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat * volume
-			//		m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat * volume
-			//		m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat * volume
-			//	}
+				//m and v not here################################
+				m := nodelist[i].m
+				//	m := vector{0, 0, 0}
+				//	volume := 0.
+				//	//in loopje m en volume berekenen
+				//	for j := range nodelist[i].lijst {
+				//		volume = 4. / 3. * math.Pi * cube(nodelist[i].lijst[i].r)
+				//		m[0] += nodelist[i].lijst[j].m[0] * nodelist[i].lijst[j].msat * volume
+				//		m[1] += nodelist[i].lijst[j].m[1] * nodelist[i].lijst[j].msat * volume
+				//		m[2] += nodelist[i].lijst[j].m[2] * nodelist[i].lijst[j].msat * volume
+				//	}
 
-//##########################################
-//M FROM NODE!!
+				//##########################################
+				//M FROM NODE!!
 
 				r2 := r * r
 				r3 := r * r2
