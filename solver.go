@@ -77,16 +77,22 @@ func heunstep(Lijst []*particle) {
 
 		temp := p.temp()
 		tau1 := p.tau(temp)
+		p.tauheun = tau1
 
 		//tau van t+1, positie nadat met tau1 al is doorgevoerd
 		p.m[0] += tau1[0] * Dt
 		p.m[1] += tau1[1] * Dt
 		p.m[2] += tau1[2] * Dt
-		if Demag {
-			calculatedemag()
-		}
-		tau2 := p.tau(temp)
+	}
 
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		tau2 := p.tau(temp)
+		tau1 := p.tauheun
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
 		p.m[1] += ((-tau1[1] + tau2[1]) * 0.5 * Dt)
 		p.m[2] += ((-tau1[2] + tau2[2]) * 0.5 * Dt)

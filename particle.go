@@ -15,6 +15,7 @@ type particle struct {
 	u_anis              vector  // Uniaxial anisotropy axis
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
+	tauheun             vector  //used in heun solver
 }
 
 //print position and magnitisation of a particle
@@ -36,7 +37,7 @@ func Anisotropy_random() {
 	uaniscalled = true
 	for i := range universe.lijst {
 		phi := rand.Float64() * (2 * math.Pi)
-		theta := 2* math.Asin(math.Sqrt(rand.Float64()))
+		theta := 2 * math.Asin(math.Sqrt(rand.Float64()))
 		universe.lijst[i].u_anis = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
