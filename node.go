@@ -2,6 +2,7 @@ package vinamax
 
 import (
 //	"fmt"
+	"math"
 )
 
 type node struct {
@@ -21,6 +22,8 @@ type node struct {
 	com      vector      //centreofmagnetisation
 	number   int64       //numberofparticles
 	lijst    []*particle //lijst met alle particles
+	volume	float64		//the total volume of all particles in the node
+	m	vector		//magnetisation of the node
 }
 
 //adds particle to node
@@ -180,6 +183,7 @@ func (w *node) descend() {
 func Maketree() {
 	treecalled = true
 	universe.descend()
+	universe.calculatevolume()
 }
 
 //returns the position of a particle in a node (in terms of subnode position), or -1 if the particle is not in the node
@@ -230,4 +234,71 @@ func (n node) where(position vector) int {
 		return 5
 	}
 	return -1
+}
+
+
+
+//calculates the volumes
+func (w *node) calculatevolume() {
+	if w.number > 1 {
+		//for every subnode
+
+			w.tlb.calculatevolume()
+			w.volume+=w.tlb.volume
+			w.tlf.calculatevolume()
+			w.volume+=w.tlf.volume
+			w.trb.calculatevolume()
+			w.volume+=w.trb.volume
+			w.trf.calculatevolume()
+			w.volume+=w.trf.volume
+			w.blb.calculatevolume()
+			w.volume+=w.blb.volume
+			w.blf.calculatevolume()
+			w.volume+=w.blf.volume
+			w.brb.calculatevolume()
+			w.volume+=w.brb.volume
+			w.brf.calculatevolume()
+			w.volume+=w.brf.volume
+		
+	}
+	if w.number == 1 {
+	w.volume=4. / 3. * math.Pi * cube(w.lijst[0].r)
+	}
+	if w.number == 0 {
+	w.volume=0.
+	}
+}
+
+
+
+
+//calculates the magnetisation of a node
+func (w *node) calculatem() {
+	if w.number > 1 {
+	w.m=vector{0.,0.,0.}
+		//for every subnode
+			w.tlb.calculatem()
+			w.m=w.m.add(w.tlb.m)
+			w.tlf.calculatem()
+			w.m=w.m.add(w.tlf.m)
+			w.trb.calculatem()
+			w.m=w.m.add(w.trb.m)
+			w.trf.calculatem()
+			w.m=w.m.add(w.trf.m)
+			w.blb.calculatem()
+			w.m=w.m.add(w.blb.m)
+			w.blf.calculatem()
+			w.m=w.m.add(w.blf.m)
+			w.brb.calculatem()
+			w.m=w.m.add(w.brb.m)
+			w.brf.calculatem()
+			w.m=w.m.add(w.brf.m)
+	}
+
+	if w.number == 1 {
+	w.m=w.lijst[0].m.times(w.lijst[0].msat*w.volume)
+	}
+	if w.number == 0 {
+	w.m=vector{0.,0.,0.}
+	}
 }
