@@ -274,7 +274,12 @@ func (w *node) calculatevolume() {
 
 //calculates the magnetisation of a node
 func (w *node) calculatem() {
-	if w.number > 1 {
+	switch w.number {
+	case 0:
+		w.m=vector{0.,0.,0.}
+	case 1:
+	w.m=w.lijst[0].m.times(w.lijst[0].msat*w.volume)
+	default: 
 	w.m=vector{0.,0.,0.}
 		//for every subnode
 			w.tlb.calculatem()
@@ -295,10 +300,4 @@ func (w *node) calculatem() {
 			w.m=w.m.add(w.brf.m)
 	}
 
-	if w.number == 1 {
-	w.m=w.lijst[0].m.times(w.lijst[0].msat*w.volume)
-	}
-	if w.number == 0 {
-	w.m=vector{0.,0.,0.}
-	}
 }
