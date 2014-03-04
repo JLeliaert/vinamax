@@ -8,6 +8,9 @@ import (
 //cfr. 2.51 in coey en watweuitrekenen.pdf
 
 func calculatedemag() {
+	if FMM {
+		universe.calculatem()
+	}
 
 	for i := range universe.lijst {
 		universe.lijst[i].demagnetising_field = universe.lijst[i].demag()
@@ -56,8 +59,6 @@ func (r *particle) dist(x, y, z float64) float64 {
 
 //demag is calculated on a position
 func fMMdemag(x, y, z float64) vector {
-	//THISISNEW
-	universe.calculatem()
 
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}

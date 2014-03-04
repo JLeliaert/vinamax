@@ -281,31 +281,31 @@ func (w *node) calculatem() {
 		w.tlb.calculatem()
 		w.m = w.m.add(w.tlb.m)
 		}
-		if w.tlb.number >0{
+		if w.tlf.number >0{
 		w.tlf.calculatem()
 		w.m = w.m.add(w.tlf.m)
 		}
-		if w.tlb.number >0{
+		if w.trb.number >0{
 		w.trb.calculatem()
 		w.m = w.m.add(w.trb.m)
 		}
-		if w.tlb.number >0{
+		if w.trf.number >0{
 		w.trf.calculatem()
 		w.m = w.m.add(w.trf.m)
 		}
-		if w.tlb.number >0{
+		if w.blb.number >0{
 		w.blb.calculatem()
 		w.m = w.m.add(w.blb.m)
 		}
-		if w.tlb.number >0{
+		if w.blf.number >0{
 		w.blf.calculatem()
 		w.m = w.m.add(w.blf.m)
 		}
-		if w.tlb.number >0{
+		if w.brb.number >0{
 		w.brb.calculatem()
 		w.m = w.m.add(w.brb.m)
 		}
-		if w.tlb.number >0{
+		if w.brf.number >0{
 		w.brf.calculatem()
 		w.m = w.m.add(w.brf.m)
 		}
