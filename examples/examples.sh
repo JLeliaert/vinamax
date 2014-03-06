@@ -20,16 +20,17 @@ rm -r example2.out
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example2.pdf -quality 100 -sharpen 0x1.0 example2.png
 
+#commented out because long examples
 cd ../example3
-go run example3.go
-go run nofmm.go
-go run wode.go
+#go run example3.go
+#go run nofmm.go
+#go run wode.go
 gnuplot example3.gnu
 epstopdf example3.eps
 rm example3.eps
-rm -r example3.out
-rm -r wode.out
-rm -r nofmm.out
+#rm -r example3.out
+#rm -r wode.out
+#rm -r nofmm.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example3.pdf -quality 100 -sharpen 0x1.0 example3.png
@@ -74,6 +75,17 @@ epstopdf example7.eps
 rm example7.eps
 rm -r example7.out
 rm -r notemp.out
+
+#only to update the figures for the webpage
+#convert -verbose -density 125 -trim example7.pdf -quality 100 -sharpen 0x1.0 example7.png
+
+#commented out because long simulation
+cd ../example8
+go run example8.go
+gnuplot example8.gnu
+epstopdf example8.eps
+rm example7.eps
+#rm -r example7.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example7.pdf -quality 100 -sharpen 0x1.0 example7.png

@@ -7,10 +7,9 @@ import (
 
 func main() {
 
-	//comment TODO	
-	World(0,0,0,5e-7)
-	test := Cube{S:5e-7}
-	test.Addparticles(20)
+	World(0,0,0,2e-6)
+	test := Cube{S:2e-6}
+	test.Addparticles(256)
 
 	//the particle has radius 16 nm
 	Particle_radius(16e-9)
@@ -21,14 +20,14 @@ func main() {
 	B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
 
 	FMM=false
-	Thresholdbeta=0.7
+	Thresholdbeta=0.4
 	Demag=false
 
 	//MSAT
 	Msat (860e3)
 
 	//timestep : 10fs
-	Dt = 3e-13
+	Dt = 9e-13
 	//initialise time at zero
 	T = 0.
 	//temperature=0
@@ -46,13 +45,13 @@ func main() {
 	Tableadd("B_ext")
 
 	//write output every 1e-13s 
-	Output(2e-12)
+	Output(1.5e-10)
 //	Save("geometry")
 
 	//calculates the tree for the FMM demag
 	Maketree()
 
 
-	//run for 10 ns
-	Run(1.e-9)
+	//run for 100 ns
+	Run(1.e-7)
 }
