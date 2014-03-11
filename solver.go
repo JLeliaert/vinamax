@@ -17,6 +17,10 @@ func Setsolver(a string) {
 		{
 			solver = "heun"
 		}
+	case "rk3":
+		{
+			solver = "rk3"
+		}
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" ")
@@ -41,6 +45,9 @@ func Run(time float64) {
 		}
 		if solver == "euler" {
 			eulerstep(universe.lijst)
+		}
+		if solver == "rk3" {
+			rk3step(universe.lijst)
 		}
 		T += Dt
 
@@ -74,7 +81,6 @@ func eulerstep(Lijst []*particle) {
 //http://en.wikipedia.org/wiki/Heun_method
 func heunstep(Lijst []*particle) {
 	for _, p := range Lijst {
-
 		temp := p.temp()
 		tau1 := p.tau(temp)
 		p.tauheun = tau1
@@ -103,6 +109,60 @@ func heunstep(Lijst []*particle) {
 			taux := (-tau1[0] + tau2[0]) * 0.5
 			tauy := (-tau1[1] + tau2[1]) * 0.5
 			tauz := (-tau1[2] + tau2[2]) * 0.5
+			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+			if torq > maxtauwitht {
+				maxtauwitht = torq
+			}
+		}
+	}
+}
+
+//#########################################################################
+
+//perform a timestep using 3th order RK
+func rk3step(Lijst []*particle) {
+	for _, p := range Lijst {
+		temp := p.temp()
+		tau0 := p.tau(temp)
+		p.taurk3k1 = tau0
+
+		//k1
+		p.m[0] += tau0[0] * 1/2. * Dt
+		p.m[1] += tau0[1] * 1/2. * Dt
+		p.m[2] += tau0[2] * 1/2. * Dt
+	}
+
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k2 := p.tau(temp)
+		p.taurk3k2 = k2
+		k1 := p.taurk3k1
+		p.m[0] += ((-3/2.*k1[0] + 2*k2[0]) * Dt)
+		p.m[1] += ((-3/2.*k1[1] + 2*k2[1]) * Dt)
+		p.m[2] += ((-3/2.*k1[2] + 2*k2[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k3 := p.tau(temp)
+		k1 := p.taurk3k1
+		k2 := p.taurk3k2
+		p.m[0] += ((7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0]) * Dt)
+		p.m[1] += ((7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1]) * Dt)
+		p.m[2] += ((7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2]) * Dt)
+
+		p.m = norm(p.m)
+
+		if suggest_timestep {
+			taux := (7/6*k1[0] - 4/3*k2[0] + 1/6*k3[0])
+			tauy := (7/6*k1[1] - 4/3*k2[1] + 1/6*k3[1])
+			tauz := (7/6*k1[2] - 4/3*k2[2] + 1/6*k3[2])
 			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
 			if torq > maxtauwitht {
 				maxtauwitht = torq

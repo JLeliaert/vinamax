@@ -1,5 +1,4 @@
 //This example shows a how a profile can be made with gotools.
-//The profile of example3 is made as an illustration 
 
 package main
 

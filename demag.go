@@ -2,7 +2,7 @@ package vinamax
 
 import (
 	"math"
-//	"fmt"
+	//	"fmt"
 )
 
 //cfr. 2.51 in coey en watweuitrekenen.pdf
@@ -132,9 +132,9 @@ func fMMdemag(x, y, z float64) vector {
 				nodelist = append(nodelist, nodelist[i].brf)
 			}
 		}
-//		copy(nodelist[i:], nodelist[i+1:])
-//		nodelist[len(nodelist)-1] = nil 
-	nodelist[i],nodelist = nodelist[len(nodelist)-1],nodelist[:len(nodelist)-1]
+		//		copy(nodelist[i:], nodelist[i+1:])
+		//		nodelist[len(nodelist)-1] = nil
+		nodelist[i], nodelist = nodelist[len(nodelist)-1], nodelist[:len(nodelist)-1]
 	}
 	//}
 	return demag

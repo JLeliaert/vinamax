@@ -24,7 +24,7 @@ func main() {
 
 	B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
 
-	//Calculate the demagnetsing field using the fast multipole method
+	//Calculate the demagnetizing field using the dipole approximation method
 	//the tresholdbeta= 0.4 is a good compromise between speed and accuracy
 	FMM=true
 	Thresholdbeta=0.4
@@ -58,7 +58,7 @@ func main() {
 	//saves the geometry of the simulation
 	Save("geometry")
 
-	//calculates the tree for the FMM demag
+	//calculates the tree for the dipole approximation
 	Maketree()
 	//run for 100 ns
 	Run(1.e-7)

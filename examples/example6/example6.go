@@ -12,14 +12,14 @@ func main() {
 	//Defines the world at location 0,0,0 and with a side of 2e-5 m	
 	World(0,0,0,2e-5)
 
-	//Adds a cube to the word with side 1e-5 m
+	//Adds a cube to the word with side 2e-5 m
 	test := Cube{S:2e-5}
 
 	//Adds 20000 particles to the cube
 	test.Addparticles(20000)
 
-	//the particle have a lognormal distribution of diameters
-	//with mean 20 nm and stdev 1 nm
+	//the particles have a lognormal distribution of diameters
+	//with mean 20 nm and stdev 1 nm of the log of the diameters
 	Lognormal_diameter(20e-9, 1e-9)
 
 	//Don't calculate the demagnetsing field
@@ -28,14 +28,14 @@ func main() {
 	//saturation magnetisation 860 000 A/m
 	Msat (860e3)
 
-	//timestep : 1ps
+	//timestep : 2ps
 	Dt = 2e-12
 	//initialise time at zero
 	T = 0.
 	//temperature=0
 	Temp = 0.0
-	//Gilbert damping constant=0.8 for fast relax
-	Alpha = 0.8
+	//Gilbert damping constant=0.05
+	Alpha = 0.05
 	//anisotropy constant=10 000 J/m**3
 	Ku1 = 10000 
 
@@ -50,6 +50,6 @@ func main() {
 	//Save the magnetisation at the start of the simulation (to see the diameters)
 	Save("m")
 
-	//run for 8 ns
-	Run(8.e-9)
+	//run for 20 ns
+	Run(20.e-9)
 }

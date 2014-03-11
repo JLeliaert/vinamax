@@ -21,7 +21,7 @@ func main() {
 	//the particle have radius 20 nm
 	Particle_radius(20e-9)
 
-	//Don't calculate the demagnetsing field
+	//Don't calculate the demagnetizing field
 	Demag=false
 
 	//saturation magnetisation in A/m

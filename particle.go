@@ -16,6 +16,11 @@ type particle struct {
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
 	tauheun             vector  //used in heun solver
+	taurk3k1            vector
+	taurk3k2            vector
+	taurk4k1            vector
+	taurk4k2            vector
+	taurk4k3            vector
 }
 
 //print position and magnitisation of a particle

@@ -23,9 +23,9 @@ func main() {
 	//apply an external field along the z direction of 10mT
 	//B_ext can be an arbitrary function of time
 	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 0.1 }
-	//Don't calculate demag 
+	//Don't calculate the demagnetizing field
 	Demag=false
-	//Don't use the fast multipole method
+	//Don't use the dipole approximation method
 	FMM=false
 
 	//sets the saturation magnetisaton of the particles at 860e3 A/m

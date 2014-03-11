@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	//Defines the world at location 0,0,0 and with a side of 2e-6 m	
+	//Define the world at location 0,0,0 and with a side of 2e-6 m	
 	World(0,0,0,2e-6)
 	//Adds two particles
 	Addsingleparticle(-64.48e-9,0,0)
@@ -27,7 +27,7 @@ func main() {
 
 	B_ext = func(t float64) (float64, float64, float64) { return 0.001,0.,0.0}
 
-	//We calculate demag, but not with the FMM method
+	//We calculate the demagnetizing field, but not with the FMM method
 	FMM=false
 	Demag=true
 
