@@ -12,14 +12,17 @@ func Setsolver(a string) {
 	case "euler":
 		{
 			solver = "euler"
+			order = 1
 		}
 	case "heun":
 		{
 			solver = "heun"
+			order = 2
 		}
 	case "rk3":
 		{
 			solver = "rk3"
+			order = 3
 		}
 	default:
 		{
@@ -127,9 +130,9 @@ func rk3step(Lijst []*particle) {
 		p.taurk3k1 = tau0
 
 		//k1
-		p.m[0] += tau0[0] * 1/2. * Dt
-		p.m[1] += tau0[1] * 1/2. * Dt
-		p.m[2] += tau0[2] * 1/2. * Dt
+		p.m[0] += tau0[0] * 1 / 2. * Dt
+		p.m[1] += tau0[1] * 1 / 2. * Dt
+		p.m[2] += tau0[2] * 1 / 2. * Dt
 	}
 
 	if Demag {

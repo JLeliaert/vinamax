@@ -6,21 +6,22 @@ import (
 
 var (
 	//These variables can be set in the input files
-	B_ext            func(t float64) (float64, float64, float64)          // External applied field in T
-	Dt               float64                                     = -1     // Timestep in s
-	T                float64                                              // Time in s
-	Alpha            float64                                     = -1     // Gilbert damping constant
-	Temp             float64                                     = -1     // Temperature in K
-	Ku1              float64                                     = 0      // Uniaxial anisotropy constant in J/m**3
-	Thresholdbeta    float64                                     = 0.3    // The threshold value for the FMM
-	universe         node                                                 // The entire universe of the simulation
-	FMM              bool                                        = false  // Calculate demag with FMM method
-	Demag            bool                                        = true   // Calculate demag
-	outdir           string                                               // The output directory
-	solver           string                                      = "heun" // The solver used
+	B_ext            func(t float64) (float64, float64, float64)         // External applied field in T
+	Dt               float64                                     = -1    // Timestep in s
+	T                float64                                             // Time in s
+	Alpha            float64                                     = -1    // Gilbert damping constant
+	Temp             float64                                     = -1    // Temperature in K
+	Ku1              float64                                     = 0     // Uniaxial anisotropy constant in J/m**3
+	Thresholdbeta    float64                                     = 0.3   // The threshold value for the FMM
+	universe         node                                                // The entire universe of the simulation
+	FMM              bool                                        = false // Calculate demag with FMM method
+	Demag            bool                                        = true  // Calculate demag
+	outdir           string                                              // The output directory
+	solver           string                                      = "rk3" // The solver used
 	outputinterval   float64
 	maxtauwitht      float64 = 0. //maximum torque during the simulations with temperature
 	suggest_timestep bool    = false
+	order            int     = 3 //the order of the solver
 
 	msatcalled          bool = false
 	radiuscalled        bool = false

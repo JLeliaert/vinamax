@@ -71,7 +71,7 @@ func writeheader() {
 func printsuggestedtimestep() {
 	shouldbemaxerror := 1e-5
 	currentmaxerror := Dt * maxtauwitht
-	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/2.))
+	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/float64(order)))
 }
 
 //Adds the field at a specific location to the output table
