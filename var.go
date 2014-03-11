@@ -17,11 +17,11 @@ var (
 	FMM              bool                                        = false // Calculate demag with FMM method
 	Demag            bool                                        = true  // Calculate demag
 	outdir           string                                              // The output directory
-	solver           string                                      = "rk3" // The solver used
+	solver           string                                      = "rk4" // The solver used
 	outputinterval   float64
 	maxtauwitht      float64 = 0. //maximum torque during the simulations with temperature
 	suggest_timestep bool    = false
-	order            int     = 3 //the order of the solver
+	order            int     = 4 //the order of the solver
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
