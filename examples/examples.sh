@@ -81,11 +81,11 @@ rm -r notemp.out
 
 #commented out because long simulation
 cd ../example8
-go run example8.go
+#go run example8.go
 gnuplot example8.gnu
 epstopdf example8.eps
-rm example7.eps
-#rm -r example7.out
+rm example8.eps
+#rm -r example8.out
 
 #only to update the figures for the webpage
 #convert -verbose -density 125 -trim example7.pdf -quality 100 -sharpen 0x1.0 example7.png

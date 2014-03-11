@@ -34,7 +34,7 @@ func main() {
 	Msat (860e3)
 
 	//timestep : 0.9ps
-	Dt = 9e-13
+	Dt = 5e-12
 	//initialise time at zero
 	T = 0.
 	//temperature=0
