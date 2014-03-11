@@ -24,6 +24,11 @@ func Setsolver(a string) {
 			solver = "rk3"
 			order = 3
 		}
+	case "rk4":
+		{
+			solver = "rk4"
+			order = 4
+		}
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" ")
@@ -51,6 +56,9 @@ func Run(time float64) {
 		}
 		if solver == "rk3" {
 			rk3step(universe.lijst)
+		}
+		if solver == "rk4" {
+			rk4step(universe.lijst)
 		}
 		T += Dt
 
@@ -166,6 +174,73 @@ func rk3step(Lijst []*particle) {
 			taux := (7/6*k1[0] - 4/3*k2[0] + 1/6*k3[0])
 			tauy := (7/6*k1[1] - 4/3*k2[1] + 1/6*k3[1])
 			tauz := (7/6*k1[2] - 4/3*k2[2] + 1/6*k3[2])
+			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+			if torq > maxtauwitht {
+				maxtauwitht = torq
+			}
+		}
+	}
+}
+
+//#########################################################################
+
+//perform a timestep using 4th order RK
+func rk4step(Lijst []*particle) {
+	for _, p := range Lijst {
+		temp := p.temp()
+		tau0 := p.tau(temp)
+		p.taurk4k1 = tau0
+
+		//k1
+		p.m[0] += tau0[0] * 1 / 2. * Dt
+		p.m[1] += tau0[1] * 1 / 2. * Dt
+		p.m[2] += tau0[2] * 1 / 2. * Dt
+	}
+
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k2 := p.tau(temp)
+		p.taurk4k2 = k2
+		k1 := p.taurk4k1
+		p.m[0] += ((-1/2.*k1[0] + 1/2.*k2[0]) * Dt)
+		p.m[1] += ((-1/2.*k1[1] + 1/2.*k2[1]) * Dt)
+		p.m[2] += ((-1/2.*k1[2] + 1/2.*k2[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k3 := p.tau(temp)
+		p.taurk4k3 = k3
+		k2 := p.taurk4k2
+		p.m[0] += ((-1/2.*k2[0] + 1*k3[0]) * Dt)
+		p.m[1] += ((-1/2.*k2[1] + 1*k3[1]) * Dt)
+		p.m[2] += ((-1/2.*k2[2] + 1*k3[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k4 := p.tau(temp)
+		k1 := p.taurk4k1
+		k2 := p.taurk4k2
+		k3 := p.taurk4k3
+		p.m[0] += ((1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0]) * Dt)
+		p.m[1] += ((1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1]) * Dt)
+		p.m[2] += ((1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2]) * Dt)
+
+		p.m = norm(p.m)
+
+		if suggest_timestep {
+			taux := (1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0])
+			tauy := (1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1])
+			tauz := (1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2])
 			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
 			if torq > maxtauwitht {
 				maxtauwitht = torq
