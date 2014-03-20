@@ -32,21 +32,65 @@
 
 <a href="http://jleliaert.github.io/vinamax/examples.html">Back to examples</a>
 <h2>
-<a name="seventh example" class="anchor" href="#seventh-example"><span class="octicon octicon-link"></span></a>Seventh example: Temperature</h2>
+<a name="eighth example" class="anchor" href="#eighth-example"><span class="octicon octicon-link"></span></a>Eights example: Switching</h2>
 <p>
 
-In this example 10 particles are initialised with a random magnetisation. They have a negative anisotropy constant along the z-axis, which means that the magnetisation prefers to lie in the xy-plane. This relaxation is shown at a zero and nonzero temperature.<br>
+In this example the thermal switching behaviour of a single particle is shown <br>
 
 <pre><code>
+package main
 
+import (
+. "github.com/JLeliaert/vinamax"
+)
+
+func main() {
+
+//Define world
+World(0,0,0,1e-7)
+//Add a single particle in the origin
+Addsingleparticle(0,0,0)
+
+The radius of the particle is 9 nm
+Particle_radius(9.0e-9)
+
+//Don't calculate the demagnetising field
+Demag=false
+
+//Timestep = 3 picoseconds
+Dt = 3e-12
+//Initialize time at zero
+T = 0.
+//Temperature = 0
+Temp = 300.
+//Set a randomseed for the thermal field
+Setrandomseed(2)
+//The Gilbert damping constant =0.01
+Alpha = 0.01
+//The anisotropy constant is 10000 J/m**3
+Ku1 = 10000
+//The saturation magnetisation is 400000 A/m
+Msat(400e3)
+
+//The particle has its anisotropy axis along the z-axis
+Anisotropy_axis(0, 0., 1)
+//Initialise the magnetisation along the z-axis
+M_uniform(0,0,1)
+
+//Ouput the magnetization every 1e-5 seconds
+Output(1e-5)
+
+//Run the simulation for 1 second
+Run(1.e-0)
+}
 </code></pre>
 <p>
 
-The results of the simulation are visualised below, and the effects of a nonzero temperature can clearly be seen. </p>
+The results of the simulation are visualised below, and the switching at random intervals can clearly be seen. </p>
 
 <figure style="float:left">
-        <img src="examples/example7/example7.png"/>
-	        <figcaption> <p>The output of the seventh example plotted with GNUPLOT </p></figcaption>
+        <img src="examples/example8/example8.png"/>
+	        <figcaption> <p>The output of the eighth example plotted with GNUPLOT </p></figcaption>
 		</figure>
 		<BR clear=all>
   </body>
