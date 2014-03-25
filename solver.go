@@ -36,7 +36,7 @@ func Setsolver(a string) {
 		}
 	default:
 		{
-			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" ")
+			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"rk5\"")
 		}
 	}
 }
