@@ -29,6 +29,11 @@ func Setsolver(a string) {
 			solver = "rk4"
 			order = 4
 		}
+	case "rk5":
+		{
+			solver = "rk5"
+			order = 5
+		}
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" ")
@@ -37,6 +42,7 @@ func Setsolver(a string) {
 }
 
 //Runs the simulation for a certain time
+//TODO if if if in case to do
 func Run(time float64) {
 	testinput()
 	syntaxrun()
@@ -59,6 +65,9 @@ func Run(time float64) {
 		}
 		if solver == "rk4" {
 			rk4step(universe.lijst)
+		}
+		if solver == "rk5" {
+			rk5step(universe.lijst)
 		}
 		T += Dt
 
@@ -171,9 +180,9 @@ func rk3step(Lijst []*particle) {
 		p.m = norm(p.m)
 
 		if suggest_timestep {
-			taux := (7/6*k1[0] - 4/3*k2[0] + 1/6*k3[0])
-			tauy := (7/6*k1[1] - 4/3*k2[1] + 1/6*k3[1])
-			tauz := (7/6*k1[2] - 4/3*k2[2] + 1/6*k3[2])
+			taux := (7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0])
+			tauy := (7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1])
+			tauz := (7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2])
 			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
 			if torq > maxtauwitht {
 				maxtauwitht = torq
@@ -241,6 +250,109 @@ func rk4step(Lijst []*particle) {
 			taux := (1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0])
 			tauy := (1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1])
 			tauz := (1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2])
+			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+			if torq > maxtauwitht {
+				maxtauwitht = torq
+			}
+		}
+	}
+}
+
+//#########################################################################
+
+//perform a timestep using 5th order RK
+func rk5step(Lijst []*particle) {
+	for _, p := range Lijst {
+		temp := p.temp()
+		tau0 := p.tau(temp)
+		p.taurk5k1 = tau0
+
+		//k1
+		p.m[0] += tau0[0] * 1 / 4. * Dt
+		p.m[1] += tau0[1] * 1 / 4. * Dt
+		p.m[2] += tau0[2] * 1 / 4. * Dt
+	}
+
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k2 := p.tau(temp)
+		p.taurk5k2 = k2
+		k1 := p.taurk5k1
+		p.m[0] += ((-1/8.*k1[0] + 1/8.*k2[0]) * Dt)
+		p.m[1] += ((-1/8.*k1[1] + 1/8.*k2[1]) * Dt)
+		p.m[2] += ((-1/8.*k1[2] + 1/8.*k2[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k3 := p.tau(temp)
+		p.taurk5k3 = k3
+		k2 := p.taurk5k2
+		k1 := p.taurk5k1
+		p.m[0] += ((-1/8.*k1[0] - 5/8.*k2[0] + 1*k3[0]) * Dt)
+		p.m[1] += ((-1/8.*k1[1] - 5/8.*k2[1] + 1*k3[1]) * Dt)
+		p.m[2] += ((-1/8.*k1[2] - 5/8.*k2[2] + 1*k3[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k4 := p.tau(temp)
+		p.taurk5k4 = k4
+		k2 := p.taurk5k2
+		k1 := p.taurk5k1
+		k3 := p.taurk5k3
+		p.m[0] += ((3/16.*k1[0] + 1/2.*k2[0] - 1*k3[0] + 12/16.*k4[0]) * Dt)
+		p.m[1] += ((3/16.*k1[1] + 1/2.*k2[1] - 1*k3[1] + 12/16.*k4[1]) * Dt)
+		p.m[2] += ((3/16.*k1[2] + 1/2.*k2[2] - 1*k3[2] + 12/16.*k4[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k5 := p.tau(temp)
+		p.taurk5k5 = k5
+		k2 := p.taurk5k2
+		k1 := p.taurk5k1
+		k3 := p.taurk5k3
+		k4 := p.taurk5k4
+
+		p.m[0] += ((-69/112.*k1[0] + 2/7.*k2[0] + 12/7.*k3[0] - 69/28.*k4[0] + 8/7.*k5[0]) * Dt)
+		p.m[1] += ((-69/112.*k1[1] + 2/7.*k2[1] + 12/7.*k3[1] - 69/28.*k4[1] + 8/7.*k5[1]) * Dt)
+		p.m[2] += ((-69/112.*k1[2] + 2/7.*k2[2] + 12/7.*k3[2] - 69/28.*k4[2] + 8/7.*k5[2]) * Dt)
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k6 := p.tau(temp)
+		k1 := p.taurk5k1
+		k2 := p.taurk5k2
+		k3 := p.taurk5k3
+		k4 := p.taurk5k4
+		k5 := p.taurk5k5
+		//TODO
+		p.m[0] += ((319/630.*k1[0] - 2/7.*k2[0] - 428/315.*k3[0] + 194/105.*k4[0] - 248/315.*k5[0] + 7/90.*k6[0]) * Dt)
+		p.m[1] += ((319/630.*k1[1] - 2/7.*k2[1] - 428/315.*k3[1] + 194/105.*k4[1] - 248/315.*k5[1] + 7/90.*k6[1]) * Dt)
+		p.m[2] += ((319/630.*k1[2] - 2/7.*k2[2] - 428/315.*k3[2] + 194/105.*k4[2] - 248/315.*k5[2] + 7/90.*k6[2]) * Dt)
+
+		p.m = norm(p.m)
+
+		if suggest_timestep {
+			//TODO
+			taux := (319/630.*k1[0] - 2/7.*k2[0] - 428/315.*k3[0] + 194/105.*k4[0] - 248/315.*k5[0] + 7/90.*k6[0])
+			tauy := (319/630.*k1[1] - 2/7.*k2[1] - 428/315.*k3[1] + 194/105.*k4[1] - 248/315.*k5[1] + 7/90.*k6[1])
+			tauz := (319/630.*k1[2] - 2/7.*k2[2] - 428/315.*k3[2] + 194/105.*k4[2] - 248/315.*k5[2] + 7/90.*k6[2])
 			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
 			if torq > maxtauwitht {
 				maxtauwitht = torq

@@ -21,6 +21,11 @@ type particle struct {
 	taurk4k1            vector
 	taurk4k2            vector
 	taurk4k3            vector
+	taurk5k1            vector
+	taurk5k2            vector
+	taurk5k3            vector
+	taurk5k4            vector
+	taurk5k5            vector
 }
 
 //print position and magnitisation of a particle
