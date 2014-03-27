@@ -69,8 +69,9 @@ func writeheader() {
 
 //prints the suggested timestep for the simulation
 func printsuggestedtimestep() {
-	shouldbemaxerror := 1e-3
-	currentmaxerror := Dt * maxtauwitht
+	shouldbemaxerror := 5e-4
+	currentmaxerror := maxtauwitht //* Dt
+	fmt.Println("maxerr=", currentmaxerror)
 	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/float64(order)))
 }
 

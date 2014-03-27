@@ -26,6 +26,14 @@ type particle struct {
 	taurk5k3            vector
 	taurk5k4            vector
 	taurk5k5            vector
+	tempm               vector
+	doprik1             vector
+	doprik2             vector
+	doprik3             vector
+	doprik4             vector
+	doprik5             vector
+	doprik6             vector
+	doprik7             vector
 }
 
 //print position and magnitisation of a particle
