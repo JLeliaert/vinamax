@@ -2,10 +2,7 @@ package vinamax
 
 import (
 	"math"
-	//	"fmt"
 )
-
-//cfr. 2.51 in coey en watweuitrekenen.pdf
 
 func calculatedemag() {
 	if FMM {
@@ -17,7 +14,7 @@ func calculatedemag() {
 	}
 }
 
-//demag is calculated on a position
+//Demag is calculated on a position
 func demag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
@@ -44,7 +41,7 @@ func demag(x, y, z float64) vector {
 	return demag
 }
 
-//demag on a particle
+//Demag on a particle
 func (p particle) demag() vector {
 	if FMM {
 		return fMMdemag(p.x, p.y, p.z)
@@ -57,28 +54,21 @@ func (r *particle) dist(x, y, z float64) float64 {
 	return math.Sqrt(sqr(float64(r.x-x)) + sqr(float64(r.y-y)) + sqr(float64(r.z-z)))
 }
 
-//demag is calculated on a position
+//Dipole approximation Demag is calculated on a position
 func fMMdemag(x, y, z float64) vector {
 
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
-	//lijst maken met nodes
-	//node universe in de box steken
+	//make list with nodes
+	//put node universe in box
 	nodelist := []*node{&universe}
-	//for lijst!=leeg
+	//for lijst!=empty
 	for len(nodelist) > 0 {
 		i := 0
-		//	for i := range nodelist {
-		//if aantalparticles in box==0: delete van stack
-		//	if nodelist[i].number == 0 {
-		//		nodelist[i] = nodelist[len(nodelist)-1]
-		//		nodelist = nodelist[0 : len(nodelist)-1]
-		//	}
 		if nodelist[i].number == 1 {
-			//if aantalparticles in box==1:
+			//if numberofparticles in box==1:
 			if nodelist[i].lijst[0].x != x || nodelist[i].lijst[0].y != y || nodelist[i].lijst[0].z != z {
-				//	if ik ben niet die ene: calculate en delete van stack
-				//	CALC
+				//	if i'm not the one: calculate and delete from stack
 
 				volume := nodelist[i].volume
 
@@ -96,16 +86,14 @@ func fMMdemag(x, y, z float64) vector {
 
 				demag[2] += nodelist[i].lijst[0].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (nodelist[i].lijst[0].m[2] / r3))
 			}
-			//	nodelist[i] = nodelist[len(nodelist)-1]
-			//	nodelist = nodelist[0 : len(nodelist)-1]
 		}
 		if nodelist[i].number > 1 {
-			//if aantalparticles in box>1:
+			//if number of particles in box>1:
 			r_vect := vector{x - nodelist[i].com[0], y - nodelist[i].com[1], z - nodelist[i].com[2]}
 			r := math.Sqrt(r_vect[0]*r_vect[0] + r_vect[1]*r_vect[1] + r_vect[2]*r_vect[2])
 
 			if (nodelist[i].where(vector{x, y, z}) == -1 && (math.Sqrt(2)/2.*nodelist[i].diameter/r) < Thresholdbeta) {
-				//	if voldoet aan criterium: calculate en delete van stack
+				//	if criterium is ok: calculate and delete from stack
 
 				m := nodelist[i].m
 
@@ -121,7 +109,7 @@ func fMMdemag(x, y, z float64) vector {
 				demag[2] += prefactor * ((3 * dotproduct * r_vect[2] / r5) - (m[2] / r3))
 
 			} else {
-				//	if not: add subboxen en delete van stack
+				//	if not: add subboxes andn delete from stack
 				nodelist = append(nodelist, nodelist[i].tlb)
 				nodelist = append(nodelist, nodelist[i].tlf)
 				nodelist = append(nodelist, nodelist[i].trb)
@@ -132,10 +120,7 @@ func fMMdemag(x, y, z float64) vector {
 				nodelist = append(nodelist, nodelist[i].brf)
 			}
 		}
-		//		copy(nodelist[i:], nodelist[i+1:])
-		//		nodelist[len(nodelist)-1] = nil
 		nodelist[i], nodelist = nodelist[len(nodelist)-1], nodelist[:len(nodelist)-1]
 	}
-	//}
 	return demag
 }

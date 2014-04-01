@@ -3,8 +3,9 @@ package vinamax
 import (
 	"math"
 	"math/rand"
-	//	"fmt"
 )
+
+var rng = rand.New(rand.NewSource(0))
 
 //Sums the individual fields to the effective field working on the particle
 func (p *particle) b_eff(temp vector) vector {
@@ -17,8 +18,6 @@ func Setrandomseed(a int64) {
 	rng = rand.New(rand.NewSource(a))
 }
 
-var rng = rand.New(rand.NewSource(0))
-
 //Calculates the the thermal field B_therm working on a particle
 // factor 4/3pi in "number" because they are spherical
 func (p *particle) temp() vector {
@@ -28,11 +27,6 @@ func (p *particle) temp() vector {
 		etay := rng.NormFloat64()
 		etaz := rng.NormFloat64()
 
-		//marsaglia polar method, don't use
-		//etax := normfloat()
-		//etay := normfloat()
-		//etaz := normfloat()
-
 		B_therm = vector{etax, etay, etaz}
 		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
 		B_therm = B_therm.times(number)
@@ -40,7 +34,7 @@ func (p *particle) temp() vector {
 	return B_therm
 }
 
-//Calculates the zeeman field working on a particle
+//Calculates the Zeeman field working on a particle
 func (p *particle) zeeman() vector {
 	x, y, z := B_ext(T)
 	x2, y2, z2 := B_ext_space(T, p.x, p.y, p.z)

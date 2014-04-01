@@ -15,25 +15,26 @@ type particle struct {
 	u_anis              vector  // Uniaxial anisotropy axis
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
-	tauheun             vector  //used in heun solver
-	taurk3k1            vector
-	taurk3k2            vector
-	taurk4k1            vector
-	taurk4k2            vector
-	taurk4k3            vector
-	taurk5k1            vector
-	taurk5k2            vector
-	taurk5k3            vector
-	taurk5k4            vector
-	taurk5k5            vector
-	tempm               vector
-	doprik1             vector
-	doprik2             vector
-	doprik3             vector
-	doprik4             vector
-	doprik5             vector
-	doprik6             vector
-	doprik7             vector
+	//All these coeffients are used in the different solvers
+	tauheun  vector
+	taurk3k1 vector
+	taurk3k2 vector
+	taurk4k1 vector
+	taurk4k2 vector
+	taurk4k3 vector
+	taurk5k1 vector
+	taurk5k2 vector
+	taurk5k3 vector
+	taurk5k4 vector
+	taurk5k5 vector
+	tempm    vector
+	doprik1  vector
+	doprik2  vector
+	doprik3  vector
+	doprik4  vector
+	doprik5  vector
+	doprik6  vector
+	doprik7  vector
 }
 
 //print position and magnitisation of a particle

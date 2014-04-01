@@ -137,7 +137,7 @@ func Save(a string) {
 		}
 	case "m":
 		{
-			// heel de lijst met particles aflopen en de locatie straal,msat en magnetisatie printen
+			// loop over entire list with particles and print location, radius, msat and mag
 			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tm_x\tm_y\tm_z\n", T)
 			_, err = file.WriteString(header)
 			check(err)

@@ -1,4 +1,4 @@
-//This file contains all the constants
+//This file contains all the constants and init files
 
 package vinamax
 
@@ -40,6 +40,8 @@ contact: jonathan.leliaert@gmail.com
 
 
 `)
+
+	//Initialise the outputdir
 
 	fname := os.Args[0]
 	f2name := strings.Split(fname, "/")

@@ -1,7 +1,6 @@
 package vinamax
 
 import (
-	//	"fmt"
 	"math"
 )
 
@@ -55,7 +54,7 @@ func (w *node) descend() {
 	w.calculatecom()
 	if w.number > 1 {
 
-		//initialiseert de 8 subnodes
+		//initialises the 8 subnodes
 
 		//tlb
 		pos := vector{w.origin[0] - w.diameter/4, w.origin[1] + w.diameter/4, w.origin[2] + w.diameter/4}
@@ -149,8 +148,8 @@ func (w *node) descend() {
 				//fmt.Println("particle at ",vector{w.lijst[i].x, w.lijst[i].y, w.lijst[i].z},"  was put at brf")
 			}
 		}
-		//for iedere subnode
-		//oeveel zitten derin?
+		//for every subnode
+		//how many are there in the subnode?
 
 		if w.tlb.number > 1 {
 			w.tlb.descend()

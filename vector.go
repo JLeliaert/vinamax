@@ -2,6 +2,8 @@
 
 package vinamax
 
+import "math"
+
 type vector [3]float64
 
 //Dot product between two vectors
@@ -20,6 +22,11 @@ func norm(x vector) vector {
 	//magnitude := math.Sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2])
 	magnitude := ((x[0]*x[0]+x[1]*x[1]+x[2]*x[2])-1)/2 + 1
 	return x.times(1 / magnitude)
+}
+
+//returns the norm of a vector
+func size(x vector) float64 {
+	return math.Sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2])
 }
 
 //multiply each component of a vector by a float
