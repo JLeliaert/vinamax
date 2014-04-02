@@ -35,6 +35,14 @@ type particle struct {
 	doprik5  vector
 	doprik6  vector
 	doprik7  vector
+	fehlk1   vector
+	fehlk2   vector
+	fehlk3   vector
+	fehlk4   vector
+	fehlk5   vector
+	fehlk6   vector
+	fehlk7   vector
+	fehlk8   vector
 }
 
 //print position and magnitisation of a particle

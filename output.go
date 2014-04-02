@@ -4,7 +4,7 @@ package vinamax
 import (
 	"fmt"
 	"log"
-	"math"
+	//	"math"
 	"os"
 )
 
@@ -67,13 +67,13 @@ func writeheader() {
 
 }
 
-//prints the suggested timestep for the simulation
-func printsuggestedtimestep() {
-	shouldbemaxerror := 5e-4
-	currentmaxerror := maxtauwitht //* Dt
-	fmt.Println("maxerr=", currentmaxerror)
-	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/float64(order)))
-}
+////prints the suggested timestep for the simulation
+//func printsuggestedtimestep() {
+//	shouldbemaxerror := 5e-4
+//	currentmaxerror := maxtauwitht //* Dt
+//	fmt.Println("maxerr=", currentmaxerror)
+//	fmt.Println("A good timestep would be: ", Dt*math.Pow(shouldbemaxerror/currentmaxerror, 1/float64(order)))
+//}
 
 //Adds the field at a specific location to the output table
 func Tableadd_b_at_location(x, y, z float64) {
@@ -174,9 +174,9 @@ func Tableadd(a string) {
 }
 
 //returns a suggested timestep at the end of the simulation
-func Suggesttimestep() {
-	suggest_timestep = true
-}
+//func Suggesttimestep() {
+//	suggest_timestep = true
+//}
 
 func Writeintable(a string) {
 	string := fmt.Sprintf("%v\n", a)

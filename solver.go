@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"math"
 )
@@ -35,7 +35,11 @@ func Setsolver(a string) {
 			solver = "dopri"
 			order = 5
 		}
-
+	case "fehl56":
+		{
+			solver = "fehl56"
+			order = 6
+		}
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"dopri\"")
@@ -79,7 +83,17 @@ func Run(time float64) {
 				if Adaptivestep {
 
 					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
-					fmt.Println("dt:   ", Dt)
+					//fmt.Println("dt:   ", Dt)
+					maxtauwitht = 0
+				}
+			}
+		case "fehl56":
+			{
+				fehl56step(universe.lijst)
+				if Adaptivestep {
+
+					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					//fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
 			}
@@ -87,13 +101,12 @@ func Run(time float64) {
 
 		write(averages(universe.lijst))
 	}
-	if suggest_timestep {
-		printsuggestedtimestep()
-	}
+	//if suggest_timestep {
+	//	printsuggestedtimestep()
+	//}
 }
 
 //##################################################
-//TODO tijd tussenin aanpassen
 
 //Perform a timestep using euler forward method
 func eulerstep(Lijst []*particle) {
@@ -106,12 +119,12 @@ func eulerstep(Lijst []*particle) {
 		p.m[2] += tau[2] * Dt
 		T += Dt
 		p.m = norm(p.m)
-		if suggest_timestep {
-			torq := math.Sqrt(tau[0]*tau[0] + tau[1]*tau[1] + tau[2]*tau[2])
-			if torq > maxtauwitht {
-				maxtauwitht = torq
-			}
-		}
+		//	if suggest_timestep {
+		//		torq := math.Sqrt(tau[0]*tau[0] + tau[1]*tau[1] + tau[2]*tau[2])
+		//		if torq > maxtauwitht {
+		//			maxtauwitht = torq
+		//		}
+		//	}
 	}
 }
 
@@ -144,15 +157,15 @@ func heunstep(Lijst []*particle) {
 
 		p.m = norm(p.m)
 
-		if suggest_timestep {
-			taux := (-tau1[0] + tau2[0]) * 0.5
-			tauy := (-tau1[1] + tau2[1]) * 0.5
-			tauz := (-tau1[2] + tau2[2]) * 0.5
-			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
-			if torq > maxtauwitht {
-				maxtauwitht = torq
-			}
-		}
+		//	if suggest_timestep {
+		//		taux := (-tau1[0] + tau2[0]) * 0.5
+		//		tauy := (-tau1[1] + tau2[1]) * 0.5
+		//		tauz := (-tau1[2] + tau2[2]) * 0.5
+		//		torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+		//		if torq > maxtauwitht {
+		//			maxtauwitht = torq
+		//		}
+		//	}
 	}
 }
 
@@ -200,15 +213,15 @@ func rk3step(Lijst []*particle) {
 
 		p.m = norm(p.m)
 
-		if suggest_timestep {
-			taux := (7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0])
-			tauy := (7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1])
-			tauz := (7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2])
-			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
-			if torq > maxtauwitht {
-				maxtauwitht = torq
-			}
-		}
+		//	if suggest_timestep {
+		//		taux := (7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0])
+		//		tauy := (7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1])
+		//		tauz := (7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2])
+		//		torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+		//		if torq > maxtauwitht {
+		//			maxtauwitht = torq
+		//		}
+		//	}
 	}
 }
 
@@ -267,16 +280,16 @@ func rk4step(Lijst []*particle) {
 		p.m[1] += ((1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1]) * Dt)
 		p.m[2] += ((1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2]) * Dt)
 
-		if suggest_timestep {
-			taux := (1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0])
-			tauy := (1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1])
-			tauz := (1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2])
-			torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+		//	if suggest_timestep {
+		//		taux := (1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0])
+		//		tauy := (1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1])
+		//		tauz := (1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2])
+		//		torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
 
-			if torq > maxtauwitht {
-				maxtauwitht = torq
-			}
-		}
+		//		if torq > maxtauwitht {
+		//			maxtauwitht = torq
+		//		}
+		//	}
 		p.m = norm(p.m)
 	}
 }
@@ -289,7 +302,6 @@ func rk4step(Lijst []*particle) {
 func dopristep(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.tempm = p.m
-		fmt.Println(p.m)
 
 		temp := p.temp()
 		k1 := p.tau(temp)
@@ -413,14 +425,174 @@ func dopristep(Lijst []*particle) {
 		//the error is the difference between the two solutions
 		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
 
-		fmt.Println(math.Sqrt(sqr(p.tempm[0]) + sqr(p.tempm[1])))
-		fmt.Println(math.Sqrt(sqr(p.m[0]) + sqr(p.m[1])))
-
-		fmt.Println("error    :", error)
-		if Adaptivestep || suggest_timestep {
+		//fmt.Println("error    :", error)
+		if Adaptivestep {
 			if error > maxtauwitht {
 				maxtauwitht = error
 			}
 		}
 	}
 }
+
+///#########################################################################
+//perform a timestep using fehlberg 56 method
+
+func fehl56step(Lijst []*particle) {
+	for _, p := range Lijst {
+		p.tempm = p.m
+
+		temp := p.temp()
+		k1 := p.tau(temp)
+		p.fehlk1 = k1
+
+		p.m[0] += k1[0] * 1 / 6. * Dt
+		p.m[1] += k1[1] * 1 / 6. * Dt
+		p.m[2] += k1[2] * 1 / 6. * Dt
+		T += 1 / 6. * Dt
+
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.tau(temp)
+		p.fehlk2 = k2
+
+		p.m = p.tempm
+		p.m[0] += ((4/75.*k1[0] + 16/75.*k2[0]) * Dt)
+		p.m[1] += ((4/75.*k1[1] + 16/75.*k2[1]) * Dt)
+		p.m[2] += ((4/75.*k1[2] + 16/75.*k2[2]) * Dt)
+		T += (-1/6. + 4/15.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.tau(temp)
+		p.fehlk3 = k3
+
+		p.m = p.tempm
+		p.m[0] += ((5/6.*k1[0] - 8/3.*k2[0] + 5/2.*k3[0]) * Dt)
+		p.m[1] += ((5/6.*k1[1] - 8/3.*k2[1] + 5/2.*k3[1]) * Dt)
+		p.m[2] += ((5/6.*k1[2] - 8/3.*k2[2] + 5/2.*k3[2]) * Dt)
+		T += (-4/15. + 2/3.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.tau(temp)
+		p.fehlk4 = k4
+
+		p.m = p.tempm
+		p.m[0] += ((-8/5.*k1[0] + 144/25.*k2[0] - 4.*k3[0] + 16/25.*k4[0]) * Dt)
+		p.m[1] += ((-8/5.*k1[1] + 144/25.*k2[1] - 4.*k3[1] + 16/25.*k4[1]) * Dt)
+		p.m[2] += ((-8/5.*k1[2] + 144/25.*k2[2] - 4.*k3[2] + 16/25.*k4[2]) * Dt)
+		T += (-2/3. + 4/5.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.tau(temp)
+		p.fehlk5 = k5
+
+		p.m = p.tempm
+		p.m[0] += ((361/320.*k1[0] - 18/5.*k2[0] + 407/128.*k3[0] - 11/80.*k4[0] + 55/128.*k5[0]) * Dt)
+		p.m[1] += ((361/320.*k1[1] - 18/5.*k2[1] + 407/128.*k3[1] - 11/80.*k4[1] + 55/128.*k5[1]) * Dt)
+		p.m[2] += ((361/320.*k1[2] - 18/5.*k2[2] + 407/128.*k3[2] - 11/80.*k4[2] + 55/128.*k5[2]) * Dt)
+		T += 1 / 5. * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.tau(temp)
+		p.fehlk6 = k6
+
+		p.m = p.tempm
+		p.m[0] += ((-11/640.*k1[0] + 0.*k2[0] + 11/256.*k3[0] - 11/160.*k4[0] + 11/256.*k5[0] + 0.*k6[0]) * Dt)
+		p.m[1] += ((-11/640.*k1[1] + 0.*k2[1] + 11/256.*k3[1] - 11/160.*k4[1] + 11/256.*k5[1] + 0.*k6[1]) * Dt)
+		p.m[2] += ((-11/640.*k1[2] + 0.*k2[2] + 11/256.*k3[2] - 11/160.*k4[2] + 11/256.*k5[2] + 0.*k6[2]) * Dt)
+		T += 1 / 1. * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.tau(temp)
+		p.fehlk7 = k7
+
+		p.m = p.tempm
+		p.m[0] += ((93/640.*k1[0] + -18/5.*k2[0] + 803/256.*k3[0] - 11/160.*k4[0] + 99/256.*k5[0] + 0.*k6[0] + 1/1.*k7[0]) * Dt)
+		p.m[1] += ((93/640.*k1[1] + -18/5.*k2[1] + 803/256.*k3[1] - 11/160.*k4[1] + 99/256.*k5[1] + 0.*k6[1] + 1/1.*k7[1]) * Dt)
+		p.m[2] += ((93/640.*k1[2] + -18/5.*k2[2] + 803/256.*k3[2] - 11/160.*k4[2] + 99/256.*k5[2] + 0.*k6[2] + 1/1.*k7[2]) * Dt)
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.tau(temp)
+		p.fehlk8 = k8
+
+		p.m = p.tempm
+		p.m[0] += ((31/384.*k1[0] + 0.*k2[0] + 1125/2816.*k3[0] + 9/32.*k4[0] + 125/768.*k5[0] + 5/66.*k6[0] + 0/1.*k7[0]) * Dt)
+		p.m[1] += ((31/384.*k1[1] + 0.*k2[1] + 1125/2816.*k3[1] + 9/32.*k4[1] + 125/768.*k5[1] + 5/66.*k6[1] + 0/1.*k7[1]) * Dt)
+		p.m[2] += ((31/384.*k1[2] + 0.*k2[2] + 1125/2816.*k3[2] + 9/32.*k4[2] + 125/768.*k5[2] + 5/66.*k6[2] + 0/1.*k7[2]) * Dt)
+
+		p.tempm[0] = p.m[0] + ((-5/66.*k1[0] + -5/66.*k6[0] + 5/66.*k7[0] + 5/66.*k8[0]) * Dt)
+		p.tempm[1] = p.m[1] + ((-5/66.*k1[1] + -5/66.*k6[1] + 5/66.*k7[1] + 5/66.*k8[1]) * Dt)
+		p.tempm[2] = p.m[2] + ((-5/66.*k1[2] + -5/66.*k6[2] + 5/66.*k7[2] + 5/66.*k8[2]) * Dt)
+
+		p.m = norm(p.m)
+		p.tempm = norm(p.tempm)
+
+		//the error is the difference between the two solutions
+		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
+
+		//fmt.Println("error    :", error)
+		if Adaptivestep {
+			if error > maxtauwitht {
+				maxtauwitht = error
+			}
+		}
+	}
+}
+
+//###########################################################################################################
