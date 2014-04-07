@@ -18,3 +18,11 @@ func attemptf(p particle) float64 {
 
 	return prefactor * math.Sqrt(undersqrt)
 }
+
+
+//calculates the next switching time
+func switchtime(p particle) float64{
+
+
+
+}
