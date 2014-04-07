@@ -6,13 +6,15 @@ import (
 
 var (
 	//These variables can be set in the input files
-	B_ext          func(t float64) (float64, float64, float64)               // External applied field in T
-	B_ext_space    func(t, x, y, z float64) (float64, float64, float64)      // External applied field in T
-	Dt             float64                                              = -1 // Timestep in s
-	T              float64                                                   // Time in s
-	Alpha          float64                                              = -1 // Gilbert damping constant
-	Temp           float64                                              = -1 // Temperature in K
-	Ku1            float64                                              = 0  // Uniaxial anisotropy constant in J/m**3
+	B_ext          func(t float64) (float64, float64, float64)                  // External applied field in T
+	B_ext_space    func(t, x, y, z float64) (float64, float64, float64)         // External applied field in T
+	Dt             float64                                              = -1    // Timestep in s
+	Mindt          float64                                              = 1e-20 //smallest allowed timestep
+	Maxdt          float64                                              = 1     //largest allowed timestep
+	T              float64                                                      // Time in s
+	Alpha          float64                                              = -1    // Gilbert damping constant
+	Temp           float64                                              = -1    // Temperature in K
+	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
 	Errortolerance float64                                              = 1e-5
 	Thresholdbeta  float64                                              = 0.3   // The threshold value for the FMM
 	universe       node                                                         // The entire universe of the simulation

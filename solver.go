@@ -89,6 +89,12 @@ func Run(time float64) {
 				if Adaptivestep {
 
 					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					if Dt < Mindt {
+						Dt = Mindt
+					}
+					if Dt > Maxdt {
+						Dt = Maxdt
+					}
 					//fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
@@ -99,6 +105,12 @@ func Run(time float64) {
 				if Adaptivestep {
 
 					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					if Dt < Mindt {
+						Dt = Mindt
+					}
+					if Dt > Maxdt {
+						Dt = Maxdt
+					}
 					//fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
@@ -109,6 +121,12 @@ func Run(time float64) {
 				if Adaptivestep {
 
 					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					if Dt < Mindt {
+						Dt = Mindt
+					}
+					if Dt > Maxdt {
+						Dt = Maxdt
+					}
 					//	fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
