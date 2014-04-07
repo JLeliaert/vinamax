@@ -16,6 +16,7 @@ type particle struct {
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
 	//All these coeffients are used in the different solvers
+	//TODO: you can do with just 9 k's!!
 	tauheun  vector
 	taurk3k1 vector
 	taurk3k2 vector
@@ -43,6 +44,11 @@ type particle struct {
 	fehlk6   vector
 	fehlk7   vector
 	fehlk8   vector
+	fehlk9   vector
+	fehlk10  vector
+	fehlk11  vector
+	fehlk12  vector
+	fehlk13  vector
 }
 
 //print position and magnitisation of a particle

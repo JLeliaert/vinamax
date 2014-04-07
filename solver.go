@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//"fmt"
+	//	"fmt"
 	"log"
 	"math"
 )
@@ -40,6 +40,12 @@ func Setsolver(a string) {
 			solver = "fehl56"
 			order = 6
 		}
+	case "fehl67":
+		{
+			solver = "fehl67"
+			order = 7
+		}
+
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"dopri\"")
@@ -94,6 +100,16 @@ func Run(time float64) {
 
 					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
 					//fmt.Println("dt:   ", Dt)
+					maxtauwitht = 0
+				}
+			}
+		case "fehl67":
+			{
+				fehl67step(universe.lijst)
+				if Adaptivestep {
+
+					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					//	fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
 			}
@@ -536,7 +552,7 @@ func fehl56step(Lijst []*particle) {
 		p.m[0] += ((-11/640.*k1[0] + 0.*k2[0] + 11/256.*k3[0] - 11/160.*k4[0] + 11/256.*k5[0] + 0.*k6[0]) * Dt)
 		p.m[1] += ((-11/640.*k1[1] + 0.*k2[1] + 11/256.*k3[1] - 11/160.*k4[1] + 11/256.*k5[1] + 0.*k6[1]) * Dt)
 		p.m[2] += ((-11/640.*k1[2] + 0.*k2[2] + 11/256.*k3[2] - 11/160.*k4[2] + 11/256.*k5[2] + 0.*k6[2]) * Dt)
-		T += 1 / 1. * Dt
+		T -= 1 / 1. * Dt
 	}
 	if Demag {
 		calculatedemag()
@@ -557,6 +573,7 @@ func fehl56step(Lijst []*particle) {
 		p.m[0] += ((93/640.*k1[0] + -18/5.*k2[0] + 803/256.*k3[0] - 11/160.*k4[0] + 99/256.*k5[0] + 0.*k6[0] + 1/1.*k7[0]) * Dt)
 		p.m[1] += ((93/640.*k1[1] + -18/5.*k2[1] + 803/256.*k3[1] - 11/160.*k4[1] + 99/256.*k5[1] + 0.*k6[1] + 1/1.*k7[1]) * Dt)
 		p.m[2] += ((93/640.*k1[2] + -18/5.*k2[2] + 803/256.*k3[2] - 11/160.*k4[2] + 99/256.*k5[2] + 0.*k6[2] + 1/1.*k7[2]) * Dt)
+		T += 1 / 1. * Dt
 	}
 
 	for _, p := range Lijst {
@@ -575,10 +592,291 @@ func fehl56step(Lijst []*particle) {
 		p.m[0] += ((31/384.*k1[0] + 0.*k2[0] + 1125/2816.*k3[0] + 9/32.*k4[0] + 125/768.*k5[0] + 5/66.*k6[0] + 0/1.*k7[0]) * Dt)
 		p.m[1] += ((31/384.*k1[1] + 0.*k2[1] + 1125/2816.*k3[1] + 9/32.*k4[1] + 125/768.*k5[1] + 5/66.*k6[1] + 0/1.*k7[1]) * Dt)
 		p.m[2] += ((31/384.*k1[2] + 0.*k2[2] + 1125/2816.*k3[2] + 9/32.*k4[2] + 125/768.*k5[2] + 5/66.*k6[2] + 0/1.*k7[2]) * Dt)
+		//fifth order solution
 
 		p.tempm[0] = p.m[0] + ((-5/66.*k1[0] + -5/66.*k6[0] + 5/66.*k7[0] + 5/66.*k8[0]) * Dt)
 		p.tempm[1] = p.m[1] + ((-5/66.*k1[1] + -5/66.*k6[1] + 5/66.*k7[1] + 5/66.*k8[1]) * Dt)
 		p.tempm[2] = p.m[2] + ((-5/66.*k1[2] + -5/66.*k6[2] + 5/66.*k7[2] + 5/66.*k8[2]) * Dt)
+		//sixth order solution
+
+		p.m = norm(p.m)
+		p.tempm = norm(p.tempm)
+
+		//the error is the difference between the two solutions
+		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
+
+		//fmt.Println("error    :", error)
+		if Adaptivestep {
+			if error > maxtauwitht {
+				maxtauwitht = error
+			}
+		}
+	}
+}
+
+//###########################################################################################################
+
+//perform a timestep using fehlberg 67 method
+
+func fehl67step(Lijst []*particle) {
+	for _, p := range Lijst {
+		p.tempm = p.m
+
+		temp := p.temp()
+		k1 := p.tau(temp)
+		p.fehlk1 = k1
+
+		p.m[0] += k1[0] * 2 / 27. * Dt
+		p.m[1] += k1[1] * 2 / 27. * Dt
+		p.m[2] += k1[2] * 2 / 27. * Dt
+		T += 2 / 27. * Dt
+
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.tau(temp)
+		p.fehlk2 = k2
+
+		p.m = p.tempm
+		p.m[0] += ((1/36.*k1[0] + 1/12.*k2[0]) * Dt)
+		p.m[1] += ((1/36.*k1[1] + 1/12.*k2[1]) * Dt)
+		p.m[2] += ((1/36.*k1[2] + 1/12.*k2[2]) * Dt)
+		T += (-2/27. + 1/9.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.tau(temp)
+		p.fehlk3 = k3
+
+		p.m = p.tempm
+		p.m[0] += ((1/24.*k1[0] + 0.*k2[0] + 1/8.*k3[0]) * Dt)
+		p.m[1] += ((1/24.*k1[1] + 0.*k2[1] + 1/8.*k3[1]) * Dt)
+		p.m[2] += ((1/24.*k1[2] + 0.*k2[2] + 1/8.*k3[2]) * Dt)
+		T += (-1/9. + 1/6.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.tau(temp)
+		p.fehlk4 = k4
+
+		p.m = p.tempm
+		p.m[0] += ((5/12.*k1[0] + 0.*k2[0] - 25/16.*k3[0] + 25/16.*k4[0]) * Dt)
+		p.m[1] += ((5/12.*k1[1] + 0.*k2[1] - 25/16.*k3[1] + 25/16.*k4[1]) * Dt)
+		p.m[2] += ((5/12.*k1[2] + 0.*k2[2] - 25/16.*k3[2] + 25/16.*k4[2]) * Dt)
+		T += (-1/6. + 5/12.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.tau(temp)
+		p.fehlk5 = k5
+
+		p.m = p.tempm
+		p.m[0] += ((1/20.*k1[0] + 0.*k2[0] + 0.*k3[0] + 1/4.*k4[0] + 1/5.*k5[0]) * Dt)
+		p.m[1] += ((1/20.*k1[1] + 0.*k2[1] + 0.*k3[1] + 1/4.*k4[1] + 1/5.*k5[1]) * Dt)
+		p.m[2] += ((1/20.*k1[2] + 0.*k2[2] + 0.*k3[2] + 1/4.*k4[2] + 1/5.*k5[2]) * Dt)
+		T += (-5/12. + 1/2.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.tau(temp)
+		p.fehlk6 = k6
+
+		p.m = p.tempm
+		p.m[0] += ((-25/108.*k1[0] + 0.*k2[0] + 0.*k3[0] + 125/108.*k4[0] - 65/27.*k5[0] + 125/54.*k6[0]) * Dt)
+		p.m[1] += ((-25/108.*k1[1] + 0.*k2[1] + 0.*k3[1] + 125/108.*k4[1] - 65/27.*k5[1] + 125/54.*k6[1]) * Dt)
+		p.m[2] += ((-25/108.*k1[2] + 0.*k2[2] + 0.*k3[2] + 125/108.*k4[2] - 65/27.*k5[2] + 125/54.*k6[2]) * Dt)
+		T += (-1/2. + 5/6.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.tau(temp)
+		p.fehlk7 = k7
+
+		p.m = p.tempm
+		p.m[0] += ((31/300.*k1[0] + 0.*k2[0] + 0.*k3[0] + 0.*k4[0] + 61/225.*k5[0] - 2/9.*k6[0] + +13/900.*k7[0]) * Dt)
+		p.m[1] += ((31/300.*k1[1] + 0.*k2[1] + 0.*k3[1] + 0.*k4[1] + 61/225.*k5[1] - 2/9.*k6[1] + +13/900.*k7[1]) * Dt)
+		p.m[2] += ((31/300.*k1[2] + 0.*k2[2] + 0.*k3[2] + 0.*k4[2] + 61/225.*k5[2] - 2/9.*k6[2] + +13/900.*k7[2]) * Dt)
+		T += (-5/6. + 1/6.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.tau(temp)
+		p.fehlk8 = k8
+
+		p.m = p.tempm
+		p.m[0] += ((2.*k1[0] + 0.*k2[0] + 0.*k3[0] - 53/6.*k4[0] + 704/45.*k5[0] - 107/9.*k6[0] + 67/90.*k7[0] + 3.*k8[0]) * Dt)
+		p.m[1] += ((2.*k1[1] + 0.*k2[1] + 0.*k3[1] - 53/6.*k4[1] + 704/45.*k5[1] - 107/9.*k6[1] + 67/90.*k7[1] + 3.*k8[1]) * Dt)
+		p.m[2] += ((2.*k1[2] + 0.*k2[2] + 0.*k3[2] - 53/6.*k4[2] + 704/45.*k5[2] - 107/9.*k6[2] + 67/90.*k7[2] + 3.*k8[2]) * Dt)
+		T += (-1/6. + 2/3.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.fehlk8
+		k9 := p.tau(temp)
+		p.fehlk9 = k9
+
+		p.m = p.tempm
+		p.m[0] += ((-91/108.*k1[0] + 0.*k2[0] + 0.*k3[0] + 23/108.*k4[0] - 976/135.*k5[0] + 311/54.*k6[0] - 19/60.*k7[0] + 17/6.*k8[0] - 1/12.*k9[0]) * Dt)
+		p.m[1] += ((-91/108.*k1[1] + 0.*k2[1] + 0.*k3[1] + 23/108.*k4[1] - 976/135.*k5[1] + 311/54.*k6[1] - 19/60.*k7[1] + 17/6.*k8[1] - 1/12.*k9[1]) * Dt)
+		p.m[2] += ((-91/108.*k1[2] + 0.*k2[2] + 0.*k3[2] + 23/108.*k4[2] - 976/135.*k5[2] + 311/54.*k6[2] - 19/60.*k7[2] + 17/6.*k8[2] - 1/12.*k9[2]) * Dt)
+		T += (-1 / 3.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.fehlk8
+		k9 := p.fehlk9
+		k10 := p.tau(temp)
+		p.fehlk10 = k10
+
+		p.m = p.tempm
+		p.m[0] += ((2383/4100.*k1[0] + 0.*k2[0] + 0.*k3[0] - 341/164.*k4[0] + 4496/1025.*k5[0] - 301/82.*k6[0] + 2133/4100.*k7[0] + 45/82.*k8[0] + 45/164.*k9[0] + 18/41.*k10[0]) * Dt)
+		p.m[1] += ((2383/4100.*k1[1] + 0.*k2[1] + 0.*k3[1] - 341/164.*k4[1] + 4496/1025.*k5[1] - 301/82.*k6[1] + 2133/4100.*k7[1] + 45/82.*k8[1] + 45/164.*k9[1] + 18/41.*k10[1]) * Dt)
+		p.m[2] += ((2383/4100.*k1[2] + 0.*k2[2] + 0.*k3[2] - 341/164.*k4[2] + 4496/1025.*k5[2] - 301/82.*k6[2] + 2133/4100.*k7[2] + 45/82.*k8[2] + 45/164.*k9[2] + 18/41.*k10[2]) * Dt)
+		T += (2 / 3.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.fehlk8
+		k9 := p.fehlk9
+		k10 := p.fehlk10
+		k11 := p.tau(temp)
+		p.fehlk11 = k11
+
+		p.m = p.tempm
+		p.m[0] += ((3/205.*k1[0] + 0.*k2[0] + 0.*k3[0] + 0.*k4[0] + 0.*k5[0] - 6/41.*k6[0] - 3/205.*k7[0] - 3/41.*k8[0] + 3/41.*k9[0] + 6/41.*k10[0]) * Dt)
+		p.m[1] += ((3/205.*k1[1] + 0.*k2[1] + 0.*k3[1] + 0.*k4[1] + 0.*k5[1] - 6/41.*k6[1] - 3/205.*k7[1] - 3/41.*k8[1] + 3/41.*k9[1] + 6/41.*k10[1]) * Dt)
+		p.m[2] += ((3/205.*k1[2] + 0.*k2[2] + 0.*k3[2] + 0.*k4[2] + 0.*k5[2] - 6/41.*k6[2] - 3/205.*k7[2] - 3/41.*k8[2] + 3/41.*k9[2] + 6/41.*k10[2]) * Dt)
+		T += (-1.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.fehlk8
+		k9 := p.fehlk9
+		k10 := p.fehlk10
+		k12 := p.tau(temp)
+		p.fehlk12 = k12
+
+		p.m = p.tempm
+		p.m[0] += ((-1777/4100.*k1[0] + 0.*k2[0] + 0.*k3[0] - 341/164.*k4[0] + 4496/1025.*k5[0] - 289/82.*k6[0] + 2193/4100.*k7[0] + 51/82.*k8[0] + 33/164.*k9[0] + 12/41.*k10[0] + 1.*k12[0]) * Dt)
+		p.m[1] += ((-1777/4100.*k1[1] + 0.*k2[1] + 0.*k3[1] - 341/164.*k4[1] + 4496/1025.*k5[1] - 289/82.*k6[1] + 2193/4100.*k7[1] + 51/82.*k8[1] + 33/164.*k9[1] + 12/41.*k10[1] + 1.*k12[1]) * Dt)
+		p.m[2] += ((-1777/4100.*k1[2] + 0.*k2[2] + 0.*k3[2] - 341/164.*k4[2] + 4496/1025.*k5[2] - 289/82.*k6[2] + 2193/4100.*k7[2] + 51/82.*k8[2] + 33/164.*k9[2] + 12/41.*k10[2] + 1.*k12[2]) * Dt)
+		T += (1.) * Dt
+	}
+	for _, p := range Lijst {
+		temp := p.temp()
+		k1 := p.fehlk1
+		k6 := p.fehlk6
+		k7 := p.fehlk7
+		k8 := p.fehlk8
+		k9 := p.fehlk9
+		k10 := p.fehlk10
+		k11 := p.fehlk11
+		k12 := p.fehlk12
+		k13 := p.tau(temp)
+		p.fehlk13 = k13
+
+		p.m = p.tempm
+		p.m[0] += ((41/840.*k1[0] + 34/105.*k6[0] + 9/35.*k7[0] + 9/35.*k8[0] + 9/280.*k9[0] + 9/280.*k10[0] + 41/840.*k11[0]) * Dt)
+		p.m[1] += ((41/840.*k1[1] + 34/105.*k6[1] + 9/35.*k7[1] + 9/35.*k8[1] + 9/280.*k9[1] + 9/280.*k10[1] + 41/840.*k11[1]) * Dt)
+		p.m[2] += ((41/840.*k1[2] + 34/105.*k6[2] + 9/35.*k7[2] + 9/35.*k8[2] + 9/280.*k9[2] + 9/280.*k10[2] + 41/840.*k11[2]) * Dt)
+		//sixth order solution
+
+		p.tempm[0] = p.m[0] + ((-41/840.*k1[0] - 41/840.*k11[0] + 41/840.*k12[0] + 41/840.*k13[0]) * Dt)
+		p.tempm[1] = p.m[1] + ((-41/840.*k1[1] - 41/840.*k11[1] + 41/840.*k12[1] + 41/840.*k13[1]) * Dt)
+		p.tempm[2] = p.m[2] + ((-41/840.*k1[2] - 41/840.*k11[2] + 41/840.*k12[2] + 41/840.*k13[2]) * Dt)
+		//seventh order solution
 
 		p.m = norm(p.m)
 		p.tempm = norm(p.tempm)
