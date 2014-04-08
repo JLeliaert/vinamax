@@ -70,25 +70,31 @@ func Run(time float64) {
 		case "heun":
 			{
 				heunstep(universe.lijst)
+				T += Dt
 			}
 		case "euler":
 			{
 				eulerstep(universe.lijst)
+				T += Dt
 			}
 		case "rk3":
 			{
 				rk3step(universe.lijst)
+				T += Dt
 			}
 		case "rk4":
 			{
 				rk4step(universe.lijst)
+				T += Dt
 			}
 		case "dopri":
 			{
 				dopristep(universe.lijst)
+				T += Dt
+				//fmt.Println(Dt)
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						undobadstep(universe.lijst)
+						//	undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -109,9 +115,10 @@ func Run(time float64) {
 		case "fehl56":
 			{
 				fehl56step(universe.lijst)
+				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						undobadstep(universe.lijst)
+						//	undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -133,9 +140,10 @@ func Run(time float64) {
 		case "fehl67":
 			{
 				fehl67step(universe.lijst)
+				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						undobadstep(universe.lijst)
+						//	undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -156,6 +164,9 @@ func Run(time float64) {
 			}
 		}
 
+		if Jumpnoise {
+			checkallswitch(universe.lijst)
+		}
 		write(averages(universe.lijst))
 	}
 	//if suggest_timestep {
@@ -182,6 +193,7 @@ func eulerstep(Lijst []*particle) {
 		//			maxtauwitht = torq
 		//		}
 		//	}
+		T -= Dt
 	}
 }
 
@@ -223,6 +235,7 @@ func heunstep(Lijst []*particle) {
 		//			maxtauwitht = torq
 		//		}
 		//	}
+		T -= Dt
 	}
 }
 
@@ -279,6 +292,7 @@ func rk3step(Lijst []*particle) {
 		//			maxtauwitht = torq
 		//		}
 		//	}
+		T -= Dt
 	}
 }
 
@@ -348,6 +362,7 @@ func rk4step(Lijst []*particle) {
 		//		}
 		//	}
 		p.m = norm(p.m)
+		T -= Dt
 	}
 }
 
@@ -489,6 +504,7 @@ func dopristep(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		T -= Dt
 	}
 }
 
@@ -654,6 +670,7 @@ func fehl56step(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		T -= Dt
 	}
 }
 
@@ -934,11 +951,12 @@ func fehl67step(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		T -= Dt
 	}
 }
 
 //###########################################################################################################
 
-func undobadstep(Lijst []*particle) {
-
-}
+//func undobadstep(Lijst []*particle) {
+//
+//}

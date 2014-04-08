@@ -1,6 +1,6 @@
 package vinamax
 
-//Calculates the torque working on the magnisation of a particle
+//Calculates the torque working on the magnetisation of a particle
 //using the Landau Lifshitz equation
 func (p *particle) tau(temp vector) vector {
 	mxB := p.m.cross(p.b_eff(temp))

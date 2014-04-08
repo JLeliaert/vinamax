@@ -92,5 +92,10 @@ func syntaxrun() {
 	if Brown == true && Adaptivestep == true {
 		log.Fatal("Brown Temperature can only be used with fixed timestep")
 	}
-
+	if Jumpnoise == true {
+		resetswitchtimes(universe.lijst)
+	}
+	if Temp != 0 && Brown == false && Jumpnoise == false {
+		log.Fatal("You have to specify which temperature you want to use: \"Jumpnoise\" or \"Brown\"")
+	}
 }

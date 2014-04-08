@@ -22,14 +22,16 @@ func Setrandomseed(a int64) {
 // factor 4/3pi in "number" because they are spherical
 func (p *particle) temp() vector {
 	B_therm := vector{0., 0., 0.}
-	if Temp != 0. {
-		etax := rng.NormFloat64()
-		etay := rng.NormFloat64()
-		etaz := rng.NormFloat64()
+	if Brown {
+		if Temp != 0. {
+			etax := rng.NormFloat64()
+			etay := rng.NormFloat64()
+			etaz := rng.NormFloat64()
 
-		B_therm = vector{etax, etay, etaz}
-		number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
-		B_therm = B_therm.times(number)
+			B_therm = vector{etax, etay, etaz}
+			number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
+			B_therm = B_therm.times(number)
+		}
 	}
 	return B_therm
 }
