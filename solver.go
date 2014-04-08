@@ -87,8 +87,15 @@ func Run(time float64) {
 			{
 				dopristep(universe.lijst)
 				if Adaptivestep {
+					if maxtauwitht > Errortolerance {
+						undobadstep(universe.lijst)
+						T -= Dt
+						if Dt == Mindt {
+							log.Fatal("mindt is too small for your specified error tolerance")
+						}
+					}
 
-					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					Dt = 0.95 * Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
 					if Dt < Mindt {
 						Dt = Mindt
 					}
@@ -103,8 +110,16 @@ func Run(time float64) {
 			{
 				fehl56step(universe.lijst)
 				if Adaptivestep {
+					if maxtauwitht > Errortolerance {
+						undobadstep(universe.lijst)
+						T -= Dt
+						if Dt == Mindt {
+							log.Fatal("mindt is too small for your specified error tolerance")
+						}
 
-					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					}
+
+					Dt = 0.95 * Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
 					if Dt < Mindt {
 						Dt = Mindt
 					}
@@ -119,8 +134,16 @@ func Run(time float64) {
 			{
 				fehl67step(universe.lijst)
 				if Adaptivestep {
+					if maxtauwitht > Errortolerance {
+						undobadstep(universe.lijst)
+						T -= Dt
+						if Dt == Mindt {
+							log.Fatal("mindt is too small for your specified error tolerance")
+						}
 
-					Dt = Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+					}
+
+					Dt = 0.95 * Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
 					if Dt < Mindt {
 						Dt = Mindt
 					}
@@ -915,3 +938,7 @@ func fehl67step(Lijst []*particle) {
 }
 
 //###########################################################################################################
+
+func undobadstep(Lijst []*particle) {
+
+}

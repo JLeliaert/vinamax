@@ -20,13 +20,13 @@ var (
 	universe       node                                                         // The entire universe of the simulation
 	FMM            bool                                                 = false // Calculate demag with FMM method
 	Demag          bool                                                 = true  // Calculate demag
-	Adaptivestep   bool                                                 = false
-	outdir         string                                                       // The output directory
-	solver         string                                               = "rk4" // The solver used
+	Adaptivestep   bool                                                 = true
+	outdir         string                                                         // The output directory
+	solver         string                                               = "dopri" // The solver used
 	outputinterval float64
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
-	order int = 4 //the order of the solver
+	order int = 5 //the order of the solver
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
@@ -37,6 +37,8 @@ var (
 	outputcalled        bool = false
 	randomseedcalled    bool = false
 	tableaddcalled      bool = false
+	Jumpnoise           bool = false
+	Brown               bool = false
 )
 
 //initialised B_ext functions
@@ -87,9 +89,8 @@ func syntaxrun() {
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
-	//todo ADD bool BROWN
-	//	if brown == true && Adaptivestep == true {
-	//		log.Fatal("Brown Temperature can only be used with fixed timestep")
-	//	}
+	if Brown == true && Adaptivestep == true {
+		log.Fatal("Brown Temperature can only be used with fixed timestep")
+	}
 
 }
