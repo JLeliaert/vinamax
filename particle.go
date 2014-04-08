@@ -15,6 +15,8 @@ type particle struct {
 	u_anis              vector  // Uniaxial anisotropy axis
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
+	flip                float64 //time of next flip event
+
 	//All these coeffients are used in the different solvers
 	//TODO: you can do with just 9 k's!!
 	tauheun  vector
