@@ -17,40 +17,21 @@ type particle struct {
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 //time of next flip event
 
-	//All these coeffients are used in the different solvers
-	//TODO: you can do with just 9 k's!!
-	tauheun  vector
-	taurk3k1 vector
-	taurk3k2 vector
-	taurk4k1 vector
-	taurk4k2 vector
-	taurk4k3 vector
-	taurk5k1 vector
-	taurk5k2 vector
-	taurk5k3 vector
-	taurk5k4 vector
-	taurk5k5 vector
-	tempm    vector
-	doprik1  vector
-	doprik2  vector
-	doprik3  vector
-	doprik4  vector
-	doprik5  vector
-	doprik6  vector
-	doprik7  vector
-	fehlk1   vector
-	fehlk2   vector
-	fehlk3   vector
-	fehlk4   vector
-	fehlk5   vector
-	fehlk6   vector
-	fehlk7   vector
-	fehlk8   vector
-	fehlk9   vector
-	fehlk10  vector
-	fehlk11  vector
-	fehlk12  vector
-	fehlk13  vector
+	tempm     vector
+	previousm vector
+	fehlk1    vector
+	fehlk2    vector
+	fehlk3    vector
+	fehlk4    vector
+	fehlk5    vector
+	fehlk6    vector
+	fehlk7    vector
+	fehlk8    vector
+	fehlk9    vector
+	fehlk10   vector
+	fehlk11   vector
+	fehlk12   vector
+	fehlk13   vector
 }
 
 //print position and magnitisation of a particle

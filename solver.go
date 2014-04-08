@@ -48,7 +48,7 @@ func Setsolver(a string) {
 
 	default:
 		{
-			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"dopri\"")
+			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"dopri\"or \"fehl56\"or \"fehl67\"")
 		}
 	}
 }
@@ -168,9 +168,9 @@ func heunstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		tau1 := p.tau(temp)
-		p.tauheun = tau1
+		p.fehlk1 = tau1
 
-		//tau van t+1, positie nadat met tau1 al is doorgevoerd
+		//tau (t+1)
 		p.m[0] += tau1[0] * Dt
 		p.m[1] += tau1[1] * Dt
 		p.m[2] += tau1[2] * Dt
@@ -184,7 +184,7 @@ func heunstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		tau2 := p.tau(temp)
-		tau1 := p.tauheun
+		tau1 := p.fehlk1
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
 		p.m[1] += ((-tau1[1] + tau2[1]) * 0.5 * Dt)
 		p.m[2] += ((-tau1[2] + tau2[2]) * 0.5 * Dt)
@@ -210,7 +210,7 @@ func rk3step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		tau0 := p.tau(temp)
-		p.taurk3k1 = tau0
+		p.fehlk1 = tau0
 
 		//k1
 		p.m[0] += tau0[0] * 1 / 2. * Dt
@@ -226,8 +226,8 @@ func rk3step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		k2 := p.tau(temp)
-		p.taurk3k2 = k2
-		k1 := p.taurk3k1
+		p.fehlk2 = k2
+		k1 := p.fehlk1
 		p.m[0] += ((-3/2.*k1[0] + 2*k2[0]) * Dt)
 		p.m[1] += ((-3/2.*k1[1] + 2*k2[1]) * Dt)
 		p.m[2] += ((-3/2.*k1[2] + 2*k2[2]) * Dt)
@@ -239,8 +239,8 @@ func rk3step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		k3 := p.tau(temp)
-		k1 := p.taurk3k1
-		k2 := p.taurk3k2
+		k1 := p.fehlk1
+		k2 := p.fehlk2
 		p.m[0] += ((7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0]) * Dt)
 		p.m[1] += ((7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1]) * Dt)
 		p.m[2] += ((7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2]) * Dt)
@@ -266,7 +266,7 @@ func rk4step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		tau0 := p.tau(temp)
-		p.taurk4k1 = tau0
+		p.fehlk1 = tau0
 
 		//k1
 		p.m[0] += tau0[0] * 1 / 2. * Dt
@@ -282,8 +282,8 @@ func rk4step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		k2 := p.tau(temp)
-		p.taurk4k2 = k2
-		k1 := p.taurk4k1
+		p.fehlk2 = k2
+		k1 := p.fehlk1
 		p.m[0] += ((-1/2.*k1[0] + 1/2.*k2[0]) * Dt)
 		p.m[1] += ((-1/2.*k1[1] + 1/2.*k2[1]) * Dt)
 		p.m[2] += ((-1/2.*k1[2] + 1/2.*k2[2]) * Dt)
@@ -294,8 +294,8 @@ func rk4step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		k3 := p.tau(temp)
-		p.taurk4k3 = k3
-		k2 := p.taurk4k2
+		p.fehlk3 = k3
+		k2 := p.fehlk2
 		p.m[0] += ((-1/2.*k2[0] + 1*k3[0]) * Dt)
 		p.m[1] += ((-1/2.*k2[1] + 1*k3[1]) * Dt)
 		p.m[2] += ((-1/2.*k2[2] + 1*k3[2]) * Dt)
@@ -307,9 +307,9 @@ func rk4step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		k4 := p.tau(temp)
-		k1 := p.taurk4k1
-		k2 := p.taurk4k2
-		k3 := p.taurk4k3
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
 		p.m[0] += ((1/6.*k1[0] + 1/3.*k2[0] - 2/3.*k3[0] + 1/6.*k4[0]) * Dt)
 		p.m[1] += ((1/6.*k1[1] + 1/3.*k2[1] - 2/3.*k3[1] + 1/6.*k4[1]) * Dt)
 		p.m[2] += ((1/6.*k1[2] + 1/3.*k2[2] - 2/3.*k3[2] + 1/6.*k4[2]) * Dt)
@@ -336,10 +336,11 @@ func rk4step(Lijst []*particle) {
 func dopristep(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.tempm = p.m
+		p.previousm = p.m
 
 		temp := p.temp()
 		k1 := p.tau(temp)
-		p.doprik1 = k1
+		p.fehlk1 = k1
 
 		p.m[0] += k1[0] * 1 / 5. * Dt
 		p.m[1] += k1[1] * 1 / 5. * Dt
@@ -353,9 +354,9 @@ func dopristep(Lijst []*particle) {
 	for _, p := range Lijst {
 
 		temp := p.temp()
-		k1 := p.doprik1
+		k1 := p.fehlk1
 		k2 := p.tau(temp)
-		p.doprik2 = k2
+		p.fehlk2 = k2
 
 		p.m = p.tempm
 		p.m[0] += ((3/40.*k1[0] + 9/40.*k2[0]) * Dt)
@@ -368,10 +369,10 @@ func dopristep(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 		temp := p.temp()
-		k1 := p.doprik1
-		k2 := p.doprik2
+		k1 := p.fehlk1
+		k2 := p.fehlk2
 		k3 := p.tau(temp)
-		p.doprik3 = k3
+		p.fehlk3 = k3
 
 		p.m = p.tempm
 		p.m[0] += ((44/45.*k1[0] - 56/15.*k2[0] + 32/9.*k3[0]) * Dt)
@@ -384,11 +385,11 @@ func dopristep(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 		temp := p.temp()
-		k1 := p.doprik1
-		k2 := p.doprik2
-		k3 := p.doprik3
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
 		k4 := p.tau(temp)
-		p.doprik4 = k4
+		p.fehlk4 = k4
 
 		p.m = p.tempm
 		p.m[0] += ((19372/6561.*k1[0] - 25360/2187.*k2[0] + 64448/6561.*k3[0] - 212/729.*k4[0]) * Dt)
@@ -401,12 +402,12 @@ func dopristep(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 		temp := p.temp()
-		k1 := p.doprik1
-		k2 := p.doprik2
-		k3 := p.doprik3
-		k4 := p.doprik4
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
 		k5 := p.tau(temp)
-		p.doprik5 = k5
+		p.fehlk5 = k5
 
 		p.m = p.tempm
 		p.m[0] += ((9017/3168.*k1[0] - 355/33.*k2[0] + 46732/5247.*k3[0] + 49/176.*k4[0] - 5103/18656.*k5[0]) * Dt)
@@ -420,13 +421,13 @@ func dopristep(Lijst []*particle) {
 
 	for _, p := range Lijst {
 		temp := p.temp()
-		k1 := p.doprik1
-		k2 := p.doprik2
-		k3 := p.doprik3
-		k4 := p.doprik4
-		k5 := p.doprik5
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
 		k6 := p.tau(temp)
-		p.doprik6 = k6
+		p.fehlk6 = k6
 
 		p.m = p.tempm
 		p.m[0] += ((35/384.*k1[0] + 0.*k2[0] + 500/1113.*k3[0] + 125/192.*k4[0] - 2187/6784.*k5[0] + 11/84.*k6[0]) * Dt)
@@ -440,14 +441,14 @@ func dopristep(Lijst []*particle) {
 
 	for _, p := range Lijst {
 		temp := p.temp()
-		k1 := p.doprik1
-		k2 := p.doprik2
-		k3 := p.doprik3
-		k4 := p.doprik4
-		k5 := p.doprik5
-		k6 := p.doprik6
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		k4 := p.fehlk4
+		k5 := p.fehlk5
+		k6 := p.fehlk6
 		k7 := p.tau(temp)
-		p.doprik7 = k7
+		p.fehlk7 = k7
 
 		p.tempm[0] += ((5179/57600.*k1[0] + 0.*k2[0] + 7571/16695.*k3[0] + 393/640.*k4[0] - 92097/339200.*k5[0] + 187/2100.*k6[0] + 1/40.*k7[0]) * Dt)
 		p.tempm[1] += ((5179/57600.*k1[1] + 0.*k2[1] + 7571/16695.*k3[1] + 393/640.*k4[1] - 92097/339200.*k5[1] + 187/2100.*k6[1] + 1/40.*k7[1]) * Dt)
@@ -474,6 +475,7 @@ func dopristep(Lijst []*particle) {
 func fehl56step(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.tempm = p.m
+		p.previousm = p.m
 
 		temp := p.temp()
 		k1 := p.tau(temp)
@@ -639,6 +641,7 @@ func fehl56step(Lijst []*particle) {
 func fehl67step(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.tempm = p.m
+		p.previousm = p.m
 
 		temp := p.temp()
 		k1 := p.tau(temp)
