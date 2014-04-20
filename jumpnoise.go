@@ -3,9 +3,9 @@
 package vinamax
 
 import (
-//	"fmt"
+	//	"fmt"
 	"math"
-	"math/rand"
+	//	"math/rand"
 )
 
 //calculates the attempt frequency of a particle
@@ -20,20 +20,22 @@ func attemptf(p *particle) float64 {
 	// exp( -Delta E/kt)
 	postfactor := math.Exp(-barrier / (kb * Temp))
 	bx, by, bz := B_ext(T)
-	bextvector := vector{bx,by,bz}
-	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / (anisotropyfield * mu0 )
+	bextvector := vector{bx, by, bz}
+	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / (anisotropyfield * mu0)
 	if math.Signbit(bextvector.dot(p.m)) {
 		hoverhk *= -1
 	}
 	postpostfactor := (1 - hoverhk) * (1 - hoverhk*hoverhk)
+	//fmt.Println(prefactor * math.Sqrt(undersqrt) * postfactor * postpostfactor)
 
 	return prefactor * math.Sqrt(undersqrt) * postfactor * postpostfactor
 }
 
 //calculates the next switching time
 func setswitchtime(p *particle) {
-	prob := rand.Float64()
+	prob := rng.Float64()
 	nextflip := -1. / attemptf(p) * math.Log(1-prob)
+	//fmt.Println(nextflip)
 	p.flip = nextflip + T
 }
 

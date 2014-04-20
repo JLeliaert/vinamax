@@ -14,6 +14,7 @@ var twrite float64
 var locations []vector
 var filecounter int = 0
 var output_B_ext = false
+var output_Dt = false
 
 //Sets the interval at which times the output table has to be written
 func Output(interval float64) {
@@ -54,6 +55,11 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+	if output_Dt {
+		header := fmt.Sprintf("\tDt")
+		_, err = f.WriteString(header)
+		check(err)
+	}
 	for i := range locations {
 
 		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
@@ -88,13 +94,18 @@ func Tableadd_b_at_location(x, y, z float64) {
 //Writes the time and the vector of average magnetisation in the table
 func write(avg vector) {
 	if twrite >= outputinterval && outputinterval != 0 {
-		string := fmt.Sprintf("%v\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
+		string := fmt.Sprintf("%e\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
 
 		if output_B_ext {
 			B_ext_x, B_ext_y, B_ext_z := B_ext(T)
 			string = fmt.Sprintf("\t%v\t%v\t%v", B_ext_x, B_ext_y, B_ext_z)
+			_, err = f.WriteString(string)
+			check(err)
+		}
+		if output_Dt {
+			string = fmt.Sprintf("\t%v", Dt)
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -166,6 +177,11 @@ func Tableadd(a string) {
 		{
 			output_B_ext = true
 		}
+	case "Dt":
+		{
+			output_Dt = true
+		}
+
 	default:
 		{
 			log.Fatal(a, " is currently not addable to table")

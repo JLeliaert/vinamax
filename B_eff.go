@@ -18,8 +18,18 @@ func Setrandomseed(a int64) {
 	rng = rand.New(rand.NewSource(a))
 }
 
-//Calculates the the thermal field B_therm working on a particle
 // factor 4/3pi in "number" because they are spherical
+func (p *particle) calculatetempnumber() {
+	p.tempnumber = math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
+}
+
+func calculatetempnumbers(lijst []*particle) {
+	for i := range lijst {
+		lijst[i].calculatetempnumber()
+	}
+}
+
+//Calculates the the thermal field B_therm working on a particle
 func (p *particle) temp() vector {
 	B_therm := vector{0., 0., 0.}
 	if Brown {
@@ -29,8 +39,7 @@ func (p *particle) temp() vector {
 			etaz := rng.NormFloat64()
 
 			B_therm = vector{etax, etay, etaz}
-			number := math.Sqrt((2 * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r) * Dt))
-			B_therm = B_therm.times(number)
+			B_therm = B_therm.times(p.tempnumber)
 		}
 	}
 	return B_therm

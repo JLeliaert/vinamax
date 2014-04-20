@@ -167,6 +167,7 @@ func Run(time float64) {
 		if Jumpnoise {
 			checkallswitch(universe.lijst)
 		}
+		//fmt.Println(Dt)
 		write(averages(universe.lijst))
 	}
 	//if suggest_timestep {

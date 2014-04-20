@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"math/rand"
+	//	"math/rand"
 )
 
 //A particle essentially constains a position, magnetisation
@@ -16,6 +16,7 @@ type particle struct {
 	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 //time of next flip event
+	tempnumber          float64
 
 	tempm     vector
 	previousm vector
@@ -52,8 +53,8 @@ func Anisotropy_axis(x, y, z float64) {
 func Anisotropy_random() {
 	uaniscalled = true
 	for i := range universe.lijst {
-		phi := rand.Float64() * (2 * math.Pi)
-		theta := 2 * math.Asin(math.Sqrt(rand.Float64()))
+		phi := rng.Float64() * (2 * math.Pi)
+		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
 		universe.lijst[i].u_anis = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
@@ -62,8 +63,8 @@ func Anisotropy_random() {
 func M_random() {
 	magnetisationcalled = true
 	for i := range universe.lijst {
-		phi := rand.Float64() * (2 * math.Pi)
-		theta := 2 * math.Asin(math.Sqrt(rand.Float64()))
+		phi := rng.Float64() * (2 * math.Pi)
+		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
 		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 	}
 }
@@ -95,9 +96,9 @@ func Lognormal_diameter(mean, stdev float64) {
 	radiuscalled = true
 	for i := range universe.lijst {
 		for {
-			x := rand.Float64() * 200 * m
+			x := rng.Float64() * 200 * m
 			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-1./(2.*s*s)*sqr(math.Log(x/m)))
-			if rand.Float64() < f_x {
+			if rng.Float64() < f_x {
 				universe.lijst[i].r = x * 1e-9 / 2.
 				break
 			}

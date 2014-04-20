@@ -98,4 +98,7 @@ func syntaxrun() {
 	if Temp != 0 && Brown == false && Jumpnoise == false {
 		log.Fatal("You have to specify which temperature you want to use: \"Jumpnoise\" or \"Brown\"")
 	}
+	if Brown {
+		calculatetempnumbers(universe.lijst)
+	}
 }
