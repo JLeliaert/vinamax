@@ -13,6 +13,7 @@ var (
 	Maxdt          float64                                              = 1     //largest allowed timestep
 	T              float64                                                      // Time in s
 	Alpha          float64                                              = -1    // Gilbert damping constant
+	gammaoveralpha	float64							//g/1+alfa^2
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
 	Errortolerance float64                                              = 1e-5

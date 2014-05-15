@@ -3,40 +3,86 @@
 package vinamax
 
 import (
-	//	"fmt"
 	"math"
-	//	"math/rand"
+//	"fmt"
 )
 
 //calculates the attempt frequency of a particle
-func attemptf(p *particle) float64 {
-	prefactor := Alpha * gamma0 * mu0 / (1 + Alpha*Alpha)
-	volume := cube(p.r) * 4 / 3. * math.Pi
+func attemptf1(p *particle) float64 {
+	volume := cube(p.r) * 4. / 3. * math.Pi
+	hk := 2. * Ku1 / (p.msat * mu0)
 
-	anisotropyfield := 2. * Ku1 / (p.msat * mu0)
-	undersqrt := cube(anisotropyfield) * p.msat * volume / (2 * math.Pi * kb * Temp)
+	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
+	delta := Ku1 * volume / (kb * Temp)
 
-	barrier := volume * Ku1
-	// exp( -Delta E/kt)
-	postfactor := math.Exp(-barrier / (kb * Temp))
 	bx, by, bz := B_ext(T)
-	bextvector := vector{bx, by, bz}
-	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / (anisotropyfield * mu0)
+	bextvector := vector{bx / mu0, by / mu0, bz / mu0}
+	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / hk
 	if math.Signbit(bextvector.dot(p.m)) {
-		hoverhk *= -1
+		hoverhk *= -1.
 	}
-	postpostfactor := (1 - hoverhk) * (1 - hoverhk*hoverhk)
-	//fmt.Println(prefactor * math.Sqrt(undersqrt) * postfactor * postpostfactor)
 
-	return prefactor * math.Sqrt(undersqrt) * postfactor * postpostfactor
+	postpostfactor := (1. - hoverhk) * (1. - hoverhk*hoverhk)
+
+//	fmt.Println(gprime*hk*math.Sqrt(delta/math.Pi)*postpostfactor*math.Exp(-delta))
+	return gprime * hk * math.Sqrt(delta/math.Pi) * postpostfactor * math.Exp(-delta)
+}
+
+//calculates the attempt frequency of a particle
+func attemptf2(p *particle) float64 {
+	volume := cube(p.r) * 4 / 3. * math.Pi
+	hk := 2. * Ku1 / (p.msat * mu0)
+
+	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
+
+	delta := Ku1 * volume / (kb * Temp)
+
+	bx, by, bz := B_ext(T)
+	bextvector := vector{bx / mu0, by / mu0, bz / mu0}
+	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / hk
+	if math.Signbit(bextvector.dot(p.m)) {
+		hoverhk *= -1.
+	}
+
+	postpostfactor := 1. / (math.Erf(math.Sqrt(delta) * (1 - hoverhk)))
+
+	return gprime * hk / math.Sqrt(delta*math.Pi) * postpostfactor * math.Exp(-delta)
+
+}
+
+//calculates the attempt frequency of a particle
+func attemptf3(p *particle) float64 {
+	volume := cube(p.r) * 4 / 3. * math.Pi
+	hk := 2. * Ku1 / (p.msat * mu0)
+
+	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
+
+	delta := Ku1 * volume / (kb * Temp)
+
+	bx, by, bz := B_ext(T)
+	bextvector := vector{bx / mu0, by / mu0, bz / mu0}
+	hoverhk := math.Abs(bextvector.dot(p.u_anis)) / hk
+	if math.Signbit(bextvector.dot(p.m)) {
+		hoverhk *= -1.
+	}
+
+	postpostfactor := 1. / (math.Log(2. / (1 + hoverhk)))
+
+	return gprime * hk / (4 * delta) * postpostfactor
+
 }
 
 //calculates the next switching time
 func setswitchtime(p *particle) {
 	prob := rng.Float64()
-	nextflip := -1. / attemptf(p) * math.Log(1-prob)
-	//fmt.Println(nextflip)
-	p.flip = nextflip + T
+
+	//TODO choose based on the barrier??? see which one corresponds when with brownian noise
+
+	nextflip := (-1. / attemptf1(p)) * math.Log(1.-prob)
+	//nextflip := (-1. / attemptf2(p)) * math.Log(1.-prob)
+	//nextflip := (-1. / attemptf3(p)) * math.Log(1.-prob)
+
+	p.flip = nextflip + T 
 }
 
 //checks if it's time to switch and if so, switch and calculate next switchtime

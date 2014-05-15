@@ -57,5 +57,5 @@ func (p *particle) anis() vector {
 	//2*Ku1*(m.u)*u/p.msat
 
 	mdotu := p.m.dot(p.u_anis)
-	return p.u_anis.times(2 * Ku1 * mdotu / p.msat)
+	return p.u_anis.times(2. * Ku1 * mdotu / p.msat)
 }

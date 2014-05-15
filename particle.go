@@ -18,6 +18,7 @@ type particle struct {
 	flip                float64 //time of next flip event
 	tempnumber          float64
 
+	tempfield	vector
 	tempm     vector
 	previousm vector
 	fehlk1    vector

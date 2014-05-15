@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//	"fmt"
+//	"fmt"
 	"log"
 	"math"
 )
@@ -45,7 +45,11 @@ func Setsolver(a string) {
 			solver = "fehl67"
 			order = 7
 		}
-
+	case "time":
+		{
+			solver = "time"
+			order = 0
+		}
 	default:
 		{
 			log.Fatal(a, " is not a possible solver, \"euler\" or \"heun\" or \"rk3\"or \"rk4\"or \"dopri\"or \"fehl56\"or \"fehl67\"")
@@ -56,6 +60,7 @@ func Setsolver(a string) {
 //Runs the simulation for a certain time
 
 func Run(time float64) {
+	gammaoveralpha=gamma0 / (1. + (Alpha * Alpha))
 	testinput()
 	syntaxrun()
 	for i := range universe.lijst {
@@ -94,7 +99,7 @@ func Run(time float64) {
 				//fmt.Println(Dt)
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						//	undobadstep(universe.lijst)
+							undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -118,7 +123,7 @@ func Run(time float64) {
 				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						//	undobadstep(universe.lijst)
+							undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -143,7 +148,7 @@ func Run(time float64) {
 				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-						//	undobadstep(universe.lijst)
+							undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -161,6 +166,11 @@ func Run(time float64) {
 					//	fmt.Println("dt:   ", Dt)
 					maxtauwitht = 0
 				}
+			}
+		
+		case "time":
+			{
+				T += Dt
 			}
 		}
 
@@ -186,15 +196,7 @@ func eulerstep(Lijst []*particle) {
 		p.m[0] += tau[0] * Dt
 		p.m[1] += tau[1] * Dt
 		p.m[2] += tau[2] * Dt
-		T += Dt
 		p.m = norm(p.m)
-		//	if suggest_timestep {
-		//		torq := math.Sqrt(tau[0]*tau[0] + tau[1]*tau[1] + tau[2]*tau[2])
-		//		if torq > maxtauwitht {
-		//			maxtauwitht = torq
-		//		}
-		//	}
-		T -= Dt
 	}
 }
 
@@ -203,6 +205,7 @@ func eulerstep(Lijst []*particle) {
 func heunstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
+		p.tempfield = temp
 		tau1 := p.tau(temp)
 		p.fehlk1 = tau1
 
@@ -218,7 +221,8 @@ func heunstep(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
+		//temp := p.temp()
 		tau2 := p.tau(temp)
 		tau1 := p.fehlk1
 		p.m[0] += ((-tau1[0] + tau2[0]) * 0.5 * Dt)
@@ -246,6 +250,7 @@ func heunstep(Lijst []*particle) {
 func rk3step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
+		p.tempfield = temp
 		tau0 := p.tau(temp)
 		p.fehlk1 = tau0
 
@@ -261,7 +266,7 @@ func rk3step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
 		k1 := p.fehlk1
@@ -274,7 +279,7 @@ func rk3step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k3 := p.tau(temp)
 		k1 := p.fehlk1
 		k2 := p.fehlk2
@@ -304,6 +309,7 @@ func rk4step(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
 		tau0 := p.tau(temp)
+		p.tempfield = temp
 		p.fehlk1 = tau0
 
 		//k1
@@ -318,7 +324,7 @@ func rk4step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
 		k1 := p.fehlk1
@@ -330,7 +336,7 @@ func rk4step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k3 := p.tau(temp)
 		p.fehlk3 = k3
 		k2 := p.fehlk2
@@ -343,7 +349,7 @@ func rk4step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k4 := p.tau(temp)
 		k1 := p.fehlk1
 		k2 := p.fehlk2
@@ -379,6 +385,7 @@ func dopristep(Lijst []*particle) {
 
 		temp := p.temp()
 		k1 := p.tau(temp)
+		p.tempfield = temp
 		p.fehlk1 = k1
 
 		p.m[0] += k1[0] * 1 / 5. * Dt
@@ -392,7 +399,7 @@ func dopristep(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
@@ -407,7 +414,7 @@ func dopristep(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.tau(temp)
@@ -423,7 +430,7 @@ func dopristep(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -440,7 +447,7 @@ func dopristep(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -459,7 +466,7 @@ func dopristep(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -479,7 +486,7 @@ func dopristep(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -518,6 +525,7 @@ func fehl56step(Lijst []*particle) {
 		p.previousm = p.m
 
 		temp := p.temp()
+		p.tempfield = temp
 		k1 := p.tau(temp)
 		p.fehlk1 = k1
 
@@ -532,7 +540,7 @@ func fehl56step(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
@@ -547,7 +555,7 @@ func fehl56step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.tau(temp)
@@ -563,7 +571,7 @@ func fehl56step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -580,7 +588,7 @@ func fehl56step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -599,7 +607,7 @@ func fehl56step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -619,7 +627,7 @@ func fehl56step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -637,7 +645,7 @@ func fehl56step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -685,6 +693,7 @@ func fehl67step(Lijst []*particle) {
 		p.previousm = p.m
 
 		temp := p.temp()
+		p.tempfield = temp
 		k1 := p.tau(temp)
 		p.fehlk1 = k1
 
@@ -699,7 +708,7 @@ func fehl67step(Lijst []*particle) {
 	}
 	for _, p := range Lijst {
 
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
@@ -714,7 +723,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.tau(temp)
@@ -730,7 +739,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -747,7 +756,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -766,7 +775,7 @@ func fehl67step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -786,7 +795,7 @@ func fehl67step(Lijst []*particle) {
 	}
 
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -806,7 +815,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -827,7 +836,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -849,7 +858,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -872,7 +881,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -896,7 +905,7 @@ func fehl67step(Lijst []*particle) {
 		calculatedemag()
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
@@ -917,7 +926,7 @@ func fehl67step(Lijst []*particle) {
 		T += (1.) * Dt
 	}
 	for _, p := range Lijst {
-		temp := p.temp()
+		temp := p.tempfield
 		k1 := p.fehlk1
 		k6 := p.fehlk6
 		k7 := p.fehlk7
@@ -958,6 +967,8 @@ func fehl67step(Lijst []*particle) {
 
 //###########################################################################################################
 
-//func undobadstep(Lijst []*particle) {
-//
-//}
+func undobadstep(Lijst []*particle) {
+	for _, p := range Lijst {
+	p.m=p.previousm
+}
+}
