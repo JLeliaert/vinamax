@@ -78,7 +78,7 @@ func setswitchtime(p *particle) {
 
 	//TODO choose based on the barrier??? see which one corresponds when with brownian noise
 
-	nextflip := (-1. / attemptf1(p)) * math.Log(1.-prob)
+	nextflip := (-1. / attemptf1(p)) * math.Log((1.-prob))
 	//nextflip := (-1. / attemptf2(p)) * math.Log(1.-prob)
 	//nextflip := (-1. / attemptf3(p)) * math.Log(1.-prob)
 

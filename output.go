@@ -45,6 +45,18 @@ func averages(lijst []*particle) vector {
 	return avgs.times(1. / float64(len(lijst)))
 }
 
+//calculates the average moments of all particles
+func averagemoments(lijst []*particle) vector {
+	avgs := vector{0, 0, 0}
+	for i := range lijst {
+		avgs[0] += lijst[i].m[0]//*VOLUME
+		avgs[1] += lijst[i].m[1]//*VOLUME
+		avgs[2] += lijst[i].m[2]//*VOLUME
+	}
+	//DELEN DOOR TOTAAL VOLUME
+	return avgs.times(1. / float64(len(lijst)))
+}
+
 //Writes the header in table.txt
 func writeheader() {
 	header := fmt.Sprintf("#t\t<mx>\t<my>\t<mz>")
