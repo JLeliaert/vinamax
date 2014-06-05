@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-//	"fmt"
+	//	"fmt"
 	"log"
 	"math"
 )
@@ -60,13 +60,14 @@ func Setsolver(a string) {
 //Runs the simulation for a certain time
 
 func Run(time float64) {
-	gammaoveralpha=gamma0 / (1. + (Alpha * Alpha))
+	gammaoveralpha = gamma0 / (1. + (Alpha * Alpha))
 	testinput()
 	syntaxrun()
 	for i := range universe.lijst {
 		norm(universe.lijst[i].m)
 	}
-	write(averages(universe.lijst))
+	write(averagemoments(universe.lijst))
+	//write(averages(universe.lijst))
 	for j := T; T < j+time; {
 		if Demag {
 			calculatedemag()
@@ -99,7 +100,7 @@ func Run(time float64) {
 				//fmt.Println(Dt)
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-							undobadstep(universe.lijst)
+						undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -123,7 +124,7 @@ func Run(time float64) {
 				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-							undobadstep(universe.lijst)
+						undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -148,7 +149,7 @@ func Run(time float64) {
 				T += Dt
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
-							undobadstep(universe.lijst)
+						undobadstep(universe.lijst)
 						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
@@ -167,18 +168,20 @@ func Run(time float64) {
 					maxtauwitht = 0
 				}
 			}
-		
+
 		case "time":
 			{
 				T += Dt
 			}
 		}
 
+		//	plotswitchtime()//EXTRA
 		if Jumpnoise {
 			checkallswitch(universe.lijst)
 		}
 		//fmt.Println(Dt)
-		write(averages(universe.lijst))
+		//write(averages(universe.lijst))
+		write(averagemoments(universe.lijst))
 	}
 	//if suggest_timestep {
 	//	printsuggestedtimestep()
@@ -969,6 +972,6 @@ func fehl67step(Lijst []*particle) {
 
 func undobadstep(Lijst []*particle) {
 	for _, p := range Lijst {
-	p.m=p.previousm
-}
+		p.m = p.previousm
+	}
 }

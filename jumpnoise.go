@@ -4,7 +4,7 @@ package vinamax
 
 import (
 	"math"
-//	"fmt"
+	//	"fmt"
 )
 
 //calculates the attempt frequency of a particle
@@ -24,7 +24,7 @@ func attemptf1(p *particle) float64 {
 
 	postpostfactor := (1. - hoverhk) * (1. - hoverhk*hoverhk)
 
-//	fmt.Println(gprime*hk*math.Sqrt(delta/math.Pi)*postpostfactor*math.Exp(-delta))
+	//	fmt.Println(gprime*hk*math.Sqrt(delta/math.Pi)*postpostfactor*math.Exp(-delta))
 	return gprime * hk * math.Sqrt(delta/math.Pi) * postpostfactor * math.Exp(-delta)
 }
 
@@ -78,11 +78,11 @@ func setswitchtime(p *particle) {
 
 	//TODO choose based on the barrier??? see which one corresponds when with brownian noise
 
-	nextflip := (-1. / attemptf1(p)) * math.Log((1.-prob))
+	nextflip := (-1. / attemptf1(p)) * math.Log((1. - prob))
 	//nextflip := (-1. / attemptf2(p)) * math.Log(1.-prob)
 	//nextflip := (-1. / attemptf3(p)) * math.Log(1.-prob)
 
-	p.flip = nextflip + T 
+	p.flip = nextflip + T
 }
 
 //checks if it's time to switch and if so, switch and calculate next switchtime

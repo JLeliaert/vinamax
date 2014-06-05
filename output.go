@@ -4,7 +4,7 @@ package vinamax
 import (
 	"fmt"
 	"log"
-	//	"math"
+	"math"
 	"os"
 )
 
@@ -15,6 +15,10 @@ var locations []vector
 var filecounter int = 0
 var output_B_ext = false
 var output_Dt = false
+var output_nrmzpos = false
+
+//var timelastswitch =0.//EXTRA
+//var updownswitch =true//EXTRA
 
 //Sets the interval at which times the output table has to be written
 func Output(interval float64) {
@@ -26,6 +30,20 @@ func Output(interval float64) {
 	outputinterval = interval
 	twrite = interval
 }
+
+//Helemaal extra
+//func plotswitchtime(){
+//	if (updownswitch==true && universe.lijst[0].m[2]<=-0.8){
+//		updownswitch=false
+//		fmt.Println(T-timelastswitch)
+//		timelastswitch=T
+//	}
+//	if (updownswitch ==false && universe.lijst[0].m[2]>=0.8){
+//		updownswitch=true
+//		fmt.Println(T-timelastswitch)
+//		timelastswitch=T
+//	}
+//}
 
 //checks the error
 func check(e error) {
@@ -48,13 +66,27 @@ func averages(lijst []*particle) vector {
 //calculates the average moments of all particles
 func averagemoments(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
+	totalvolume := 0.
 	for i := range lijst {
-		avgs[0] += lijst[i].m[0]//*VOLUME
-		avgs[1] += lijst[i].m[1]//*VOLUME
-		avgs[2] += lijst[i].m[2]//*VOLUME
+		volume := cube(lijst[i].r) * 4. / 3. * math.Pi
+		totalvolume += volume
+		avgs[0] += lijst[i].m[0] * volume
+		avgs[1] += lijst[i].m[1] * volume
+		avgs[2] += lijst[i].m[2] * volume
 	}
-	//DELEN DOOR TOTAAL VOLUME
-	return avgs.times(1. / float64(len(lijst)))
+	//divide by total volume
+	return avgs.times(1. / totalvolume)
+}
+
+//returns the number of particles with m_z larger than 0
+func nrmzpositive(lijst []*particle) int {
+	counter := 0
+	for i := range lijst {
+		if lijst[i].m[2] > 0. {
+			counter++
+		}
+	}
+	return counter
 }
 
 //Writes the header in table.txt
@@ -69,6 +101,11 @@ func writeheader() {
 	}
 	if output_Dt {
 		header := fmt.Sprintf("\tDt")
+		_, err = f.WriteString(header)
+		check(err)
+	}
+	if output_nrmzpos {
+		header := fmt.Sprintf("\tnrmzpos")
 		_, err = f.WriteString(header)
 		check(err)
 	}
@@ -118,6 +155,11 @@ func write(avg vector) {
 		}
 		if output_Dt {
 			string = fmt.Sprintf("\t%v", Dt)
+			_, err = f.WriteString(string)
+			check(err)
+		}
+		if output_nrmzpos {
+			string = fmt.Sprintf("\t%v", nrmzpositive(universe.lijst))
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -193,7 +235,10 @@ func Tableadd(a string) {
 		{
 			output_Dt = true
 		}
-
+	case "nrmzpos":
+		{
+			output_nrmzpos = true
+		}
 	default:
 		{
 			log.Fatal(a, " is currently not addable to table")

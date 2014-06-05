@@ -14,7 +14,7 @@ const (
 	gamma0 = 1.7595e11          // Gyromagnetic ratio of electron, in rad/Ts
 	mu0    = 4 * math.Pi * 1e-7 // Permeability of vacuum in Tm/A
 	muB    = 9.2740091523E-24   // Bohr magneton in J/T
-	kb     = 1.380650424E-23    // Boltzmann's constant in J/K
+	kb     = 1.3806488E-23      // Boltzmann's constant in J/K
 	qe     = 1.60217646E-19     // Electron charge in C
 )
 
