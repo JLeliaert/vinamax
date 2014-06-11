@@ -68,7 +68,7 @@ func Run(time float64) {
 	}
 	write(averagemoments(universe.lijst))
 	//write(averages(universe.lijst))
-	for j := T; T < j+time; {
+	for j := T; T < j+time-Dt; {
 		if Demag {
 			calculatedemag()
 		}
