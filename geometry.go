@@ -5,6 +5,14 @@ import (
 	"math/rand"
 )
 
+var georng = rand.New(rand.NewSource(0))
+
+//Set the randomseed for the geometry
+func Setgeorandomseed(a int64) {
+	randomseedcalled = true
+	georng = rand.New(rand.NewSource(a))
+}
+
 //Adds a single particle at specified coordinates
 func Addsingleparticle(x, y, z float64) {
 	if universe.inworld(vector{x, y, z}) {
@@ -31,9 +39,9 @@ func (c Cube) Addparticles(n int) {
 
 	c.n += n
 	for i := 0; i < n; i++ {
-		px := c.x + (-0.5+rand.Float64())*c.S
-		py := c.y + (-0.5+rand.Float64())*c.S
-		pz := c.z + (-0.5+rand.Float64())*c.S
+		px := c.x + (-0.5+georng.Float64())*c.S
+		py := c.y + (-0.5+georng.Float64())*c.S
+		pz := c.z + (-0.5+georng.Float64())*c.S
 		Addsingleparticle(px, py, pz)
 	}
 }
@@ -51,9 +59,9 @@ func (c Cuboid) Addparticles(n int) {
 
 	c.n += n
 	for i := 0; i < n; i++ {
-		px := c.x + (-0.5+rand.Float64())*c.Sidex
-		py := c.y + (-0.5+rand.Float64())*c.Sidey
-		pz := c.z + (-0.5+rand.Float64())*c.Sidez
+		px := c.x + (-0.5+georng.Float64())*c.Sidex
+		py := c.y + (-0.5+georng.Float64())*c.Sidey
+		pz := c.z + (-0.5+georng.Float64())*c.Sidez
 		Addsingleparticle(px, py, pz)
 	}
 }
