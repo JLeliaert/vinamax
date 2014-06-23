@@ -21,13 +21,15 @@ var (
 	universe       node                                                         // The entire universe of the simulation
 	FMM            bool                                                 = false // Calculate demag with FMM method
 	Demag          bool                                                 = true  // Calculate demag
-	Adaptivestep   bool                                                 = true
+	Adaptivestep   bool                                                 = false
 	outdir         string                                                         // The output directory
 	solver         string                                               = "dopri" // The solver used
 	outputinterval float64
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
-	order int = 5 //the order of the solver
+	order       int            = 5 //the order of the solver
+	radii       [32768]float64     //table with all radii
+	radiusindex int                //current index in the table of radii
 
 	msatcalled          bool = false
 	radiuscalled        bool = false

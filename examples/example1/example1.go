@@ -14,11 +14,12 @@ func main() {
 
 	//Defines the world at location 0,0,0 and with a side of 1e-8 m	
 	World(0,0,0,1e-8)
-	//Adds a single particle in the origin
-	Addsingleparticle(0,0,0)
 
 	//the particle has radius 10 nm
 	Particle_radius(10.e-9)
+
+	//Adds a single particle in the origin
+	Addsingleparticle(0,0,0)
 
 	//apply an external field along the z direction of 10mT
 	//B_ext can be an arbitrary function of time

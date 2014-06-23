@@ -10,17 +10,18 @@ import (
 func main() {
 
 	//Defines the world at location 0,0,0 and with a side of 2e-5 m	
-	World(0,0,0,2e-5)
+	World(0,0,0,2e-3)
 
 	//Adds a cube to the word with side 2e-5 m
-	test := Cube{S:2e-5}
-
-	//Adds 20000 particles to the cube
-	test.Addparticles(20000)
+	test := Cube{S:2e-3}
 
 	//the particles have a lognormal distribution of diameters
 	//with mean 20 nm and stdev 1 nm of the log of the diameters
 	Lognormal_diameter(20e-9, 1e-9)
+
+
+	//Adds 20000 particles to the cube
+	test.Addparticles(20000)
 
 	//Don't calculate the demagnetsing field
 	Demag=false
@@ -28,6 +29,7 @@ func main() {
 	//saturation magnetisation 860 000 A/m
 	Msat (860e3)
 
+	Adaptivestep=true
 	//timestep : 2ps
 	Dt = 2e-12
 	//initialise time at zero

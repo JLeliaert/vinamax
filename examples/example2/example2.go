@@ -15,12 +15,13 @@ func main() {
 
 	//Define the world at location 0,0,0 and with a side of 2e-6 m	
 	World(0,0,0,2e-6)
-	//Adds two particles
-	Addsingleparticle(-64.48e-9,0,0)
-	Addsingleparticle(64.48e-9,0,0)
 
 	//the particles have radius 16 nm
 	Particle_radius(16e-9)
+
+	//Adds two particles
+	Addsingleparticle(-64.48e-9,0,0)
+	Addsingleparticle(64.48e-9,0,0)
 
 	//external field along the x direction of 1mT
 	//B_ext can be an arbitrary function of time

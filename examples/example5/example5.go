@@ -30,12 +30,13 @@ func main() {
 	//Adds a cube to the word with side 5e-7 m
 	test := Cube{S:5e-7}
 
-	//Adds 20 particles to the cube
-	test.Addparticles(20)
 
 	//the particle have radius 16 nm
 	Particle_radius(16e-9)
 
+
+	//Adds 20 particles to the cube
+	test.Addparticles(20)
 	//external field along the x direction of 1mT
 	//B_ext can be an arbitrary function of time
 

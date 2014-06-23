@@ -2,7 +2,6 @@ package vinamax
 
 import (
 	"fmt"
-	"log"
 	"math"
 	//	"math/rand"
 )
@@ -13,7 +12,7 @@ type particle struct {
 	m                   vector
 	demagnetising_field vector
 	u_anis              vector  // Uniaxial anisotropy axis
-	r                   float64 //radius
+	rindex              int     //radius index
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 //time of next flip event
 	tempnumber          float64
@@ -76,34 +75,6 @@ func M_uniform(x, y, z float64) {
 	a := norm(vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].m = a
-	}
-}
-
-//Sets the radius of all particles to a consant value
-func Particle_radius(x float64) {
-	radiuscalled = true
-	if x < 0 {
-		log.Fatal("particles can't have a negative radius")
-	}
-	for i := range universe.lijst {
-		universe.lijst[i].r = x
-	}
-}
-
-//Gives all particles a diameter taken from a lognormal distribution with specified mean and stdev
-func Lognormal_diameter(mean, stdev float64) {
-	m := mean * 1e9
-	s := stdev * 1e9
-	radiuscalled = true
-	for i := range universe.lijst {
-		for {
-			x := rng.Float64() * 200 * m
-			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-1./(2.*s*s)*sqr(math.Log(x/m)))
-			if rng.Float64() < f_x {
-				universe.lijst[i].r = x * 1e-9 / 2.
-				break
-			}
-		}
 	}
 }
 

@@ -68,7 +68,8 @@ func averagemoments(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	totalvolume := 0.
 	for i := range lijst {
-		volume := cube(lijst[i].r) * 4. / 3. * math.Pi
+		radius := radii[lijst[i].rindex]
+		volume := cube(radius) * 4. / 3. * math.Pi
 		totalvolume += volume
 		avgs[0] += lijst[i].m[0] * volume
 		avgs[1] += lijst[i].m[1] * volume
@@ -195,7 +196,7 @@ func Save(a string) {
 			check(err)
 
 			for i := range universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat)
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, radii[universe.lijst[i].rindex], universe.lijst[i].msat)
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -208,7 +209,7 @@ func Save(a string) {
 			check(err)
 
 			for i := range universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].m[0], universe.lijst[i].m[1], universe.lijst[i].m[2])
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, radii[universe.lijst[i].rindex], universe.lijst[i].msat, universe.lijst[i].m[0], universe.lijst[i].m[1], universe.lijst[i].m[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}
