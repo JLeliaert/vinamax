@@ -64,6 +64,7 @@ func averages(lijst []*particle) vector {
 }
 
 //calculates the average moments of all particles
+//TODO weigh with msat
 func averagemoments(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	totalvolume := 0.
