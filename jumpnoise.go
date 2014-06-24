@@ -9,7 +9,7 @@ import (
 
 //calculates the attempt frequency of a particle
 func attemptf1(p *particle) float64 {
-	radius := radii[p.rindex]
+	radius := *p.rindex
 	volume := cube(radius) * 4. / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 
@@ -31,7 +31,7 @@ func attemptf1(p *particle) float64 {
 
 //calculates the attempt frequency of a particle
 func attemptf2(p *particle) float64 {
-	radius := radii[p.rindex]
+	radius := *p.rindex
 	volume := cube(radius) * 4 / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 
@@ -54,7 +54,7 @@ func attemptf2(p *particle) float64 {
 
 //calculates the attempt frequency of a particle
 func attemptf3(p *particle) float64 {
-	radius := radii[p.rindex]
+	radius := *p.rindex
 	volume := cube(radius) * 4 / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 

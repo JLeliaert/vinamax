@@ -20,7 +20,7 @@ func Setrandomseed(a int64) {
 
 // factor 4/3pi in "number" because they are spherical
 func (p *particle) calculatetempnumber() {
-	radius := radii[p.rindex]
+	radius := *p.rindex
 	p.tempnumber = math.Sqrt((2. * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(radius) * Dt))
 }
 

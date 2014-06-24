@@ -25,7 +25,7 @@ func addparticle(x, y, z float64) bool {
 	}
 
 	if universe.inworld(vector{x, y, z}) {
-		a := particle{x: x, y: y, z: z, rindex: radiusindex}
+		a := particle{x: x, y: y, z: z, rindex: &radii[radiusindex]}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 		msatcalled = false
@@ -160,7 +160,7 @@ func overlap(x, y, z, r float64) bool {
 		x2 := universe.lijst[i].z
 		y2 := universe.lijst[i].y
 		z2 := universe.lijst[i].z
-		r2 := radii[universe.lijst[i].rindex]
+		r2 := *universe.lijst[i].rindex
 		if math.Abs(x-x2) < (r + r2) {
 			if math.Abs(y-y2) < (r + r2) {
 				if math.Abs(z-z2) < (r + r2) {
