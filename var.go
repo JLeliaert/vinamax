@@ -16,14 +16,16 @@ var (
 	gammaoveralpha float64                                                      //g/1+alfa^2
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
-	Errortolerance float64                                              = 1e-5
-	Thresholdbeta  float64                                              = 0.3   // The threshold value for the FMM
-	universe       node                                                         // The entire universe of the simulation
-	FMM            bool                                                 = false // Calculate demag with FMM method
-	Demag          bool                                                 = true  // Calculate demag
-	Adaptivestep   bool                                                 = false
-	outdir         string                                                         // The output directory
-	solver         string                                               = "dopri" // The solver used
+	Errortolerance float64                                              = 1e-8
+	Thresholdbeta  float64                                              = 0.3 // The threshold value for the FMM
+	demagtime      float64
+	universe       node           // The entire universe of the simulation
+	FMM            bool   = false // Calculate demag with FMM method
+	Demag          bool   = true  // Calculate demag
+	demagevery     bool   = false // Calculate demag only after certain interval
+	Adaptivestep   bool   = false
+	outdir         string           // The output directory
+	solver         string = "dopri" // The solver used
 	outputinterval float64
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
@@ -50,8 +52,17 @@ func init() {
 	B_ext_space = func(t, x, y, z float64) (float64, float64, float64) { return 0, 0, 0 } // External applied field in T
 }
 
+//demag every interval
+func Demagevery(t float64) {
+	demagevery = true
+	demagtime = t
+}
+
 //test the inputvalues for unnatural things
 func testinput() {
+	if Demag == true && demagevery == true {
+		log.Fatal("You cannot call both Demagevery and Demag, pick one")
+	}
 	if Dt < 0 {
 		log.Fatal("Dt cannot be smaller than 0, did you forget to initialise?")
 	}
@@ -93,7 +104,7 @@ func syntaxrun() {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
 	if Brown == true && Adaptivestep == true {
-		log.Fatal("Brown Temperature can only be used with fixed timestep")
+	//	log.Fatal("Brown Temperature can only be used with fixed timestep")
 	}
 	if Jumpnoise == true {
 		resetswitchtimes(universe.lijst)

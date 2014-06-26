@@ -68,7 +68,12 @@ func Run(time float64) {
 	}
 	write(averagemoments(universe.lijst))
 	//write(averages(universe.lijst))
-	for j := T; T < j+time-Dt; {
+	previousdemagcalc := 0.
+	for j := T; T < j+time; {
+		if (demagevery == true) && (T-previousdemagcalc > demagtime) {
+			Demag = true
+			previousdemagcalc = T
+		}
 		if Demag {
 			calculatedemag()
 		}
@@ -101,7 +106,6 @@ func Run(time float64) {
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
 						undobadstep(universe.lijst)
-						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
 						}
@@ -125,7 +129,6 @@ func Run(time float64) {
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
 						undobadstep(universe.lijst)
-						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
 						}
@@ -150,7 +153,6 @@ func Run(time float64) {
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
 						undobadstep(universe.lijst)
-						T -= Dt
 						if Dt == Mindt {
 							log.Fatal("mindt is too small for your specified error tolerance")
 						}
@@ -182,7 +184,14 @@ func Run(time float64) {
 		//fmt.Println(Dt)
 		//write(averages(universe.lijst))
 		write(averagemoments(universe.lijst))
+		if (demagevery == true) && (Demag == true) {
+			Demag = false
+		}
+		if T >= j+time-Dt {
+			Dt = j + time - T
+		}
 	}
+
 	//if suggest_timestep {
 	//	printsuggestedtimestep()
 	//}
@@ -974,4 +983,5 @@ func undobadstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.m = p.previousm
 	}
+	T -= Dt
 }

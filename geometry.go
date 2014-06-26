@@ -157,7 +157,7 @@ func Lognormal_diameter(mean, stdev float64) {
 //easiest implementation, assumes cubic particles instead of spheres
 func overlap(x, y, z, r float64) bool {
 	for i := range universe.lijst {
-		x2 := universe.lijst[i].z
+		x2 := universe.lijst[i].x
 		y2 := universe.lijst[i].y
 		z2 := universe.lijst[i].z
 		r2 := universe.lijst[i].r
