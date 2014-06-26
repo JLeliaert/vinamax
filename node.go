@@ -39,7 +39,7 @@ func (n *node) calculatecom() {
 	prefactor := 0.
 
 	for i := range n.lijst {
-		radius := *n.lijst[i].rindex
+		radius := n.lijst[i].r
 		prefactor = n.lijst[i].msat * cube(radius)
 		comx += n.lijst[i].x * prefactor
 		comy += n.lijst[i].y * prefactor
@@ -260,7 +260,7 @@ func (w *node) calculatevolume() {
 
 	}
 	if w.number == 1 {
-		radius := *w.lijst[0].rindex
+		radius := w.lijst[0].r
 		w.volume = 4. / 3. * math.Pi * cube(radius)
 	}
 	if w.number == 0 {

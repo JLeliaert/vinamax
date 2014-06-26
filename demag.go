@@ -21,7 +21,7 @@ func demag(x, y, z float64) vector {
 
 	for i := range universe.lijst {
 		if universe.lijst[i].x != x || universe.lijst[i].y != y || universe.lijst[i].z != z {
-			radius := *universe.lijst[i].rindex
+			radius := universe.lijst[i].r
 			volume := 4. / 3 * math.Pi * cube(radius)
 			r_vect := vector{x - universe.lijst[i].x, y - universe.lijst[i].y, z - universe.lijst[i].z}
 			r := universe.lijst[i].dist(x, y, z)

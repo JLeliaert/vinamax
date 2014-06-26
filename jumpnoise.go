@@ -9,8 +9,7 @@ import (
 
 //calculates the attempt frequency of a particle
 func attemptf1(p *particle) float64 {
-	radius := *p.rindex
-	volume := cube(radius) * 4. / 3. * math.Pi
+	volume := cube(p.r) * 4. / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 
 	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
@@ -31,8 +30,7 @@ func attemptf1(p *particle) float64 {
 
 //calculates the attempt frequency of a particle
 func attemptf2(p *particle) float64 {
-	radius := *p.rindex
-	volume := cube(radius) * 4 / 3. * math.Pi
+	volume := cube(p.r) * 4 / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 
 	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
@@ -54,8 +52,7 @@ func attemptf2(p *particle) float64 {
 
 //calculates the attempt frequency of a particle
 func attemptf3(p *particle) float64 {
-	radius := *p.rindex
-	volume := cube(radius) * 4 / 3. * math.Pi
+	volume := cube(p.r) * 4 / 3. * math.Pi
 	hk := 2. * Ku1 / (p.msat * mu0)
 
 	gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
