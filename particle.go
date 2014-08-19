@@ -12,7 +12,7 @@ type particle struct {
 	m                   vector
 	demagnetising_field vector
 	u_anis              vector  // Uniaxial anisotropy axis
-	r                   float64 //radius index
+	r                   float64 //radius
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 //time of next flip event
 	tempnumber          float64

@@ -19,13 +19,12 @@ func addparticle(x, y, z float64) bool {
 	if radiuscalled == false {
 		log.Fatal("You have to specify the size of the particles before creating new particles")
 	}
-	r := radii[radiusindex]
 	if overlap(x, y, z, r) == true {
 		return false
 	}
 
 	if universe.inworld(vector{x, y, z}) {
-		a := particle{x: x, y: y, z: z, r: radii[radiusindex]}
+		a := particle{x: x, y: y, z: z, r: radius}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 		msatcalled = false
@@ -38,10 +37,6 @@ func addparticle(x, y, z float64) bool {
 func Addsingleparticle(x, y, z float64) {
 	if addparticle(x, y, z) == false {
 		log.Fatal("Trying to add particle at overlapping locations")
-	}
-	radiusindex += 1
-	if radiusindex == len(radii) {
-		radiusindex = 0
 	}
 }
 
@@ -61,10 +56,6 @@ func (c Cube) Addparticles(n int) {
 			py := c.y + (-0.5+georng.Float64())*c.S
 			pz := c.z + (-0.5+georng.Float64())*c.S
 			status = addparticle(px, py, pz)
-		}
-		radiusindex += 1
-		if radiusindex == len(radii) {
-			radiusindex = 0
 		}
 	}
 }
@@ -86,10 +77,6 @@ func (c Cuboid) Addparticles(n int) {
 			py := c.y + (-0.5+georng.Float64())*c.Sidey
 			pz := c.z + (-0.5+georng.Float64())*c.Sidez
 			status = addparticle(px, py, pz)
-		}
-		radiusindex += 1
-		if radiusindex == len(radii) {
-			radiusindex = 0
 		}
 	}
 }
@@ -123,16 +110,13 @@ func (w node) inworld(r vector) bool {
 	return true
 }
 
-//Sets the radius of all entries in radii to a consant value
+//Sets the radius of all entries in radii to a constant value
 func Particle_radius(x float64) {
 	radiuscalled = true
 	if x < 0 {
 		log.Fatal("particles can't have a negative radius")
 	}
-	size := len(radii)
-	for i := 0; i < size; i++ {
-		radii[i] = x
-	}
+	radius = x
 }
 
 //set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev

@@ -30,8 +30,7 @@ var (
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
 	order       int            = 5 //the order of the solver
-	radii       [32768]float64     //table with all radii
-	radiusindex int                //current index in the table of radii
+	radius	float64
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
