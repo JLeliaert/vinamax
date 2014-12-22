@@ -13,11 +13,13 @@ func main() {
 
 	//Defines the world at location 0,0,0 and with a side of 1e-8 m	
 	World(0,0,0,1e-8)
-	//Adds a single particle in the origin
-	Addsingleparticle(0,0,0)
 
 	//the particle has radius 500 nm
 	Particle_radius(500e-9)
+
+
+	//Adds a single particle in the origin
+	Addsingleparticle(0,0,0)
 
 	// An external field is applied that is a sine along the x-axis with amplitude 5 mT and frequency 9388?2 MHz
 	// Along the z-axis an external field is applied with 

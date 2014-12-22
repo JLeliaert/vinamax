@@ -19,9 +19,10 @@ func addparticle(x, y, z float64) bool {
 	if radiuscalled == false {
 		log.Fatal("You have to specify the size of the particles before creating new particles")
 	}
-	if overlap(x, y, z, r) == true {
-		return false
-	}
+	radius := getradius()
+	//if overlap(x, y, z, radius) == true {
+	//	return false
+	//}
 
 	if universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius}
@@ -110,31 +111,39 @@ func (w node) inworld(r vector) bool {
 	return true
 }
 
+func getradius() float64 {
+	if constradiuscalled {
+		return constradius
+	}
+	if logradiuscalled {
+		for {
+			x := rng.Float64() * 200 * logradius_m
+			f_x := 1. / (math.Sqrt(2*math.Pi) * logradius_s * x) * math.Exp(-1./(2.*logradius_s*logradius_s)*sqr(math.Log(x/logradius_m)))
+			if rng.Float64() < f_x {
+				return x * 1e-9 / 2.
+			}
+		}
+	}
+	return 0.
+}
+
 //Sets the radius of all entries in radii to a constant value
 func Particle_radius(x float64) {
 	radiuscalled = true
+	constradiuscalled = true
+
 	if x < 0 {
 		log.Fatal("particles can't have a negative radius")
 	}
-	radius = x
+	constradius = x
 }
 
 //set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev
 func Lognormal_diameter(mean, stdev float64) {
-	m := mean * 1e9
-	s := stdev * 1e9
 	radiuscalled = true
-	size := len(radii)
-	for i := 0; i < size; i++ {
-		for {
-			x := rng.Float64() * 200 * m
-			f_x := 1. / (math.Sqrt(2*math.Pi) * s * x) * math.Exp(-1./(2.*s*s)*sqr(math.Log(x/m)))
-			if rng.Float64() < f_x {
-				radii[i] = x * 1e-9 / 2.
-				break
-			}
-		}
-	}
+	logradiuscalled = true
+	logradius_m = mean * 1e9
+	logradius_s = stdev * 1e9
 }
 
 //returns true if the position of a particle overlaps with another particle

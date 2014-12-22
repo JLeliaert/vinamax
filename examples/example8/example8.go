@@ -10,11 +10,12 @@ func main() {
 
 	//Define world	
 	World(0,0,0,1e-7)
+
+	//The radius of the particle is 9 nm
+	Particle_radius(9.0e-9)
+
 	//Add a single particle in the origin
 	Addsingleparticle(0,0,0)
-
-	The radius of the particle is 9 nm
-	Particle_radius(9.0e-9)
 
 	//Don't calculate the demagnetising field
 	Demag=false
@@ -23,6 +24,7 @@ func main() {
 	Dt = 3e-12
 	//Initialize time at zero
 	T = 0.
+	Brown=true
 	//Temperature = 0
 	Temp = 300.
 	//Set a randomseed for the thermal field

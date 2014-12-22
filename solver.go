@@ -68,7 +68,7 @@ func Run(time float64) {
 	}
 	write(averagemoments(universe.lijst))
 	//write(averages(universe.lijst))
-	previousdemagcalc := T-demagtime
+	previousdemagcalc := T - demagtime
 	for j := T; T < j+time; {
 		if (demagevery == true) && (T-previousdemagcalc >= demagtime) {
 			calculatedemag()

@@ -15,11 +15,11 @@ func main() {
 	//Adds a cube to the word with side 1e-6 m
 	test := Cube{S:1e-6}
 
-	//Adds 10 particles to the cube
-	test.Addparticles(10)
-
 	//the particle have radius 20 nm
 	Particle_radius(20e-9)
+
+	//Adds 10 particles to the cube
+	test.Addparticles(10)
 
 	//Don't calculate the demagnetsing field
 	Demag=false

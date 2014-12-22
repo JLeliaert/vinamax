@@ -29,11 +29,15 @@ var (
 	outputinterval float64
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
-	order       int            = 5 //the order of the solver
-	radius	float64
+	order       int = 5 //the order of the solver
+	constradius float64
+	logradius_m float64
+	logradius_s float64
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
+	constradiuscalled   bool = false
+	logradiuscalled     bool = false
 	uaniscalled         bool = false
 	worldcalled         bool = false
 	magnetisationcalled bool = false
@@ -103,7 +107,7 @@ func syntaxrun() {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
 	if Brown == true && Adaptivestep == true {
-	//	log.Fatal("Brown Temperature can only be used with fixed timestep")
+		//	log.Fatal("Brown Temperature can only be used with fixed timestep")
 	}
 	if Jumpnoise == true {
 		resetswitchtimes(universe.lijst)

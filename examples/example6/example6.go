@@ -23,13 +23,13 @@ func main() {
 	//Adds 20000 particles to the cube
 	test.Addparticles(20000)
 
-	//Don't calculate the demagnetsing field
+	//Don't calculate the demagnetising field
 	Demag=false
 
 	//saturation magnetisation 860 000 A/m
 	Msat (860e3)
 
-	Adaptivestep=true
+	Adaptivestep =true
 	//timestep : 2ps
 	Dt = 2e-12
 	//initialise time at zero
@@ -37,7 +37,7 @@ func main() {
 	//temperature=0
 	Temp = 0.0
 	//Gilbert damping constant=0.05
-	Alpha = 0.05
+	Alpha = 0.1
 	//anisotropy constant=10 000 J/m**3
 	Ku1 = 10000 
 

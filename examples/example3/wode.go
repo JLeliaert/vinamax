@@ -8,11 +8,11 @@ import (
 func main() {
 
 	World(0,0,0,2e-6)
+	//the particle has radius 16 nm
+	Particle_radius(16e-9)
 	test := Cube{S:2e-6}
 	test.Addparticles(256)
 
-	//the particle has radius 16 nm
-	Particle_radius(16e-9)
 
 	//external field along the z direction of 10mT
 	//B_ext can be an arbitrary function of time
