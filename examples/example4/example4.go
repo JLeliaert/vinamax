@@ -33,6 +33,8 @@ func main() {
 
 	//timestep : 200fs
 	Dt = 2e-13
+	Adaptivestep=true
+	Setsolver("dopri")
 	//initialise time at zero
 	T = 0.
 	//temperature=0
@@ -49,6 +51,7 @@ func main() {
 	M_uniform(0,0,1)
 	//Add the external field to the outputtable
 	Tableadd("B_ext")
+	Tableadd("Dt")
 	//Probe the demagnetising field at a location of 1 mm above the center of the sample
 	Tableadd_b_at_location(0.,0.,1e-3)
 

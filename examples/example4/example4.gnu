@@ -18,4 +18,4 @@ set size 1.15,1
 
 file="./example4.out/table.txt"
 
-plot file using 7:(sqrt($8*$8+$9*$9)) ls 1 w l notitle
+plot file using 7:(sqrt($9*$9+$10*$10)) ls 1 w l notitle
