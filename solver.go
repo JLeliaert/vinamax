@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//	"fmt"
+//	"fmt"
 	"log"
 	"math"
 )
@@ -119,7 +119,7 @@ func Run(time float64) {
 						Dt = Maxdt
 					}
 					//fmt.Println("dt:   ", Dt)
-					maxtauwitht = 0
+					maxtauwitht = 1.e-12
 				}
 			}
 		case "fehl56":
@@ -143,7 +143,7 @@ func Run(time float64) {
 						Dt = Maxdt
 					}
 					//fmt.Println("dt:   ", Dt)
-					maxtauwitht = 0
+					maxtauwitht = 1.e-12 
 				}
 			}
 		case "fehl67":
@@ -167,7 +167,7 @@ func Run(time float64) {
 						Dt = Maxdt
 					}
 					//	fmt.Println("dt:   ", Dt)
-					maxtauwitht = 0
+					maxtauwitht =1.e-12 
 				}
 			}
 
@@ -184,8 +184,9 @@ func Run(time float64) {
 		//fmt.Println(Dt)
 		//write(averages(universe.lijst))
 		write(averagemoments(universe.lijst))
-		if T >= j+time-Dt {
-			Dt = j + time - T
+		if (T > j+time-Dt)&&(T<j+time) {
+			undobadstep(universe.lijst)
+			Dt = j + time - T +1e-15
 		}
 	}
 
@@ -982,3 +983,4 @@ func undobadstep(Lijst []*particle) {
 	}
 	T -= Dt
 }
+
