@@ -16,6 +16,7 @@ var (
 	gammaoveralpha float64                                                      //g/1+alfa^2
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
+	Kc1            float64                                              = 0     // Cubic anisotropy constant in J/m**3
 	Errortolerance float64                                              = 1e-8
 	Thresholdbeta  float64                                              = 0.3 // The threshold value for the FMM
 	demagtime      float64
@@ -39,6 +40,8 @@ var (
 	constradiuscalled   bool = false
 	logradiuscalled     bool = false
 	uaniscalled         bool = false
+	c1called            bool = false
+	c2called            bool = false
 	worldcalled         bool = false
 	magnetisationcalled bool = false
 	treecalled          bool = false
@@ -89,7 +92,10 @@ func syntaxrun() {
 		log.Fatal("You have to specify the size of the particles")
 	}
 	if uaniscalled == false && Ku1 != 0 {
-		log.Fatal("You have to specify the anisotropy-axis")
+		log.Fatal("You have to specify the uniaxial anisotropy-axis")
+	}
+	if (c1called == false || c2called == false) && Kc1 != 0 {
+		log.Fatal("You have to specify the cubic anisotropy-axes")
 	}
 	if worldcalled == false {
 		log.Fatal("You have define a \"World\"")
