@@ -62,7 +62,7 @@ func C1anisotropy_axis(x, y, z float64) {
 	}
 }
 
-//Gives all particles the same specified cubic2anisotropy-axis
+//Gives all particles the same specified cubic2anisotropy-axis, must be orthogonal to c1
 func C2anisotropy_axis(x, y, z float64) {
 	c2called = true
 	a := norm(vector{x, y, z})
