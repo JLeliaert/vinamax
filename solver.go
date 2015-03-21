@@ -208,6 +208,8 @@ func eulerstep(Lijst []*particle) {
 		p.m[1] += tau[1] * Dt
 		p.m[2] += tau[2] * Dt
 		p.m = norm(p.m)
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
 	}
 }
 
@@ -253,6 +255,9 @@ func heunstep(Lijst []*particle) {
 		//		}
 		//	}
 		T -= Dt
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 	}
 }
 
@@ -311,6 +316,9 @@ func rk3step(Lijst []*particle) {
 		//		}
 		//	}
 		T -= Dt
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 	}
 }
 
@@ -382,6 +390,9 @@ func rk4step(Lijst []*particle) {
 		//	}
 		p.m = norm(p.m)
 		T -= Dt
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 	}
 }
 
@@ -524,6 +535,9 @@ func dopristep(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 		T -= Dt
 	}
 }
@@ -691,6 +705,9 @@ func fehl56step(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 		T -= Dt
 	}
 }
@@ -973,6 +990,9 @@ func fehl67step(Lijst []*particle) {
 				maxtauwitht = error
 			}
 		}
+		//if you have to save mdotH
+		p.heff = p.tau(temp)
+
 		T -= Dt
 	}
 }

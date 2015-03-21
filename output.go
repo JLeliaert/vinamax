@@ -16,6 +16,7 @@ var filecounter int = 0
 var output_B_ext = false
 var output_Dt = false
 var output_nrmzpos = false
+var output_mdoth = false
 
 //var timelastswitch =0.//EXTRA
 //var updownswitch =true//EXTRA
@@ -80,6 +81,22 @@ func averagemoments(lijst []*particle) vector {
 	return avgs.times(1. / totalvolume)
 }
 
+//calculates the dotproduct of the average moments and the effective field of all particles
+func averagemdoth(lijst []*particle) vector {
+	avgs := vector{0, 0, 0}
+	totalvolume := 0.
+	for i := range lijst {
+		radius := lijst[i].r
+		volume := cube(radius) * 4. / 3. * math.Pi
+		totalvolume += volume
+		avgs[0] += lijst[i].m[0] * volume * lijst[i].heff[0]
+		avgs[1] += lijst[i].m[1] * volume * lijst[i].heff[1]
+		avgs[2] += lijst[i].m[2] * volume * lijst[i].heff[2]
+	}
+	//divide by total volume
+	return avgs.times(1. / totalvolume)
+}
+
 //returns the number of particles with m_z larger than 0
 func nrmzpositive(lijst []*particle) int {
 	counter := 0
@@ -111,6 +128,11 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+	if output_mdoth {
+		header := fmt.Sprintf("\tmdotH")
+		_, err = f.WriteString(header)
+		check(err)
+	}
 	for i := range locations {
 
 		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
@@ -125,6 +147,7 @@ func writeheader() {
 }
 
 ////prints the suggested timestep for the simulation
+//deprecated, is the responsibility of the user
 //func printsuggestedtimestep() {
 //	shouldbemaxerror := 5e-4
 //	currentmaxerror := maxtauwitht //* Dt
@@ -165,7 +188,11 @@ func write(avg vector) {
 			_, err = f.WriteString(string)
 			check(err)
 		}
-
+		if output_mdoth {
+			string = fmt.Sprintf("\t%v", averagemdoth(universe.lijst))
+			_, err = f.WriteString(string)
+			check(err)
+		}
 		for i := range locations {
 
 			string = fmt.Sprintf("\t%v\t%v\t%v", (demag(locations[i][0], locations[i][1], locations[i][2])[0]), (demag(locations[i][0], locations[i][1], locations[i][2])[1]), (demag(locations[i][0], locations[i][1], locations[i][2])[2]))
@@ -241,6 +268,11 @@ func Tableadd(a string) {
 		{
 			output_nrmzpos = true
 		}
+	case "mdoth":
+		{
+			output_mdoth = true
+		}
+
 	default:
 		{
 			log.Fatal(a, " is currently not addable to table")
