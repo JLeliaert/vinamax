@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//	"fmt"
+//		"fmt"
 	"log"
 	"math"
 )
@@ -209,7 +209,7 @@ func eulerstep(Lijst []*particle) {
 		p.m[2] += tau[2] * Dt
 		p.m = norm(p.m)
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 	}
 }
 
@@ -256,7 +256,7 @@ func heunstep(Lijst []*particle) {
 		//	}
 		T -= Dt
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 	}
 }
@@ -317,7 +317,7 @@ func rk3step(Lijst []*particle) {
 		//	}
 		T -= Dt
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 	}
 }
@@ -391,7 +391,7 @@ func rk4step(Lijst []*particle) {
 		p.m = norm(p.m)
 		T -= Dt
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 	}
 }
@@ -536,7 +536,7 @@ func dopristep(Lijst []*particle) {
 			}
 		}
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 		T -= Dt
 	}
@@ -706,7 +706,7 @@ func fehl56step(Lijst []*particle) {
 			}
 		}
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 		T -= Dt
 	}
@@ -991,7 +991,7 @@ func fehl67step(Lijst []*particle) {
 			}
 		}
 		//if you have to save mdotH
-		p.heff = p.tau(temp)
+		p.heff = p.b_eff(temp)
 
 		T -= Dt
 	}

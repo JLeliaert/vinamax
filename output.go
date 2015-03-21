@@ -84,17 +84,13 @@ func averagemoments(lijst []*particle) vector {
 //calculates the dotproduct of the average moments and the effective field of all particles
 func averagemdoth(lijst []*particle) float64 {
 	avg := 0.
-	totalvolume := 0.
 	for i := range lijst {
-		radius := lijst[i].r
-		volume := cube(radius) * 4. / 3. * math.Pi
-		totalvolume += volume
-		avg += lijst[i].m[0] * volume * lijst[i].heff[0]
-		avg += lijst[i].m[1] * volume * lijst[i].heff[1]
-		avg += lijst[i].m[2] * volume * lijst[i].heff[2]
-	}
-	//divide by total volume
-	return (avg / totalvolume)
+		xcomp:= lijst[i].m[0]*lijst[i].heff[0]
+		ycomp:= lijst[i].m[1]*lijst[i].heff[1]
+		zcomp:= lijst[i].m[2]*lijst[i].heff[2]
+		avg = (xcomp+ycomp+zcomp)/mu0
+	 	}
+	return (avg)
 }
 
 //returns the number of particles with m_z larger than 0
@@ -129,7 +125,7 @@ func writeheader() {
 		check(err)
 	}
 	if output_mdoth {
-		header := fmt.Sprintf("\t<mdotH>")
+		header := fmt.Sprintf("\tmdotH")
 		_, err = f.WriteString(header)
 		check(err)
 	}
