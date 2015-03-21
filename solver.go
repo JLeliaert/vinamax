@@ -67,6 +67,7 @@ func Run(time float64) {
 		norm(universe.lijst[i].m)
 	}
 	write(averagemoments(universe.lijst))
+	//averages is not weighted with volume, averagemoments is
 	//write(averages(universe.lijst))
 	previousdemagcalc := T - demagtime
 	for j := T; T < j+time; {
@@ -210,6 +211,7 @@ func eulerstep(Lijst []*particle) {
 	}
 }
 
+//#########################################################################
 //perform a timestep using heun method
 //http://en.wikipedia.org/wiki/Heun_method
 func heunstep(Lijst []*particle) {
