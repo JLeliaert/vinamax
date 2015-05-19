@@ -85,11 +85,11 @@ func averagemoments(lijst []*particle) vector {
 func averagemdoth(lijst []*particle) float64 {
 	avg := 0.
 	for i := range lijst {
-		xcomp:= lijst[i].m[0]*lijst[i].heff[0]
-		ycomp:= lijst[i].m[1]*lijst[i].heff[1]
-		zcomp:= lijst[i].m[2]*lijst[i].heff[2]
-		avg = (xcomp+ycomp+zcomp)/mu0
-	 	}
+		xcomp := lijst[i].m[0] * lijst[i].heff[0]
+		ycomp := lijst[i].m[1] * lijst[i].heff[1]
+		zcomp := lijst[i].m[2] * lijst[i].heff[2]
+		avg = (xcomp + ycomp + zcomp) / mu0
+	}
 	return (avg)
 }
 

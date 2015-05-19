@@ -113,7 +113,7 @@ func syntaxrun() {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
 	if Brown == true && Adaptivestep == true {
-			log.Fatal("Brown Temperature can only be used with fixed timestep")
+		log.Fatal("Brown Temperature can only be used with fixed timestep")
 	}
 	if Jumpnoise == true {
 		resetswitchtimes(universe.lijst)

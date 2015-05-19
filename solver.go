@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-//		"fmt"
+	//		"fmt"
 	"log"
 	"math"
 )
@@ -25,6 +25,12 @@ func Setsolver(a string) {
 			solver = "rk3"
 			order = 3
 		}
+	case "annelies":
+		{
+			solver = "annelies"
+			order = 3
+		}
+
 	case "rk4":
 		{
 			solver = "rk4"
@@ -92,6 +98,11 @@ func Run(time float64) {
 		case "rk3":
 			{
 				rk3step(universe.lijst)
+				T += Dt
+			}
+		case "annelies":
+			{
+				anneliesstep(universe.lijst)
 				T += Dt
 			}
 		case "rk4":
@@ -303,6 +314,68 @@ func rk3step(Lijst []*particle) {
 		p.m[0] += ((7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0]) * Dt)
 		p.m[1] += ((7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1]) * Dt)
 		p.m[2] += ((7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2]) * Dt)
+
+		p.m = norm(p.m)
+
+		//	if suggest_timestep {
+		//		taux := (7/6.*k1[0] - 4/3.*k2[0] + 1/6.*k3[0])
+		//		tauy := (7/6.*k1[1] - 4/3.*k2[1] + 1/6.*k3[1])
+		//		tauz := (7/6.*k1[2] - 4/3.*k2[2] + 1/6.*k3[2])
+		//		torq := math.Sqrt(taux*taux + tauy*tauy + tauz*tauz)
+		//		if torq > maxtauwitht {
+		//			maxtauwitht = torq
+		//		}
+		//	}
+		T -= Dt
+		//if you have to save mdotH
+		p.heff = p.b_eff(temp)
+
+	}
+}
+
+//#########################################################################
+
+//perform a timestep using 3th order anneliessolver
+func anneliesstep(Lijst []*particle) {
+	for _, p := range Lijst {
+		temp := p.temp()
+		p.tempfield = temp
+		tau0 := p.tau(temp)
+		p.fehlk1 = tau0
+
+		//k1
+		p.m[0] += tau0[0] * 1. / 10. * Dt
+		p.m[1] += tau0[1] * 1. / 10. * Dt
+		p.m[2] += tau0[2] * 1. / 10. * Dt
+		T += 1. / 10. * Dt
+	}
+
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.tempfield
+		k2 := p.tau(temp)
+		p.fehlk2 = k2
+		k1 := p.fehlk1
+		p.m[0] += (((-1./10.-2189./5746.)*k1[0] + 2310./2873.*k2[0]) * Dt)
+		p.m[1] += (((-1./10.-2189./5746.)*k1[1] + 2310./2873.*k2[1]) * Dt)
+		p.m[2] += (((-1./10.-2189./5746.)*k1[2] + 2310./2873.*k2[2]) * Dt)
+		T += (-1./10. + 11./26.) * Dt
+	}
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.tempfield
+		k3 := p.tau(temp)
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		p.m[0] += (((89./33.+2189./5746.)*k1[0] +(-475./126-2310./2873.)*k2[0] + 2873/1386.*k3[0]) * Dt)
+		p.m[1] += (((89./33.+2189./5746.)*k1[1] +(-475./126-2310./2873.)*k2[1] + 2873/1386.*k3[1]) * Dt)
+		p.m[2] += (((89./33.+2189./5746.)*k1[2] +(-475./126-2310./2873.)*k2[2] + 2873/1386.*k3[2]) * Dt)
+		T += (-11/26. + 1.) * Dt
 
 		p.m = norm(p.m)
 

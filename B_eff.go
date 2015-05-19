@@ -59,6 +59,8 @@ func (p *particle) anis() vector {
 	mdotu := p.m.dot(p.u_anis)
 	uniax := p.u_anis.times(2. * Ku1 * mdotu / p.msat)
 
+	cubic:=vector{0.,0.,0.}
+	if(Kc1!=0){
 	c1m := p.m.dot(p.c1_anis)
 	c2m := p.m.dot(p.c2_anis)
 	c3m := p.m.dot(p.c3_anis)
@@ -66,6 +68,7 @@ func (p *particle) anis() vector {
 	secondterm := p.c2_anis.times(c2m * (c3m*c3m + c1m*c1m))
 	thirdterm := p.c3_anis.times(c3m * (c2m*c2m + c1m*c1m))
 
-	cubic := firstterm.add(secondterm.add(thirdterm)).times(-2. * Kc1 / p.msat)
+	cubic = firstterm.add(secondterm.add(thirdterm)).times(-2. * Kc1 / p.msat)
+	}	
 	return uniax.add(cubic)
 }
