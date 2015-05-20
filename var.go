@@ -17,7 +17,7 @@ var (
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
 	Kc1            float64                                              = 0     // Cubic anisotropy constant in J/m**3
-	Errortolerance float64                                              = 1e-8
+	Errortolerance float64                                              = 1e-5
 	Thresholdbeta  float64                                              = 0.3 // The threshold value for the FMM
 	demagtime      float64
 	universe       node           // The entire universe of the simulation
@@ -34,6 +34,7 @@ var (
 	constradius float64
 	logradius_m float64
 	logradius_s float64
+	Tau0 float64 =1e-8
 
 	msatcalled          bool = false
 	radiuscalled        bool = false

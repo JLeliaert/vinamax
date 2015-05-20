@@ -69,13 +69,23 @@ func attemptf3(p *particle) float64 {
 
 }
 
+//calculates the attempt frequency of a particle
+func attemptf0(p *particle) float64 {
+	volume := cube(p.r) * 4. / 3. * math.Pi
+	delta := Ku1 * volume / (kb * Temp)
+
+	return 1./Tau0*math.Exp(-delta)
+
+}
+
 //calculates the next switching time
 func setswitchtime(p *particle) {
 	prob := rng.Float64()
 
 	//TODO choose based on the barrier??? see which one corresponds when with brownian noise
 
-	nextflip := (-1. / attemptf1(p)) * math.Log((1. - prob))
+	nextflip := (-1. / attemptf0(p)) * math.Log((1. - prob))
+	//nextflip := (-1. / attemptf1(p)) * math.Log((1. - prob))
 	//nextflip := (-1. / attemptf2(p)) * math.Log(1.-prob)
 	//nextflip := (-1. / attemptf3(p)) * math.Log(1.-prob)
 
