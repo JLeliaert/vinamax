@@ -161,6 +161,11 @@ func Tableadd_b_at_location(x, y, z float64) {
 
 }
 
+func Give_mz() float64{
+    return averagemoments(universe.lijst)[2]
+}
+
+
 //Writes the time and the vector of average magnetisation in the table
 func write(avg vector) {
 	if twrite >= outputinterval && outputinterval != 0 {

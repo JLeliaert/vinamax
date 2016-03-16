@@ -197,7 +197,7 @@ func Run(time float64) {
 		//write(averages(universe.lijst))
 		write(averagemoments(universe.lijst))
 		if (T > j+time-Dt) && (T < j+time) {
-			//undobadstep(universe.lijst)
+			undobadstep(universe.lijst)
 			Dt = j + time - T + 1e-15
 		}
 	}
