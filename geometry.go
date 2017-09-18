@@ -19,13 +19,21 @@ func addparticle(x, y, z float64) bool {
 	if radiuscalled == false {
 		log.Fatal("You have to specify the size of the particles before creating new particles")
 	}
+	
 	radius := getradius()
-	//if overlap(x, y, z, radius) == true {
-	//	return false
-	//}
+	if overlap(x, y, z, radius) == true {
+		return false
+	}
+
+	if radius_hcalled == false {
+		radius_h := getradius() //when no hydrodynamic radius is specified, consider it equal to core radius
+	} else {
+		radius_h := getradius_h()
+	}
+
 
 	if universe.inworld(vector{x, y, z}) {
-		a := particle{x: x, y: y, z: z, r: radius}
+		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 		msatcalled = false
@@ -127,6 +135,24 @@ func getradius() float64 {
 	return 0.
 }
 
+func getradius_h() float64 {
+	if constradius_hcalled {
+		return constradius_h
+	}
+	//TO DO HOW TO CHECK WITH CORE LOG? or set as fixed?
+	//if logradius_hcalled { 
+		//for {
+		//	x := rng.Float64() * 200 * logradius_m
+		//	f_x := 1. / (math.Sqrt(2*math.Pi) * logradius_s * x) * math.Exp(-1./(2.*logradius_s*logradius_s)*sqr(math.Log(x/logradius_m)))
+		//	if rng.Float64() < f_x {
+		//		return x * 1e-9 / 2.
+		//	}
+		//}
+	//}
+	return 0.
+}
+
+
 //Sets the radius of all entries in radii to a constant value
 func Particle_radius(x float64) {
 	radiuscalled = true
@@ -136,6 +162,28 @@ func Particle_radius(x float64) {
 		log.Fatal("particles can't have a negative radius")
 	}
 	constradius = x
+}
+
+//Sets the hydrodynamic radius of all entries in radii to a constant value
+func Particle_radius_h(x float64) {
+	radius_hcalled = true
+	constradius_hcalled = true
+
+	if radiuscalled == false {
+		log.Fatal("You have to specify the core size of the particles before setting the hydrodynamic radius")
+	}
+
+	if constradiuscalled {
+		if x < constradius {
+			log.Fatal("particles can't have a hydrodynamic radius (core and coating together) smaller than the core radius")
+		}
+		constradius_h = x	
+	}
+	//when a lognormal distribution of core radii is considered, coating size is considered fixed and x becomes coating size
+	if logradiuscalled {
+		
+	}
+	
 }
 
 //set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev
@@ -148,15 +196,15 @@ func Lognormal_diameter(mean, stdev float64) {
 
 //returns true if the position of a particle overlaps with another particle
 //easiest implementation, assumes cubic particles instead of spheres
-func overlap(x, y, z, r float64) bool {
+func overlap(x, y, z, r_h float64) bool {
 	for i := range universe.lijst {
 		x2 := universe.lijst[i].x
 		y2 := universe.lijst[i].y
 		z2 := universe.lijst[i].z
-		r2 := universe.lijst[i].r
-		if math.Abs(x-x2) < (r + r2) {
-			if math.Abs(y-y2) < (r + r2) {
-				if math.Abs(z-z2) < (r + r2) {
+		r_h2 := universe.lijst[i].r_h
+		if math.Abs(x-x2) < (r_h + r_h2) {
+			if math.Abs(y-y2) < (r_h + r_h2) {
+				if math.Abs(z-z2) < (r_h + r_h2) {
 					return true
 				}
 			}

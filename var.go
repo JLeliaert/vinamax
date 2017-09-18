@@ -38,7 +38,9 @@ var (
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
+	radius_hcalled      bool = false
 	constradiuscalled   bool = false
+	constradius_hcalled   bool = false
 	logradiuscalled     bool = false
 	uaniscalled         bool = false
 	c1called            bool = false
