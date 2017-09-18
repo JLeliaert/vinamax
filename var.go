@@ -32,6 +32,7 @@ var (
 	//	suggest_timestep bool    = false
 	order       int = 5 //the order of the solver
 	constradius float64
+	constradius_h float64
 	logradius_m float64
 	logradius_s float64
 	Tau0 float64 =1e-8

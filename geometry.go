@@ -25,10 +25,10 @@ func addparticle(x, y, z float64) bool {
 		return false
 	}
 
-	if radius_hcalled == false {
-		radius_h := getradius() //when no hydrodynamic radius is specified, consider it equal to core radius
-	} else {
-		radius_h := getradius_h()
+	radius_h := getradius() //when no hydrodynamic radius is specified, consider it equal to core radius
+	
+	if radius_hcalled {
+		radius_h = getradius_h()
 	}
 
 
@@ -139,16 +139,11 @@ func getradius_h() float64 {
 	if constradius_hcalled {
 		return constradius_h
 	}
-	//TO DO HOW TO CHECK WITH CORE LOG? or set as fixed?
-	//if logradius_hcalled { 
-		//for {
-		//	x := rng.Float64() * 200 * logradius_m
-		//	f_x := 1. / (math.Sqrt(2*math.Pi) * logradius_s * x) * math.Exp(-1./(2.*logradius_s*logradius_s)*sqr(math.Log(x/logradius_m)))
-		//	if rng.Float64() < f_x {
-		//		return x * 1e-9 / 2.
-		//	}
-		//}
-	//}
+	//when lognormaldistribution of cores, use fixed coating size
+	if logradiuscalled { 
+		r_c := getradius()
+		return constradius_h + r_c  
+	}
 	return 0.
 }
 
@@ -164,7 +159,7 @@ func Particle_radius(x float64) {
 	constradius = x
 }
 
-//Sets the hydrodynamic radius of all entries in radii to a constant value
+//Sets the hydrodynamic radius of all entries in radii to a constant value or constant coating in case core distribution
 func Particle_radius_h(x float64) {
 	radius_hcalled = true
 	constradius_hcalled = true
@@ -176,14 +171,9 @@ func Particle_radius_h(x float64) {
 	if constradiuscalled {
 		if x < constradius {
 			log.Fatal("particles can't have a hydrodynamic radius (core and coating together) smaller than the core radius")
-		}
-		constradius_h = x	
+		}	
 	}
-	//when a lognormal distribution of core radii is considered, coating size is considered fixed and x becomes coating size
-	if logradiuscalled {
-		
-	}
-	
+	constradius_h = x
 }
 
 //set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev

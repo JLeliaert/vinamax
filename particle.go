@@ -17,7 +17,7 @@ type particle struct {
 	c2_anis             vector  // cubic anisotropy axis
 	c3_anis             vector  // cubic anisotropy axis
 	r                   float64 // radius core
-	r_h		    float64 // radius core and coating
+	r_h		    float64 // radius core and coating together
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 // time of next flip event
 	tempnumber          float64
