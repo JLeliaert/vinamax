@@ -1,6 +1,7 @@
 package vinamax
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -21,16 +22,21 @@ func addparticle(x, y, z float64) bool {
 	}
 	
 	radius := getradius()
-	if overlap(x, y, z, radius) == true {
-		return false
-	}
-
-	radius_h := getradius() //when no hydrodynamic radius is specified, consider it equal to core radius
 	
-	if radius_hcalled {
-		radius_h = getradius_h()
-	}
 
+	var radius_h float64	
+	if radius_hcalled == false { //when no hydrodynamic radius is specified, consider it equal to core radius
+		radius_h = radius 
+	} 
+	if logradiuscalled { //when distribution of core sizes use a fixed coating size
+		radius_h = getradius_h() + radius
+	}
+	if constradiuscalled {
+		radius_h = getradius_h() 
+	}
+	if overlap(x, y, z, radius_h) == true {
+		return false
+	}	
 
 	if universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
@@ -40,6 +46,11 @@ func addparticle(x, y, z float64) bool {
 	} else {
 		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
 	}
+	fmt.Printf("particle core diamter is %#v \n",radius)
+	fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
+	fmt.Printf("radius H-called is %#v \n", radius_hcalled)
+
+
 	return true
 }
 
@@ -136,15 +147,7 @@ func getradius() float64 {
 }
 
 func getradius_h() float64 {
-	if constradius_hcalled {
-		return constradius_h
-	}
-	//when lognormaldistribution of cores, use fixed coating size
-	if logradiuscalled { 
-		r_c := getradius()
-		return constradius_h + r_c  
-	}
-	return 0.
+	return constradius_h 		
 }
 
 
@@ -162,8 +165,7 @@ func Particle_radius(x float64) {
 //Sets the hydrodynamic radius of all entries in radii to a constant value or constant coating in case core distribution
 func Particle_radius_h(x float64) {
 	radius_hcalled = true
-	constradius_hcalled = true
-
+	
 	if radiuscalled == false {
 		log.Fatal("You have to specify the core size of the particles before setting the hydrodynamic radius")
 	}

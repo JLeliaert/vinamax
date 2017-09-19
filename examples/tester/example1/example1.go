@@ -8,6 +8,7 @@ package main
 
 import (
 	. "github.com/JLeliaert/vinamax"
+	//"fmt"
 )
 
 func main() {
@@ -22,7 +23,7 @@ func main() {
 
 	//Adds a single particle in the origin
 	Addsingleparticle(0,0,0)
-
+	
 	//apply an external field along the z direction of 10mT
 	//B_ext can be an arbitrary function of time
 	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 0.1 }
@@ -53,6 +54,9 @@ func main() {
 
 	//write output every 5e-12s 
 	Output(5e-12)
+
+	//fmt.Printf("particle hydrodynamic diamter is %#v \n",universe.lijst[0].r_h)
+
 
 	//run for 5 ns
 	Run(5.e-9)
