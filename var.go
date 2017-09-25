@@ -36,6 +36,7 @@ var (
 	logradius_m float64
 	logradius_s float64
 	Tau0 float64 =1e-8
+	viscosity float64 //set viscosity value
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
@@ -54,6 +55,8 @@ var (
 	tableaddcalled      bool = false
 	Jumpnoise           bool = false
 	Brown               bool = false
+	BrownianRotation    bool = false
+	viscositycalled     bool = false
 )
 
 //initialised B_ext functions
@@ -106,6 +109,9 @@ func syntaxrun() {
 	}
 	if magnetisationcalled == false {
 		log.Fatal("You have specify the initial magnetisation")
+	}
+	if BrownianRotation == true && viscositycalled == false {
+		log.Fatal("You have to specify the viscosity of the particles' environment when taking into account Brownian relaxation")
 	}
 	if treecalled == false && FMM == true {
 		log.Fatal("You have to run Maketree() as last command in front of Run() when using the FMM method")

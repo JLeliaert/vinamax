@@ -36,20 +36,28 @@ func addparticle(x, y, z float64) bool {
 	}
 	if overlap(x, y, z, radius_h) == true {
 		return false
+	}
+	
+	if BrownianRotation == true && viscositycalled == false {
+		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
 	}	
 
 	if universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
+		if BrownianRotation {
+			a.eta = viscosity
+		}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 		msatcalled = false
 	} else {
 		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
 	}
-	fmt.Printf("particle core diamter is %#v \n",radius)
-	fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
-	fmt.Printf("radius H-called is %#v \n", radius_hcalled)
-
+	//fmt.Printf("particle core diamter is %#v \n",radius)
+	//fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
+	fmt.Printf("Viscosity of particle is %#v \n", viscosity)
+	fmt.Printf("Viscosity called %#v \n", viscositycalled)
+	fmt.Printf("Brownian rotation? %#v \n", BrownianRotation)
 
 	return true
 }
@@ -64,6 +72,25 @@ type Cube struct {
 	x, y, z float64 //position
 	S       float64 //side
 	n       int     //numberofparticles
+}
+
+//Sets origin of the cube 
+func (c Cube) Setorigin(x1,y1,z1 float64) {
+	c.x = x1
+	c.y = y1
+	c.z = z1
+	
+}
+
+
+//Sets viscosity of particles in the cube (e.g. different viscosity regions possible)
+func (c Cube) Setviscosity(visc float64) {
+	if BrownianRotation == false {
+		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
+	}
+	viscositycalled = true
+	viscosity = visc
+	
 }
 
 //Adds a number of particles at random locations in a cubic region
@@ -86,6 +113,25 @@ type Cuboid struct {
 	n                   int     //numberofparticles
 }
 
+//Sets origin of the cuboid 
+func (c Cuboid) Setorigin(x1,y1,z1 float64) {
+	c.x = x1
+	c.y = y1
+	c.z = z1
+	
+}
+
+
+//Sets viscosity of particles in the cuboid (e.g. different viscosity regions possible)
+func (c Cuboid) Setviscosity(visc float64) {
+	if BrownianRotation == false {
+		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
+	}
+	viscositycalled = true
+	viscosity = visc
+	
+}
+
 //Adds a number of particles at random locations in a cubic region
 func (c Cuboid) Addparticles(n int) {
 
@@ -100,6 +146,7 @@ func (c Cuboid) Addparticles(n int) {
 		}
 	}
 }
+
 
 //Defines the universe, its center and its diameter
 func World(x, y, z, r float64) {
@@ -128,6 +175,17 @@ func (w node) inworld(r vector) bool {
 		return false
 	}
 	return true
+}
+
+//Sets viscosity of particles to be added directly to the universe
+func Setviscosity(visc float64) {
+	//check if Brownian rotation calculations are on
+	if BrownianRotation == false {
+		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
+	}
+	viscositycalled = true
+	viscosity = visc
+	
 }
 
 func getradius() float64 {
