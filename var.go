@@ -89,7 +89,7 @@ func testinput() {
 	if universe.number == 0 {
 		log.Fatal("There are no particles in the geometry")
 	}
-}
+} 
 
 //checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {
@@ -121,7 +121,7 @@ func syntaxrun() {
 		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
 	}
 	if BrownianRotation == true && randomseedcalled_anis == false {
-		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anistropy dynamics) of the particle")
+		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anisotropy dynamics) of the particle")
 	}
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")

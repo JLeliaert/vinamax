@@ -221,6 +221,16 @@ func eulerstep(Lijst []*particle) {
 		p.m = norm(p.m)
 		//if you have to save mdotH
 		p.heff = p.b_eff(temp)
+		
+		if (BrownianRotation) { //only calculate anisodynamics when requested
+			randomv := p.randomv()
+			
+			 tau_u := p.tau_u(randomv)
+			 p.u[0] += tau_u[0] * Dt
+			 p.u[1] += tau_u[1] * Dt
+			 p.u[2] += tau_u[2] * Dt
+			 p.u = norm(p.u)
+		}
 	}
 }
 
