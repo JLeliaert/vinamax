@@ -52,6 +52,7 @@ var (
 	treecalled          bool = false
 	outputcalled        bool = false
 	randomseedcalled    bool = false
+	randomseedcalled_anis bool = false
 	tableaddcalled      bool = false
 	Jumpnoise           bool = false
 	Brown               bool = false
@@ -119,6 +120,9 @@ func syntaxrun() {
 	if Temp != 0 && randomseedcalled == false {
 		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
 	}
+	if BrownianRotation == true && randomseedcalled_anis == false {
+		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anistropy dynamics) of the particle")
+	}
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
@@ -133,5 +137,8 @@ func syntaxrun() {
 	}
 	if Brown {
 		calculatetempnumbers(universe.lijst)
+	}
+	if BrownianRotation {
+		calculaterandomvprefacts(universe.lijst)
 	}
 }

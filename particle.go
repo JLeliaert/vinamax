@@ -21,6 +21,7 @@ type particle struct {
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 // time of next flip event
 	tempnumber          float64
+	randomvprefact	    float64
 	eta		    float64 //viscosity of particle surroundings
 
 	heff      vector //effective field

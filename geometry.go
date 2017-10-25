@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -55,9 +55,9 @@ func addparticle(x, y, z float64) bool {
 	}
 	//fmt.Printf("particle core diamter is %#v \n",radius)
 	//fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
-	fmt.Printf("Viscosity of particle is %#v \n", viscosity)
-	fmt.Printf("Viscosity called %#v \n", viscositycalled)
-	fmt.Printf("Brownian rotation? %#v \n", BrownianRotation)
+	//fmt.Printf("Viscosity of particle is %#v \n", viscosity)
+	//fmt.Printf("Viscosity called %#v \n", viscositycalled)
+	//fmt.Printf("Brownian rotation? %#v \n", BrownianRotation)
 
 	return true
 }
