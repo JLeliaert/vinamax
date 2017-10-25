@@ -26,14 +26,23 @@ type particle struct {
 
 	heff      vector //effective field
 	tempfield vector
+	randomvfield vector
 	tempm     vector
 	previousm vector
+	tempu_anis vector
+	previousu_anis vector
 	fehlk1    vector
+	fehlk1_u  vector
 	fehlk2    vector
+	fehlk2_u  vector
 	fehlk3    vector
+	fehlk3_u  vector
 	fehlk4    vector
+	fehlk4_u  vector
 	fehlk5    vector
+	fehlk5_u  vector
 	fehlk6    vector
+	fehlk6_u  vector
 	fehlk7    vector
 	fehlk8    vector
 	fehlk9    vector

@@ -11,12 +11,12 @@ var anisrng = rand.New(rand.NewSource(0))
 //using the Langevin equation
 func (p *particle) tau_u(randomv vector) vector {
 	mdotBext := p.m.dot(p.zeeman())
-	mdotBextdotu := p.u_anis.dot(mdotBext).times((4. / 3. * math.Pi * cube(p.r) * p.msat) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
-	randomdotu := randomv.dot(p.u_anis)
-	return mdotBextdotu.add(randomdotu)
+	mdotBexttimesu := p.u_anis.times(mdotBext * (4. / 3. * math.Pi * cube(p.r) * p.msat) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+	randomdotu := randomv.cross(p.u_anis)
+	return mdotBexttimesu.add(randomdotu)
 }
 
-//Set the randomseed for the anisotropy dynamics ??Is this necessary or use temp seed? better to use independent one in case there is no temp?
+//Set the randomseed for the anisotropy dynamics 
 func Setrandomseed_anis(a int64) {
 	randomseedcalled_anis = true
 	anisrng = rand.New(rand.NewSource(a))
