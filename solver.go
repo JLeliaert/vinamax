@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//		"fmt"
+	//"fmt"
 	"log"
 	"math"
 )
@@ -118,7 +118,7 @@ func Run(time float64) {
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
 						undobadstep(universe.lijst)
-						if BrownianRelaxtion {
+						if BrownianRotation {
 							undobadstep_u_anis(universe.lijst)
 						}
 						if Dt == Mindt {

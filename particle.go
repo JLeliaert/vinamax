@@ -44,6 +44,7 @@ type particle struct {
 	fehlk6    vector
 	fehlk6_u  vector
 	fehlk7    vector
+	fehlk7_u  vector
 	fehlk8    vector
 	fehlk9    vector
 	fehlk10   vector

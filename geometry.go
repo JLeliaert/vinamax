@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//"fmt"
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -97,6 +97,7 @@ func (c Cube) Setviscosity(visc float64) {
 func (c Cube) Addparticles(n int) {
 	c.n += n
 	for i := 0; i < n; i++ {
+	fmt.Println(i,"th particle to be added")
 		status := false
 		for status == false {
 			px := c.x + (-0.5+georng.Float64())*c.S
@@ -104,6 +105,7 @@ func (c Cube) Addparticles(n int) {
 			pz := c.z + (-0.5+georng.Float64())*c.S
 			status = addparticle(px, py, pz)
 		}
+	
 	}
 }
 
