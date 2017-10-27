@@ -495,10 +495,6 @@ func dopristep(Lijst []*particle) {
 		k1 := p.tau(temp)
 		p.tempfield = temp
 		p.fehlk1 = k1
-
-		p.m[0] += k1[0] * 1 / 5. * Dt
-		p.m[1] += k1[1] * 1 / 5. * Dt
-		p.m[2] += k1[2] * 1 / 5. * Dt
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			p.tempu_anis = p.u_anis
@@ -513,6 +509,11 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[1] += k1_u[1] * 1 / 5. * Dt
 			p.u_anis[2] += k1_u[2] * 1 / 5. * Dt
 		}
+
+		p.m[0] += k1[0] * 1 / 5. * Dt
+		p.m[1] += k1[1] * 1 / 5. * Dt
+		p.m[2] += k1[2] * 1 / 5. * Dt
+
 	}
 	T += 1 / 5. * Dt
 	if Demag {
@@ -524,11 +525,6 @@ func dopristep(Lijst []*particle) {
 		k1 := p.fehlk1
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
-
-		p.m = p.tempm
-		p.m[0] += ((3/40.*k1[0] + 9/40.*k2[0]) * Dt)
-		p.m[1] += ((3/40.*k1[1] + 9/40.*k2[1]) * Dt)
-		p.m[2] += ((3/40.*k1[2] + 9/40.*k2[2]) * Dt)
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 						
@@ -542,6 +538,11 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[1] += ((3/40.*k1_u[1] + 9/40.*k2_u[1]) * Dt)
 			p.u_anis[2] += ((3/40.*k1_u[2] + 9/40.*k2_u[2]) * Dt)
 		}
+
+		p.m = p.tempm
+		p.m[0] += ((3/40.*k1[0] + 9/40.*k2[0]) * Dt)
+		p.m[1] += ((3/40.*k1[1] + 9/40.*k2[1]) * Dt)
+		p.m[2] += ((3/40.*k1[2] + 9/40.*k2[2]) * Dt)
 	}
 	T += 1 / 10. * Dt
 	if Demag {
@@ -553,11 +554,6 @@ func dopristep(Lijst []*particle) {
 		k2 := p.fehlk2
 		k3 := p.tau(temp)
 		p.fehlk3 = k3
-
-		p.m = p.tempm
-		p.m[0] += ((44/45.*k1[0] - 56/15.*k2[0] + 32/9.*k3[0]) * Dt)
-		p.m[1] += ((44/45.*k1[1] - 56/15.*k2[1] + 32/9.*k3[1]) * Dt)
-		p.m[2] += ((44/45.*k1[2] - 56/15.*k2[2] + 32/9.*k3[2]) * Dt)
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -571,6 +567,12 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[1] += ((44/45.*k1_u[1] - 56/15.*k2_u[1] + 32/9.*k3_u[1]) * Dt)
 			p.u_anis[2] += ((44/45.*k1_u[2] - 56/15.*k2_u[2] + 32/9.*k3_u[2]) * Dt)
 		}
+
+		p.m = p.tempm
+		p.m[0] += ((44/45.*k1[0] - 56/15.*k2[0] + 32/9.*k3[0]) * Dt)
+		p.m[1] += ((44/45.*k1[1] - 56/15.*k2[1] + 32/9.*k3[1]) * Dt)
+		p.m[2] += ((44/45.*k1[2] - 56/15.*k2[2] + 32/9.*k3[2]) * Dt)
+		
 	}
 	T += 1 / 2. * Dt
 	if Demag {
@@ -583,11 +585,6 @@ func dopristep(Lijst []*particle) {
 		k3 := p.fehlk3
 		k4 := p.tau(temp)
 		p.fehlk4 = k4
-
-		p.m = p.tempm
-		p.m[0] += ((19372/6561.*k1[0] - 25360/2187.*k2[0] + 64448/6561.*k3[0] - 212/729.*k4[0]) * Dt)
-		p.m[1] += ((19372/6561.*k1[1] - 25360/2187.*k2[1] + 64448/6561.*k3[1] - 212/729.*k4[1]) * Dt)
-		p.m[2] += ((19372/6561.*k1[2] - 25360/2187.*k2[2] + 64448/6561.*k3[2] - 212/729.*k4[2]) * Dt)
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -602,6 +599,12 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[1] += ((19372/6561.*k1_u[1] - 25360/2187.*k2_u[1] + 64448/6561.*k3_u[1] - 212/729.*k4_u[1]) * Dt)
 			p.u_anis[2] += ((19372/6561.*k1_u[2] - 25360/2187.*k2_u[2] + 64448/6561.*k3_u[2] - 212/729.*k4_u[2]) * Dt)
 		}
+
+		p.m = p.tempm
+		p.m[0] += ((19372/6561.*k1[0] - 25360/2187.*k2[0] + 64448/6561.*k3[0] - 212/729.*k4[0]) * Dt)
+		p.m[1] += ((19372/6561.*k1[1] - 25360/2187.*k2[1] + 64448/6561.*k3[1] - 212/729.*k4[1]) * Dt)
+		p.m[2] += ((19372/6561.*k1[2] - 25360/2187.*k2[2] + 64448/6561.*k3[2] - 212/729.*k4[2]) * Dt)
+		
 	}
 	T += (-4/5. + 8/9.) * Dt
 	if Demag {
@@ -615,11 +618,6 @@ func dopristep(Lijst []*particle) {
 		k4 := p.fehlk4
 		k5 := p.tau(temp)
 		p.fehlk5 = k5
-
-		p.m = p.tempm
-		p.m[0] += ((9017/3168.*k1[0] - 355/33.*k2[0] + 46732/5247.*k3[0] + 49/176.*k4[0] - 5103/18656.*k5[0]) * Dt)
-		p.m[1] += ((9017/3168.*k1[1] - 355/33.*k2[1] + 46732/5247.*k3[1] + 49/176.*k4[1] - 5103/18656.*k5[1]) * Dt)
-		p.m[2] += ((9017/3168.*k1[2] - 355/33.*k2[2] + 46732/5247.*k3[2] + 49/176.*k4[2] - 5103/18656.*k5[2]) * Dt)
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -635,6 +633,12 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[1] += ((9017/3168.*k1_u[1] - 355/33.*k2_u[1] + 46732/5247.*k3_u[1] + 49/176.*k4_u[1] - 5103/18656.*k5_u[1]) * Dt)
 			p.u_anis[2] += ((9017/3168.*k1_u[2] - 355/33.*k2_u[2] + 46732/5247.*k3_u[2] + 49/176.*k4_u[2] - 5103/18656.*k5_u[2]) * Dt)
 		}
+
+		p.m = p.tempm
+		p.m[0] += ((9017/3168.*k1[0] - 355/33.*k2[0] + 46732/5247.*k3[0] + 49/176.*k4[0] - 5103/18656.*k5[0]) * Dt)
+		p.m[1] += ((9017/3168.*k1[1] - 355/33.*k2[1] + 46732/5247.*k3[1] + 49/176.*k4[1] - 5103/18656.*k5[1]) * Dt)
+		p.m[2] += ((9017/3168.*k1[2] - 355/33.*k2[2] + 46732/5247.*k3[2] + 49/176.*k4[2] - 5103/18656.*k5[2]) * Dt)
+		
 	}
 	T += 1 / 9. * Dt
 	if Demag {
@@ -650,12 +654,6 @@ func dopristep(Lijst []*particle) {
 		k5 := p.fehlk5
 		k6 := p.tau(temp)
 		p.fehlk6 = k6
-
-		p.m = p.tempm
-		p.m[0] += ((35/384.*k1[0] + 0.*k2[0] + 500/1113.*k3[0] + 125/192.*k4[0] - 2187/6784.*k5[0] + 11/84.*k6[0]) * Dt)
-		p.m[1] += ((35/384.*k1[1] + 0.*k2[1] + 500/1113.*k3[1] + 125/192.*k4[1] - 2187/6784.*k5[1] + 11/84.*k6[1]) * Dt)
-		p.m[2] += ((35/384.*k1[2] + 0.*k2[2] + 500/1113.*k3[2] + 125/192.*k4[2] - 2187/6784.*k5[2] + 11/84.*k6[2]) * Dt)
-		//and this is also the fifth order solution
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -673,6 +671,13 @@ func dopristep(Lijst []*particle) {
 			p.u_anis[2] += ((35/384.*k1_u[2] + 0.*k2_u[2] + 500/1113.*k3_u[2] + 125/192.*k4_u[2] - 2187/6784.*k5_u[2] + 11/84.*k6_u[2]) * Dt)
 			//and this is also the fifth order solution
 		}
+
+		p.m = p.tempm
+		p.m[0] += ((35/384.*k1[0] + 0.*k2[0] + 500/1113.*k3[0] + 125/192.*k4[0] - 2187/6784.*k5[0] + 11/84.*k6[0]) * Dt)
+		p.m[1] += ((35/384.*k1[1] + 0.*k2[1] + 500/1113.*k3[1] + 125/192.*k4[1] - 2187/6784.*k5[1] + 11/84.*k6[1]) * Dt)
+		p.m[2] += ((35/384.*k1[2] + 0.*k2[2] + 500/1113.*k3[2] + 125/192.*k4[2] - 2187/6784.*k5[2] + 11/84.*k6[2]) * Dt)
+		//and this is also the fifth order solution
+		
 	}
 	if Demag {
 		calculatedemag()
@@ -693,20 +698,6 @@ func dopristep(Lijst []*particle) {
 		p.tempm[1] += ((5179/57600.*k1[1] + 0.*k2[1] + 7571/16695.*k3[1] + 393/640.*k4[1] - 92097/339200.*k5[1] + 187/2100.*k6[1] + 1/40.*k7[1]) * Dt)
 		p.tempm[2] += ((5179/57600.*k1[2] + 0.*k2[2] + 7571/16695.*k3[2] + 393/640.*k4[2] - 92097/339200.*k5[2] + 187/2100.*k6[2] + 1/40.*k7[2]) * Dt)
 		//and this is also the fourth order solution
-		p.m = norm(p.m)
-		p.tempm = norm(p.tempm)
-
-		//the error is the difference between the two solutions
-		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
-
-		//fmt.Println("error    :", error)
-		if Adaptivestep {
-			if error > maxtauwitht {
-				maxtauwitht = error
-			}
-		}
-		//if you have to save mdotH
-		p.heff = p.b_eff(temp)
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -723,6 +714,24 @@ func dopristep(Lijst []*particle) {
 			p.tempu_anis[1] += ((5179/57600.*k1_u[1] + 0.*k2_u[1] + 7571/16695.*k3_u[1] + 393/640.*k4_u[1] - 92097/339200.*k5_u[1] + 187/2100.*k6_u[1] + 1/40.*k7_u[1]) * Dt)
 			p.tempu_anis[2] += ((5179/57600.*k1_u[2] + 0.*k2_u[2] + 7571/16695.*k3_u[2] + 393/640.*k4_u[2] - 92097/339200.*k5_u[2] + 187/2100.*k6_u[2] + 1/40.*k7_u[2]) * Dt)
 			//and this is also the fourth order solution
+		}
+				
+		p.m = norm(p.m)
+		p.tempm = norm(p.tempm)
+
+		//the error is the difference between the two solutions
+		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
+
+		//fmt.Println("error    :", error)
+		if Adaptivestep {
+			if error > maxtauwitht {
+				maxtauwitht = error
+			}
+		}
+		//if you have to save mdotH
+		p.heff = p.b_eff(temp)
+		
+		if (BrownianRotation) { //only calculate anisodynamics when requested
 			p.u_anis = norm(p.u_anis)
 			p.tempu_anis = norm(p.tempu_anis)
 			
