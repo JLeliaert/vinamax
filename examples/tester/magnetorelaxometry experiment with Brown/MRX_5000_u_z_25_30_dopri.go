@@ -41,7 +41,7 @@ func main() {
 	Brown=true
 	Temp = 300.
 	//Set a randomseed for the thermal field
-	Setrandomseed(2)
+	Setrandomseed(1)
 	//The Gilbert damping constant =0.1
 	Alpha = 0.1
 	//anisotropy constant=10 000 J/m**3

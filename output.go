@@ -17,6 +17,7 @@ var output_B_ext = false
 var output_Dt = false
 var output_nrmzpos = false
 var output_mdoth = false
+var output_u_anis = false
 
 //var timelastswitch =0.//EXTRA
 //var updownswitch =true//EXTRA
@@ -129,6 +130,11 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+	if output_u_anis {
+		header := fmt.Sprintf("\tu_anis_x\tu_anis_y\tu_anis_z")
+		_, err = f.WriteString(header)
+		check(err)		
+	}
 	for i := range locations {
 
 		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
@@ -191,6 +197,11 @@ func write(avg vector) {
 		}
 		if output_mdoth {
 			string = fmt.Sprintf("\t%v", averagemdoth(universe.lijst))
+			_, err = f.WriteString(string)
+			check(err)
+		}
+		if output_u_anis {
+			string = fmt.Sprintf("\t%v\t%v\t%v", universe.lijst[0].u_anis[0], universe.lijst[0].u_anis[1], universe.lijst[0].u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -272,6 +283,11 @@ func Tableadd(a string) {
 	case "mdoth":
 		{
 			output_mdoth = true
+		}
+		
+	case "u_anis":
+		{
+			output_u_anis = true
 		}
 
 	default:

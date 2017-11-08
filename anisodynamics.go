@@ -11,8 +11,8 @@ var anisrng = rand.New(rand.NewSource(0))
 //using the Langevin equation
 func (p *particle) tau_u(randomv vector) vector {
 	mvf := p.m.times((4. / 3. * math.Pi * cube(p.r) * p.msat) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
-	mvfcrossHeff := mvf.cross(p.heff)
-	return mvfcrossHeff.add(randomv)
+	mvfcrossHeff := mvf.cross(p.heff.add(p.anis().times(-1)))
+	return mvfcrossHeff.cross(p.u_anis).add(randomv)
 }
 
 //Set the randomseed for the anisotropy dynamics 
