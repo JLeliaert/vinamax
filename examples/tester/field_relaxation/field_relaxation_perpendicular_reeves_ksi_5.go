@@ -20,8 +20,8 @@ func main() {
 	test.Setviscosity(1.e-3)
 
 	//the particle have radius 12.5 nm and a hydrodynamic radius (core + coating together) of 15 nm 
-	Particle_radius(25e-9)
-	Particle_radius_h(30e-9)
+	Particle_radius(25.e-9)
+	Particle_radius_h(30.e-9)
 
 	//Adds a single particles with radii defined above to the cube with viscosity 1 mPas
 	test.Addparticles(10000)
@@ -30,11 +30,11 @@ func main() {
 	Demag=false
 
 	//saturation magnetisation 400 000 A/m
-	Msat(860e3)
+	Msat(860.e3)
 	
 	//apply an external field along the z direction of 1mT
 	//B_ext can be an arbitrary function of time
-	B_ext = func(t float64) (float64, float64, float64) { return 0, 0, 3.68e-4} 
+	B_ext = func(t float64) (float64, float64, float64) { return 3.68e-4, 0, 0} 
 
 	Adaptivestep = true
 	//timestep : 2ps
@@ -43,7 +43,7 @@ func main() {
 	T = 0.
 	//Temperature at 300 Kelvin
 	Brown=true
-	Temp = 300
+	Temp = 300.
 	//Set a randomseed for the thermal field
 	Setrandomseed(2)
 	//The Gilbert damping constant =0.1
@@ -52,10 +52,10 @@ func main() {
 	Ku1 = 10000 
 
 	//anisotropy axis is perpendicular
-	Anisotropy_axis(1,0,0)
+	Anisotropy_axis(0,0,1)
 	
 	//initialise the magnetisation parallel to anisotropy axis
-	M_uniform(1,0,0)
+	M_uniform(0,0,1)
 	
 	//curently anisodynamics only works with Euler
 	Setsolver("dopri")

@@ -10,9 +10,10 @@ var anisrng = rand.New(rand.NewSource(0))
 //Calculates the torque working on the uniaxial anisotropy axis of a particle
 //using the Langevin equation
 func (p *particle) tau_u(randomv vector) vector {
-	mvf := p.m.times((4. / 3. * math.Pi * cube(p.r) * p.msat) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
-	mvfcrossHeff := mvf.cross(p.heff.add(p.anis().times(-1)))
-	return mvfcrossHeff.cross(p.u_anis).add(randomv)
+	mdotu := p.m.dot(p.u_anis)
+	ucoef := (mdotu * mdotu) - mdotu
+	upart := p.u_anis.times((-1)* ucoef * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+	return upart.add(randomv)
 }
 
 //Set the randomseed for the anisotropy dynamics 
