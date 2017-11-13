@@ -11,8 +11,8 @@ var anisrng = rand.New(rand.NewSource(0))
 //using the Langevin equation
 func (p *particle) tau_u(randomv vector) vector {
 	mdotu := p.m.dot(p.u_anis)
-	ucoef := (mdotu * mdotu) - mdotu
-	upart := p.u_anis.times((-1)* ucoef * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+	uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
+	upart := uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
 	return upart.add(randomv)
 }
 
