@@ -1212,12 +1212,12 @@ func undobadstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.m = p.previousm
 	}
-	T -= Dt
+	T -= Dt 
 }
 
 func undobadstep_u_anis(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.u_anis = p.previousu_anis
 	}
-	T -= Dt
+	//T -= Dt //do not repeat this! is already done for both!!!
 }
