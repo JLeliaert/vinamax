@@ -42,7 +42,7 @@ func main() {
 	//initialise time at zero
 	T = 0.
 	//Temperature at 300 Kelvin
-	Brown=true
+	Brown = true
 	Temp = 300.
 	//Set a randomseed for the thermal field
 	Setrandomseed(2)
