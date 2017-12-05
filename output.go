@@ -18,8 +18,6 @@ var output_Dt = false
 var output_nrmzpos = false
 var output_mdoth = false
 var output_u_anis = false
-var output_du_dt = false
-var output_dm_dt = false
 
 //var timelastswitch =0.//EXTRA
 //var updownswitch =true//EXTRA
@@ -63,6 +61,17 @@ func averages(lijst []*particle) vector {
 		avgs[0] += lijst[i].m[0]
 		avgs[1] += lijst[i].m[1]
 		avgs[2] += lijst[i].m[2]
+	}
+	return avgs.times(1. / float64(len(lijst)))
+}
+
+//calculates the average anisotropy components of all particles
+func averages_u(lijst []*particle) vector {
+	avgs := vector{0, 0, 0}
+	for i := range lijst {
+		avgs[0] += lijst[i].u_anis[0]
+		avgs[1] += lijst[i].u_anis[1]
+		avgs[2] += lijst[i].u_anis[2]
 	}
 	return avgs.times(1. / float64(len(lijst)))
 }
@@ -137,16 +146,6 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)		
 	}
-	if output_du_dt {
-		header := fmt.Sprintf("\tdu_dt_x\tdu_dt_y\tdu_dt_z")
-		_, err = f.WriteString(header)
-		check(err)
-	}
-	if output_dm_dt {
-		header := fmt.Sprintf("\tdm_dt_x\tdm_dt_y\tdm_dt_z")
-		_, err = f.WriteString(header)
-		check(err)
-	}
 	for i := range locations {
 
 		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
@@ -213,20 +212,12 @@ func write(avg vector) {
 			check(err)
 		}
 		if output_u_anis {
-			string = fmt.Sprintf("\t%v\t%v\t%v", universe.lijst[0].u_anis[0], universe.lijst[0].u_anis[1], universe.lijst[0].u_anis[2])
+			averaged_u_anis := averages_u(universe.lijst)
+			string = fmt.Sprintf("\t%v\t%v\t%v",averaged_u_anis[0],averaged_u_anis[1],averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
-		if output_du_dt {
-		string = fmt.Sprintf("\t%v\t%v\t%v", universe.lijst[0].fehlk1_u[0], universe.lijst[0].fehlk1_u[1], universe.lijst[0].fehlk1_u[2])
-			_, err = f.WriteString(string)
-			check(err)
-		}
-		if output_dm_dt {
-		string = fmt.Sprintf("\t%v\t%v\t%v", universe.lijst[0].fehlk1[0], universe.lijst[0].fehlk1[1], universe.lijst[0].fehlk1[2])
-			_, err = f.WriteString(string)
-			check(err)
-		}
+		
 		for i := range locations {
 
 			string = fmt.Sprintf("\t%v\t%v\t%v", (demag(locations[i][0], locations[i][1], locations[i][2])[0]), (demag(locations[i][0], locations[i][1], locations[i][2])[1]), (demag(locations[i][0], locations[i][1], locations[i][2])[2]))
@@ -311,15 +302,7 @@ func Tableadd(a string) {
 		{
 			output_u_anis = true
 		}
-	case "du_dt":
-		{
-			output_du_dt = true
-		}
-	case "dm_dt":
-		{
-			output_dm_dt = true
-		}
-
+	
 
 	default:
 		{
