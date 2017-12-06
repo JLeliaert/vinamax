@@ -58,7 +58,7 @@ var (
 	Brown               bool = false
 	BrownianRotation    bool = false
 	viscositycalled     bool = false
-	noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
+	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
 )
 
 //initialised B_ext functions
@@ -127,9 +127,9 @@ func syntaxrun() {
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
-	if BrownianRotation == false && noMagDyn == true {
-		log.Fatal("You have to calculate something, e.g. anisotropy dynamics or magnetisation dynamics or both")
-	}
+	//if BrownianRotation == false && noMagDyn == true {
+	//	log.Fatal("You have to calculate something, e.g. anisotropy dynamics or magnetisation dynamics or both")
+	//}
 	//if Brown == true && Adaptivestep == true { see paper Leliaert et. al 2017
 	//	log.Fatal("Brown Temperature can only be used with fixed timestep")
 	//}
