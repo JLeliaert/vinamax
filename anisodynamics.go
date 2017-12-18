@@ -10,10 +10,27 @@ var anisrng = rand.New(rand.NewSource(0))
 //Calculates the torque working on the uniaxial anisotropy axis of a particle
 //using the Langevin equation
 func (p *particle) tau_u(randomv vector) vector {
-	mdotu := p.m.dot(p.u_anis)
-	uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
-	upart := uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+	//exit condition 1 and 2
+	upart := vector{0., 0., 0.}
+	if condition_1 == false { //this occurs when magn dynamics are much slower than rotational dynamics
+		if condition_2 {
+			mdotu := p.m.dot(p.u_anis)
+			uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
+			upart = uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
+			pheff := &p.heff
+			heffxm := pheff.cross(p.m)
+			pm := &p.m
+			mxheffxm := pm.cross(heffxm)
+			mxheffxmxu := (&mxheffxm).cross(p.u_anis).times(mu0 * Alpha * p.msat * 4. / 3. * math.Pi * cube(p.r)/ ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
+			upart = upart.add(mxheffxmxu)
+		} else { //no conservation of angular momentum (e.g. Reeves' paper)
+			mdotu := p.m.dot(p.u_anis)
+			uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
+			upart = uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+		}
+	}
 	return upart.add(randomv)
+	
 }
 
 //Set the randomseed for the anisotropy dynamics 
