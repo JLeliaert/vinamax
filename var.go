@@ -59,8 +59,8 @@ var (
 	BrownianRotation    bool = false
 	viscositycalled     bool = false
 	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
-	condition_1	    bool = false
-	condition_2	    bool = false
+	Condition_1	    bool = false
+	Condition_2	    bool = false
 )
 
 //initialised B_ext functions

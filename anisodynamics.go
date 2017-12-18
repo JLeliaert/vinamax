@@ -12,8 +12,8 @@ var anisrng = rand.New(rand.NewSource(0))
 func (p *particle) tau_u(randomv vector) vector {
 	//exit condition 1 and 2
 	upart := vector{0., 0., 0.}
-	if condition_1 == false { //this occurs when magn dynamics are much slower than rotational dynamics
-		if condition_2 {
+	if Condition_1 == false { //this occurs when magn dynamics are much slower than rotational dynamics
+		if Condition_2 {
 			mdotu := p.m.dot(p.u_anis)
 			uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
 			upart = uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
