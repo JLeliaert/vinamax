@@ -129,6 +129,15 @@ func syntaxrun() {
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
+	if BrownianRotation == false && Condition_1 == true {
+		log.Fatal("You have to calculate anisotropy dynamics for condition 1 to be true")
+	}
+	if BrownianRotation == false && Condition_2 == true {
+		log.Fatal("You have to calculate anisotropy dynamics for condition 2 to be true")
+	}
+	if Condition_1 && Condition_2 == false {
+		log.Fatal("This situation is not yet implemented")
+	}
 	//if BrownianRotation == false && noMagDyn == true {
 	//	log.Fatal("You have to calculate something, e.g. anisotropy dynamics or magnetisation dynamics or both")
 	//}
