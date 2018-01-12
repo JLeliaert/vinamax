@@ -12,7 +12,14 @@ var anisrng = rand.New(rand.NewSource(0))
 func (p *particle) tau_u(randomv vector) vector {
 	//exit condition 1 and 2
 	upart := vector{0., 0., 0.}
-	if Condition_1 == false { //this occurs when magn dynamics are much slower than rotational dynamics
+	if Condition_1 {
+		pdmdt := &p.dmdt
+		dmdtxu := pdmdt.cross(p.u_anis).times(mu0 * p.msat * 4. / 3. * math.Pi * cube(p.r)/ (gamma0 * 6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+		hexthdemag := p.demagnetising_field.add(p.zeeman())
+		hexthdemagxm := (&hexthdemag).cross(p.m)
+		hexthdemagxmxu := (&hexthdemagxm).cross(p.u_anis).times((-1) * mu0 * p.msat * 4. / 3. * math.Pi * cube(p.r) / (6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h)))
+		upart = dmdtxu.add(hexthdemagxmxu)
+	} else { //this occurs when magn dynamics are much slower than rotational dynamics
 		if Condition_2 {
 			mdotu := p.m.dot(p.u_anis)
 			uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))

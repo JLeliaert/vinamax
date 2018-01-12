@@ -217,12 +217,20 @@ func Run(time float64) {
 func eulerstep(Lijst []*particle) {
 	for _, p := range Lijst {
 		temp := p.temp()
-
+	if Condition_1 {//necessary to have noise field of anisodynamics
+			p.randomvfield = p.randomv()
+		}
 		tau := p.tau(temp)
 		
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
-			randomv := p.randomv()
+			randomv := vector{0., 0., 0.}
+			if Condition_1 { 
+			  randomv = p.randomvfield
+			} else { //we still need to calculate randomv
+				randomv = p.randomv()
+				p.randomvfield = randomv
+			}
 			
 			 tau_u := p.tau_u(randomv)
 			 p.u_anis[0] += tau_u[0] * Dt
@@ -492,19 +500,27 @@ func dopristep(Lijst []*particle) {
 	for _, p := range Lijst {
 		p.tempm = p.m
 		p.previousm = p.m
+		if Condition_1 {//necessary to have noise field of anisodynamics
+			p.randomvfield = p.randomv()
+		}
 
 		temp := p.temp()
 		k1 := p.tau(temp)
 		p.tempfield = temp
 		p.fehlk1 = k1
+		p.dmdt = k1
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			p.tempu_anis = p.u_anis
 			p.previousu_anis = p.u_anis
-			
-			randomv := p.randomv()
+			randomv := vector{0., 0., 0.}
+			if Condition_1 { 
+			  randomv = p.randomvfield
+			} else { //we still need to calculate randomv
+				randomv = p.randomv()
+				p.randomvfield = randomv
+			}
 			k1_u := p.tau_u(randomv)
-			p.randomvfield = randomv
 			p.fehlk1_u = k1_u
 			
 			p.u_anis[0] += k1_u[0] * 1 / 5. * Dt
@@ -527,6 +543,7 @@ func dopristep(Lijst []*particle) {
 		k1 := p.fehlk1
 		k2 := p.tau(temp)
 		p.fehlk2 = k2
+		p.dmdt = k2
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 						
@@ -545,6 +562,7 @@ func dopristep(Lijst []*particle) {
 		p.m[0] += ((3/40.*k1[0] + 9/40.*k2[0]) * Dt)
 		p.m[1] += ((3/40.*k1[1] + 9/40.*k2[1]) * Dt)
 		p.m[2] += ((3/40.*k1[2] + 9/40.*k2[2]) * Dt)
+		
 	}
 	T += 1 / 10. * Dt
 	if Demag {
@@ -556,6 +574,7 @@ func dopristep(Lijst []*particle) {
 		k2 := p.fehlk2
 		k3 := p.tau(temp)
 		p.fehlk3 = k3
+		p.dmdt = k3
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -575,6 +594,7 @@ func dopristep(Lijst []*particle) {
 		p.m[1] += ((44/45.*k1[1] - 56/15.*k2[1] + 32/9.*k3[1]) * Dt)
 		p.m[2] += ((44/45.*k1[2] - 56/15.*k2[2] + 32/9.*k3[2]) * Dt)
 		
+		
 	}
 	T += 1 / 2. * Dt
 	if Demag {
@@ -587,6 +607,7 @@ func dopristep(Lijst []*particle) {
 		k3 := p.fehlk3
 		k4 := p.tau(temp)
 		p.fehlk4 = k4
+		p.dmdt = k4
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -607,6 +628,7 @@ func dopristep(Lijst []*particle) {
 		p.m[1] += ((19372/6561.*k1[1] - 25360/2187.*k2[1] + 64448/6561.*k3[1] - 212/729.*k4[1]) * Dt)
 		p.m[2] += ((19372/6561.*k1[2] - 25360/2187.*k2[2] + 64448/6561.*k3[2] - 212/729.*k4[2]) * Dt)
 		
+		
 	}
 	T += (-4/5. + 8/9.) * Dt
 	if Demag {
@@ -620,6 +642,7 @@ func dopristep(Lijst []*particle) {
 		k4 := p.fehlk4
 		k5 := p.tau(temp)
 		p.fehlk5 = k5
+		p.dmdt = k5
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -656,6 +679,7 @@ func dopristep(Lijst []*particle) {
 		k5 := p.fehlk5
 		k6 := p.tau(temp)
 		p.fehlk6 = k6
+		p.dmdt = k6
 		
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := p.randomvfield
@@ -695,6 +719,7 @@ func dopristep(Lijst []*particle) {
 		k6 := p.fehlk6
 		k7 := p.tau(temp)
 		p.fehlk7 = k7
+		p.dmdt = k7
 
 		p.tempm[0] += ((5179/57600.*k1[0] + 0.*k2[0] + 7571/16695.*k3[0] + 393/640.*k4[0] - 92097/339200.*k5[0] + 187/2100.*k6[0] + 1/40.*k7[0]) * Dt)
 		p.tempm[1] += ((5179/57600.*k1[1] + 0.*k2[1] + 7571/16695.*k3[1] + 393/640.*k4[1] - 92097/339200.*k5[1] + 187/2100.*k6[1] + 1/40.*k7[1]) * Dt)

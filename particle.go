@@ -25,6 +25,8 @@ type particle struct {
 	eta		    float64 //viscosity of particle surroundings
 
 	heff      vector //effective field
+	dmdt	  vector //dm/dt for use in du/dt when condition 1
+	omega	  vector //for dm/dt and du/dt in condition 1
 	tempfield vector
 	randomvfield vector
 	tempm     vector
