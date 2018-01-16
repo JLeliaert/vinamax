@@ -24,10 +24,9 @@ if Condition_1 {
 		//check with Jonathan
 		p.heff =p.b_eff(temp)
 		// was originally not saved to heff
-		mxB := pm.cross(p.heff)
+		mxB = pm.cross(p.heff)
 		amxmxB := pm.cross(mxB).times(Alpha)
 		mxB = mxB.add(amxmxB).times(-gammaoveralpha)
 	}
-	
 	return mxB
 }

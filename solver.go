@@ -221,8 +221,7 @@ func eulerstep(Lijst []*particle) {
 			p.randomvfield = p.randomv()
 		}
 		tau := p.tau(temp)
-		
-		
+				
 		if (BrownianRotation) { //only calculate anisodynamics when requested
 			randomv := vector{0., 0., 0.}
 			if Condition_1 { 
