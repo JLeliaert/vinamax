@@ -61,6 +61,7 @@ var (
 	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
 	Condition_1	    bool = false
 	Condition_2	    bool = false
+	Test		    bool = false
 )
 
 //initialised B_ext functions

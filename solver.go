@@ -521,6 +521,9 @@ func dopristep(Lijst []*particle) {
 			}
 			k1_u := p.tau_u(randomv)
 			p.fehlk1_u = k1_u
+			//fmt.Println("k1_u0   ", k1_u[0])
+			//fmt.Println("k1_u1   ", k1_u[1])
+			//fmt.Println("k1_u2   ", k1_u[2])
 			
 			p.u_anis[0] += k1_u[0] * 1 / 5. * Dt
 			p.u_anis[1] += k1_u[1] * 1 / 5. * Dt
