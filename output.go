@@ -69,6 +69,12 @@ func averages(lijst []*particle) vector {
 func averages_u(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	for i := range lijst {
+		if lijst[i].u_anis[0] < 0 {
+			lijst[i].u_anis[0] = (-1)*lijst[i].u_anis[0]
+			lijst[i].u_anis[1] = (-1)*lijst[i].u_anis[1]
+			lijst[i].u_anis[2] = (-1)*lijst[i].u_anis[2]
+		
+		}
 		avgs[0] += lijst[i].u_anis[0]
 		avgs[1] += lijst[i].u_anis[1]
 		avgs[2] += lijst[i].u_anis[2]
