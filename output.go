@@ -82,6 +82,21 @@ func averages_u(lijst []*particle) vector {
 	return avgs.times(1. / float64(len(lijst)))
 }
 
+func averages_u_xy(lijst []*particle) vector {
+	avgs := vector{0, 0, 0}
+	for i := range lijst {
+		if lijst[i].u_anis[0] < 0 {
+			lijst[i].u_anis[0] = (-1)*lijst[i].u_anis[0]
+			lijst[i].u_anis[1] = (-1)*lijst[i].u_anis[1]
+			lijst[i].u_anis[2] = (-1)*lijst[i].u_anis[2]
+		
+		}
+		avgs[0] += math.Sqrt(lijst[i].u_anis[0]*lijst[i].u_anis[0]) + (lijst[i].u_anis[1]*lijst[i].u_anis[1])
+		avgs[2] += lijst[i].u_anis[2]
+	}
+	return avgs.times(1. / float64(len(lijst)))
+}
+
 //calculates the average moments of all particles
 //TODO weigh with msat
 func averagemoments(lijst []*particle) vector {
@@ -149,6 +164,11 @@ func writeheader() {
 	}
 	if output_u_anis {
 		header := fmt.Sprintf("\tu_anis_x\tu_anis_y\tu_anis_z")
+		_, err = f.WriteString(header)
+		check(err)		
+	}
+	if output_u_anis_xy {
+		header := fmt.Sprintf("\tu_anis_xy\tu_anis_z")
 		_, err = f.WriteString(header)
 		check(err)		
 	}
@@ -220,6 +240,12 @@ func write(avg vector) {
 		if output_u_anis {
 			averaged_u_anis := averages_u(universe.lijst)
 			string = fmt.Sprintf("\t%v\t%v\t%v",averaged_u_anis[0],averaged_u_anis[1],averaged_u_anis[2])
+			_, err = f.WriteString(string)
+			check(err)
+		}
+		if output_u_anis_xy {
+			averaged_u_anis := averages_u_xy(universe.lijst)
+			string = fmt.Sprintf("\t%v\t%v",averaged_u_anis[0],averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -308,6 +334,10 @@ func Tableadd(a string) {
 		{
 			output_u_anis = true
 		}
+	case "u_anis_xy":
+		{
+			output_u_anis_xy = true
+		}	
 	
 
 	default:
