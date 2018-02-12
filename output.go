@@ -94,53 +94,7 @@ func averages_u(lijst []*particle) vector {
 		avgs[0] += lijst[i].u_anis[0]
 		avgs[1] += lijst[i].u_anis[1]
 		avgs[2] += lijst[i].u_anis[2]
-		if T >= 3./Freq && T < 4./Freq {//T < 1./Freq {
-			if lijst[i].u_anis[0] > Max_u_anis_x{
-			fmt.Println("maximal x value",lijst[i].u_anis[0])
-			Max_u_anis_x = lijst[i].u_anis[0]
-			}
-			if lijst[i].u_anis[2] >Max_u_anis_z{
-			fmt.Println("maximal z value",lijst[i].u_anis[2])
-			Max_u_anis_z = lijst[i].u_anis[2]
-			}
-			if lijst[i].u_anis[0] < Min_u_anis_x{
-			Min_u_anis_x = lijst[i].u_anis[0]
-			}
-			if lijst[i].u_anis[2] < Min_u_anis_z{
-			Min_u_anis_z = lijst[i].u_anis[2]
-			}
-		}
-		if T >= 4./Freq && T < 5./Freq {
-			if lijst[i].u_anis[0] >Max_u_anis_x_2{
-			Max_u_anis_x_2 = lijst[i].u_anis[0]
-			}
-			if lijst[i].u_anis[2] >Max_u_anis_z_2{
-			Max_u_anis_z_2 = lijst[i].u_anis[2]
-			}
-			if lijst[i].u_anis[0] < Min_u_anis_x_2{
-			Min_u_anis_x_2 = lijst[i].u_anis[0]
-			}
-			if lijst[i].u_anis[2] < Min_u_anis_z_2{
-			Min_u_anis_z_2 = lijst[i].u_anis[2]
-			}
-		}
-		if T >= 6./Freq {
-			Trigger = true
-		}
-		if Trigger {
-			fmt.Println("x2 - x1: %d",Max_u_anis_x_2-Max_u_anis_x)
-			fmt.Println("z2 - z1: %d",Max_u_anis_z_2-Max_u_anis_z)
-			T = 4.1e-3
-			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) > ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
-				
-				Print1 = true	
-
-			}	
-			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) < ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
-				Print0 = true
-
-			}
-		}
+		
 		
 		
 		//if lijst[i].u_anis[0] > 0.8 {
@@ -153,7 +107,56 @@ func averages_u(lijst []*particle) vector {
 		//}
 		
 	}
-	return avgs.times(1. / float64(len(lijst)))
+	avgs = avgs.times(1. / float64(len(lijst)))
+	
+	if T >= 3./Freq && T < 4./Freq {//T < 1./Freq {
+			if avgs[0] > Max_u_anis_x{
+			//fmt.Println("maximal x value",avgs[0])
+			Max_u_anis_x = avgs[0]
+			}
+			if avgs[2] >Max_u_anis_z{
+			//fmt.Println("maximal z value",avgs[2])
+			Max_u_anis_z = avgs[2]
+			}
+			if avgs[0] < Min_u_anis_x{
+			Min_u_anis_x = avgs[0]
+			}
+			if avgs[2] < Min_u_anis_z{
+			Min_u_anis_z = avgs[2]
+			}
+		}
+		if T >= 4./Freq && T < 5./Freq {
+			if avgs[0] >Max_u_anis_x_2{
+			Max_u_anis_x_2 = avgs[0]
+			}
+			if avgs[2] >Max_u_anis_z_2{
+			Max_u_anis_z_2 = avgs[2]
+			}
+			if avgs[0] < Min_u_anis_x_2{
+			Min_u_anis_x_2 = avgs[0]
+			}
+			if avgs[2] < Min_u_anis_z_2{
+			Min_u_anis_z_2 = avgs[2]
+			}
+		}
+		if T >= 6./Freq {
+			Trigger = true
+		}
+		if Trigger {
+			//fmt.Println("x2 - x1: %d",Max_u_anis_x_2-Max_u_anis_x)
+			//fmt.Println("z2 - z1: %d",Max_u_anis_z_2-Max_u_anis_z)
+			T = 4.1e-3
+			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) > ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
+				
+				Print1 = true	
+
+			}	
+			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) < ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
+				Print0 = true
+
+			}
+		}
+	return avgs
 }
 
 func averages_u_xy(lijst []*particle) vector {
