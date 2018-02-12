@@ -23,19 +23,19 @@ func (p *particle) tau_u(randomv vector) vector {
 		//fmt.Println("u0:   ", upart[0])
 		//fmt.Println("u1:   ", upart[1])
 		//fmt.Println("u2:   ", upart[2])
-		if Test {mdotu := p.m.dot(p.u_anis)
-			uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
-			upart = uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
-			pheff := &p.heff
-			heffxm := pheff.cross(p.m)
-			pm := &p.m
-			mxheffxm := pm.cross(heffxm)
-			mxheffxmxu := (&mxheffxm).cross(p.u_anis).times(mu0 * Alpha * p.msat * 4. / 3. * math.Pi * cube(p.r)/ ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
-			upart = upart.add(mxheffxmxu)
+		//if Test {mdotu := p.m.dot(p.u_anis)
+		//	uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
+		//	upart = uminm.times((-1) * mdotu * (2* Ku1 * 4. / 3. * math.Pi * cube(p.r)) / ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
+		//	pheff := &p.heff
+		//	heffxm := pheff.cross(p.m)
+		//	pm := &p.m
+		//	mxheffxm := pm.cross(heffxm)
+		//	mxheffxmxu := (&mxheffxm).cross(p.u_anis).times(mu0 * Alpha * p.msat * 4. / 3. * math.Pi * cube(p.r)/ ((6. * p.eta * 4. / 3. * math.Pi * cube(p.r_h))*(1+(Alpha*Alpha))))
+		//	upart = upart.add(mxheffxmxu)
 			//fmt.Println("u0_test:   ", upart[0])
 			//fmt.Println("u1_test:   ", upart[1])
 			//fmt.Println("u2_test:   ", upart[2])
-		}
+		//}
 	} else { //this occurs when magn dynamics are much slower than rotational dynamics
 		if Condition_2 {
 			mdotu := p.m.dot(p.u_anis)

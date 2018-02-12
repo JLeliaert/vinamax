@@ -105,6 +105,15 @@ func Anisotropy_random() {
 	}
 }
 
+//Gives all particles a random anisotropy-axis in the xy plane
+func Anisotropy_random_xy() {
+	uaniscalled = true
+	for i := range universe.lijst {
+		phi := rng.Float64() * (2 * math.Pi)
+		universe.lijst[i].u_anis = vector{math.Cos(phi), math.Sin(phi), 0}
+	}
+}
+
 //Gives all particles with random magnetisation orientation
 func M_random() {
 	magnetisationcalled = true
@@ -112,6 +121,15 @@ func M_random() {
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
 		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+	}
+}
+
+//Gives all particles with random magnetisation orientation in the xy plane
+func M_random_xy() {
+	magnetisationcalled = true
+	for i := range universe.lijst {
+		phi := rng.Float64() * (2 * math.Pi)
+		universe.lijst[i].m = vector{math.Cos(phi),math.Sin(phi), 0}
 	}
 }
 
