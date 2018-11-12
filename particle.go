@@ -48,10 +48,7 @@ func (p particle) string() string {
 //Gives all particles the same specified uniaxialanisotropy-axis
 func Anisotropy_axis(x, y, z float64) {
 	uaniscalled = true
-	a := norm(vector{x, y, z})
-	for i := range universe.lijst {
-		universe.lijst[i].u_anis = a
-	}
+	global_u_anis = norm(vector{x, y, z})
 }
 
 //Gives all particles the same specified cubic1anisotropy-axis

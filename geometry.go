@@ -25,7 +25,7 @@ func addparticle(x, y, z float64) bool {
 	//}
 
 	if universe.inworld(vector{x, y, z}) {
-		a := particle{x: x, y: y, z: z, r: radius}
+		a := particle{x: x, y: y, z: z, r: radius, u_anis: global_u_anis}
 		universe.lijst = append(universe.lijst, &a)
 		universe.number += 1
 		msatcalled = false
@@ -117,7 +117,7 @@ func getradius() float64 {
 	}
 	if logradiuscalled {
 		for {
-			x := rng.Float64() * 200 * logradius_m
+			x := rng.Float64() * 2. * logradius_m
 			f_x := 1. / (math.Sqrt(2*math.Pi) * logradius_s * x) * math.Exp(-1./(2.*logradius_s*logradius_s)*sqr(math.Log(x/logradius_m)))
 			if rng.Float64() < f_x {
 				return x * 1e-9 / 2.

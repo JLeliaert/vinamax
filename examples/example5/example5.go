@@ -72,7 +72,7 @@ func main() {
 
 	//write output every 2e-12s 
 	Output(2e-12)
-	
+
 	//saves the geometry of the simulation
 	Save("geometry")
 
@@ -85,4 +85,4 @@ func main() {
 	//saves the magnetisation of particles in the simulation
 	Save("m")
 }
-	
+

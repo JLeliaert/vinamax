@@ -17,6 +17,7 @@ var output_B_ext = false
 var output_Dt = false
 var output_nrmzpos = false
 var output_mdoth = false
+var output_allmag = false
 
 //var timelastswitch =0.//EXTRA
 //var updownswitch =true//EXTRA
@@ -129,6 +130,14 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+	if output_allmag {
+		for range universe.lijst {
+			header := fmt.Sprintf("\tm_x\tm_y\tm_z")
+			_, err = f.WriteString(header)
+			check(err)
+		}
+	}
+
 	for i := range locations {
 
 		header = fmt.Sprintf("\t(B_x\tB_y\tB_z)@(%v,%v,%v)", locations[i][0], locations[i][1], locations[i][2])
@@ -161,10 +170,9 @@ func Tableadd_b_at_location(x, y, z float64) {
 
 }
 
-func Give_mz() float64{
-    return averagemoments(universe.lijst)[2]
+func Give_mz() float64 {
+	return averagemoments(universe.lijst)[2]
 }
-
 
 //Writes the time and the vector of average magnetisation in the table
 func write(avg vector) {
@@ -193,6 +201,13 @@ func write(avg vector) {
 			string = fmt.Sprintf("\t%v", averagemdoth(universe.lijst))
 			_, err = f.WriteString(string)
 			check(err)
+		}
+		if output_allmag {
+			for _, i := range universe.lijst {
+				string = fmt.Sprintf("\t%v\t%v\t%v", i.m[0], i.m[1], i.m[2])
+				_, err = f.WriteString(string)
+				check(err)
+			}
 		}
 		for i := range locations {
 
@@ -243,6 +258,19 @@ func Save(a string) {
 				check(error)
 			}
 		}
+	case "anis":
+		{
+			// loop over entire list with particles and print location, radius, msat and mag
+			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tu_anis_x\tu_anis_y\tu_anis_z\n", T)
+			_, err = file.WriteString(header)
+			check(err)
+
+			for i := range universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].u_anis[0], universe.lijst[i].u_anis[1], universe.lijst[i].u_anis[2])
+				_, error = file.WriteString(string)
+				check(error)
+			}
+		}
 	default:
 		{
 			log.Fatal(a, " is not a quantitity that can be saved")
@@ -272,6 +300,10 @@ func Tableadd(a string) {
 	case "mdoth":
 		{
 			output_mdoth = true
+		}
+	case "allmag":
+		{
+			output_allmag = true
 		}
 
 	default:

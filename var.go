@@ -16,9 +16,10 @@ var (
 	gammaoveralpha float64                                                      //g/1+alfa^2
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
-	Kc1            float64                                              = 0     // Cubic anisotropy constant in J/m**3
-	Errortolerance float64                                              = 1e-5
-	Thresholdbeta  float64                                              = 0.3 // The threshold value for the FMM
+	global_u_anis  vector
+	Kc1            float64 = 0 // Cubic anisotropy constant in J/m**3
+	Errortolerance float64 = 1e-5
+	Thresholdbeta  float64 = 0.3 // The threshold value for the FMM
 	demagtime      float64
 	universe       node           // The entire universe of the simulation
 	FMM            bool   = false // Calculate demag with FMM method
@@ -34,7 +35,7 @@ var (
 	constradius float64
 	logradius_m float64
 	logradius_s float64
-	Tau0 float64 =1e-8
+	Tau0        float64 = 1e-8
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
@@ -113,9 +114,9 @@ func syntaxrun() {
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
-	if Brown == true && Adaptivestep == true {
-		log.Fatal("Brown Temperature can only be used with fixed timestep")
-	}
+	//	if Brown == true && Adaptivestep == true {
+	//		log.Fatal("Brown Temperature can only be used with fixed timestep")
+	//	}
 	if Jumpnoise == true {
 		resetswitchtimes(universe.lijst)
 	}

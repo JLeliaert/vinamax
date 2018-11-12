@@ -74,7 +74,7 @@ func attemptf0(p *particle) float64 {
 	volume := cube(p.r) * 4. / 3. * math.Pi
 	delta := Ku1 * volume / (kb * Temp)
 
-	return 1./Tau0*math.Exp(-delta)
+	return 1. / Tau0 * math.Exp(-delta)
 
 }
 
