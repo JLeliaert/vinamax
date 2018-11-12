@@ -16,6 +16,7 @@ var (
 	gammaoveralpha float64                                                      //g/1+alfa^2
 	Temp           float64                                              = -1    // Temperature in K
 	Ku1            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
+	Ku2            float64                                              = 0     // Uniaxial anisotropy constant in J/m**3
 	global_u_anis  vector
 	Kc1            float64 = 0 // Cubic anisotropy constant in J/m**3
 	Errortolerance float64 = 1e-5

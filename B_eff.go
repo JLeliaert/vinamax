@@ -58,6 +58,8 @@ func (p *particle) anis() vector {
 
 	mdotu := p.m.dot(p.u_anis)
 	uniax := p.u_anis.times(2. * Ku1 * mdotu / p.msat)
+	mdotu2 := p.m.dot(p.u2_anis)
+	uniax2 := p.u2_anis.times(2. * Ku2 * mdotu2 / p.msat)
 
 	cubic := vector{0., 0., 0.}
 	if Kc1 != 0 {
@@ -70,5 +72,5 @@ func (p *particle) anis() vector {
 
 		cubic = firstterm.add(secondterm.add(thirdterm)).times(-2. * Kc1 / p.msat)
 	}
-	return uniax.add(cubic)
+	return uniax.add(cubic).add(uniax2)
 }

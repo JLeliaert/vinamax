@@ -13,6 +13,7 @@ type particle struct {
 	m                   vector
 	demagnetising_field vector
 	u_anis              vector  // Uniaxial anisotropy axis
+	u2_anis             vector  // Uniaxial anisotropy axis
 	c1_anis             vector  // cubic anisotropy axis
 	c2_anis             vector  // cubic anisotropy axis
 	c3_anis             vector  // cubic anisotropy axis
@@ -57,6 +58,15 @@ func C1anisotropy_axis(x, y, z float64) {
 	a := norm(vector{x, y, z})
 	for i := range universe.lijst {
 		universe.lijst[i].c1_anis = a
+	}
+}
+
+
+//Gives all particles the same specified second uniaxial anisotropy-axis
+func U2anisotropy_axis(x, y, z float64) {
+	a := norm(vector{x, y, z})
+	for i := range universe.lijst {
+		universe.lijst[i].u2_anis = a
 	}
 }
 
