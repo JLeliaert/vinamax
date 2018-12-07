@@ -34,13 +34,17 @@ var (
 	//	suggest_timestep bool    = false
 	order       int = 5 //the order of the solver
 	constradius float64
+	constradius_h float64
 	logradius_m float64
 	logradius_s float64
 	Tau0        float64 = 1e-8
+	viscosity float64 //set viscosity value
 
 	msatcalled          bool = false
 	radiuscalled        bool = false
+	radius_hcalled      bool = false
 	constradiuscalled   bool = false
+	//constradius_hcalled bool = false
 	logradiuscalled     bool = false
 	uaniscalled         bool = false
 	c1called            bool = false
@@ -50,9 +54,29 @@ var (
 	treecalled          bool = false
 	outputcalled        bool = false
 	randomseedcalled    bool = false
+	randomseedcalled_anis bool = false
 	tableaddcalled      bool = false
 	Jumpnoise           bool = false
 	Brown               bool = false
+	BrownianRotation    bool = false
+	viscositycalled     bool = false
+	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
+	Condition_1	    bool = false
+	Condition_2	    bool = false
+	Test		    bool = false
+	Counter		    int = 0
+	Max_u_anis_x 	    float64 = 0.
+	Max_u_anis_z	    float64 = 0.
+	Min_u_anis_x 	    float64 = 1.
+	Min_u_anis_z	    float64 = 1.
+	Max_u_anis_x_2 	    float64 = 0.
+	Max_u_anis_z_2	    float64 = 0.
+	Min_u_anis_x_2 	    float64 = 1.
+	Min_u_anis_z_2	    float64 = 1.
+	Trigger		    bool = false
+	Freq		    float64 = 0.0
+	Print1 		    bool = false
+	Print0		    bool = false
 )
 
 //initialised B_ext functions
@@ -84,7 +108,7 @@ func testinput() {
 	if universe.number == 0 {
 		log.Fatal("There are no particles in the geometry")
 	}
-}
+} 
 
 //checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {
@@ -106,11 +130,17 @@ func syntaxrun() {
 	if magnetisationcalled == false {
 		log.Fatal("You have specify the initial magnetisation")
 	}
+	if BrownianRotation == true && viscositycalled == false {
+		log.Fatal("You have to specify the viscosity of the particles' environment when taking into account Brownian relaxation")
+	}
 	if treecalled == false && FMM == true {
 		log.Fatal("You have to run Maketree() as last command in front of Run() when using the FMM method")
 	}
 	if Temp != 0 && randomseedcalled == false {
 		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
+	}
+	if BrownianRotation == true && randomseedcalled_anis == false {
+		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anisotropy dynamics) of the particle")
 	}
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
@@ -118,6 +148,21 @@ func syntaxrun() {
 	//	if Brown == true && Adaptivestep == true {
 	//		log.Fatal("Brown Temperature can only be used with fixed timestep")
 	//	}
+	if BrownianRotation == false && Condition_1 == true {
+		log.Fatal("You have to calculate anisotropy dynamics for condition 1 to be true")
+	}
+	if BrownianRotation == false && Condition_2 == true {
+		log.Fatal("You have to calculate anisotropy dynamics for condition 2 to be true")
+	}
+	if Condition_1 && Condition_2 == false {
+		log.Fatal("This situation is not yet implemented")
+	}
+	//if BrownianRotation == false && noMagDyn == true {
+	//	log.Fatal("You have to calculate something, e.g. anisotropy dynamics or magnetisation dynamics or both")
+	//}
+	//if Brown == true && Adaptivestep == true { see paper Leliaert et. al 2017
+	//	log.Fatal("Brown Temperature can only be used with fixed timestep")
+	//}
 	if Jumpnoise == true {
 		resetswitchtimes(universe.lijst)
 	}
@@ -126,5 +171,8 @@ func syntaxrun() {
 	}
 	if Brown {
 		calculatetempnumbers(universe.lijst)
+	}
+	if BrownianRotation {
+		calculaterandomvprefacts(universe.lijst)
 	}
 }

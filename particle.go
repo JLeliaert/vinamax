@@ -17,22 +17,37 @@ type particle struct {
 	c1_anis             vector  // cubic anisotropy axis
 	c2_anis             vector  // cubic anisotropy axis
 	c3_anis             vector  // cubic anisotropy axis
-	r                   float64 // radius
+	r                   float64 // radius core
+	r_h		    float64 // radius core and coating together
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 // time of next flip event
 	tempnumber          float64
+	randomvprefact	    float64
+	eta		    float64 //viscosity of particle surroundings
 
 	heff      vector //effective field
+	dmdt	  vector //dm/dt for use in du/dt when condition 1
+	omega	  vector //for dm/dt and du/dt in condition 1
 	tempfield vector
+	randomvfield vector
 	tempm     vector
 	previousm vector
+	tempu_anis vector
+	previousu_anis vector
 	fehlk1    vector
+	fehlk1_u  vector
 	fehlk2    vector
+	fehlk2_u  vector
 	fehlk3    vector
+	fehlk3_u  vector
 	fehlk4    vector
+	fehlk4_u  vector
 	fehlk5    vector
+	fehlk5_u  vector
 	fehlk6    vector
+	fehlk6_u  vector
 	fehlk7    vector
+	fehlk7_u  vector
 	fehlk8    vector
 	fehlk9    vector
 	fehlk10   vector
@@ -97,6 +112,15 @@ func Anisotropy_random() {
 	}
 }
 
+//Gives all particles a random anisotropy-axis in the xy plane
+func Anisotropy_random_xy() {
+	uaniscalled = true
+	for i := range universe.lijst {
+		phi := rng.Float64() * (2 * math.Pi)
+		universe.lijst[i].u_anis = vector{math.Cos(phi), math.Sin(phi), 0}
+	}
+}
+
 //Gives all particles with random magnetisation orientation
 func M_random() {
 	magnetisationcalled = true
@@ -104,6 +128,15 @@ func M_random() {
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
 		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+	}
+}
+
+//Gives all particles with random magnetisation orientation in the xy plane
+func M_random_xy() {
+	magnetisationcalled = true
+	for i := range universe.lijst {
+		phi := rng.Float64() * (2 * math.Pi)
+		universe.lijst[i].m = vector{math.Cos(phi),math.Sin(phi), 0}
 	}
 }
 
