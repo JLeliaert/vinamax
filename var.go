@@ -32,51 +32,51 @@ var (
 	outputinterval float64
 	maxtauwitht    float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
-	order       int = 5 //the order of the solver
-	constradius float64
+	order         int = 5 //the order of the solver
+	constradius   float64
 	constradius_h float64
-	logradius_m float64
-	logradius_s float64
-	Tau0        float64 = 1e-8
-	viscosity float64 //set viscosity value
+	logradius_m   float64
+	logradius_s   float64
+	Tau0          float64 = 1e-8
+	viscosity     float64 //set viscosity value
 
-	msatcalled          bool = false
-	radiuscalled        bool = false
-	radius_hcalled      bool = false
-	constradiuscalled   bool = false
+	msatcalled        bool = false
+	radiuscalled      bool = false
+	radius_hcalled    bool = false
+	constradiuscalled bool = false
 	//constradius_hcalled bool = false
-	logradiuscalled     bool = false
-	uaniscalled         bool = false
-	c1called            bool = false
-	c2called            bool = false
-	worldcalled         bool = false
-	magnetisationcalled bool = false
-	treecalled          bool = false
-	outputcalled        bool = false
-	randomseedcalled    bool = false
+	logradiuscalled       bool = false
+	uaniscalled           bool = false
+	c1called              bool = false
+	c2called              bool = false
+	worldcalled           bool = false
+	magnetisationcalled   bool = false
+	treecalled            bool = false
+	outputcalled          bool = false
+	randomseedcalled      bool = false
 	randomseedcalled_anis bool = false
-	tableaddcalled      bool = false
-	Jumpnoise           bool = false
-	Brown               bool = false
-	BrownianRotation    bool = false
-	viscositycalled     bool = false
-	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics 
-	Condition_1	    bool = false
-	Condition_2	    bool = false
-	Test		    bool = false
-	Counter		    int = 0
-	Max_u_anis_x 	    float64 = 0.
-	Max_u_anis_z	    float64 = 0.
-	Min_u_anis_x 	    float64 = 1.
-	Min_u_anis_z	    float64 = 1.
-	Max_u_anis_x_2 	    float64 = 0.
-	Max_u_anis_z_2	    float64 = 0.
-	Min_u_anis_x_2 	    float64 = 1.
-	Min_u_anis_z_2	    float64 = 1.
-	Trigger		    bool = false
-	Freq		    float64 = 0.0
-	Print1 		    bool = false
-	Print0		    bool = false
+	tableaddcalled        bool = false
+	Jumpnoise             bool = false
+	Brown                 bool = false
+	BrownianRotation      bool = false
+	viscositycalled       bool = false
+	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics
+	Condition_1    bool    = false
+	Condition_2    bool    = false
+	Test           bool    = false
+	Counter        int     = 0
+	Max_u_anis_x   float64 = 0.
+	Max_u_anis_z   float64 = 0.
+	Min_u_anis_x   float64 = 1.
+	Min_u_anis_z   float64 = 1.
+	Max_u_anis_x_2 float64 = 0.
+	Max_u_anis_z_2 float64 = 0.
+	Min_u_anis_x_2 float64 = 1.
+	Min_u_anis_z_2 float64 = 1.
+	Trigger        bool    = false
+	Freq           float64 = 0.0
+	Print1         bool    = false
+	Print0         bool    = false
 )
 
 //initialised B_ext functions
@@ -108,7 +108,7 @@ func testinput() {
 	if universe.number == 0 {
 		log.Fatal("There are no particles in the geometry")
 	}
-} 
+}
 
 //checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {

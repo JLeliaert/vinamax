@@ -20,27 +20,26 @@ func addparticle(x, y, z float64) bool {
 	if radiuscalled == false {
 		log.Fatal("You have to specify the size of the particles before creating new particles")
 	}
-	
-	radius := getradius()
-	
 
-	var radius_h float64	
+	radius := getradius()
+
+	var radius_h float64
 	if radius_hcalled == false { //when no hydrodynamic radius is specified, consider it equal to core radius
-		radius_h = radius 
-	} 
+		radius_h = radius
+	}
 	if logradiuscalled { //when distribution of core sizes use a fixed coating size
 		radius_h = getradius_h() + radius
 	}
 	if constradiuscalled {
-		radius_h = getradius_h() 
+		radius_h = getradius_h()
 	}
 	if overlap(x, y, z, radius_h) == true {
 		return false
 	}
-	
+
 	if BrownianRotation == true && viscositycalled == false {
 		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
-	}	
+	}
 
 	if universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
@@ -74,14 +73,13 @@ type Cube struct {
 	n       int     //numberofparticles
 }
 
-//Sets origin of the cube 
-func (c Cube) Setorigin(x1,y1,z1 float64) {
+//Sets origin of the cube
+func (c Cube) Setorigin(x1, y1, z1 float64) {
 	c.x = x1
 	c.y = y1
 	c.z = z1
-	
-}
 
+}
 
 //Sets viscosity of particles in the cube (e.g. different viscosity regions possible)
 func (c Cube) Setviscosity(visc float64) {
@@ -90,14 +88,14 @@ func (c Cube) Setviscosity(visc float64) {
 	}
 	viscositycalled = true
 	viscosity = visc
-	
+
 }
 
 //Adds a number of particles at random locations in a cubic region
 func (c Cube) Addparticles(n int) {
 	c.n += n
 	for i := 0; i < n; i++ {
-	fmt.Println(i,"th particle to be added")
+		fmt.Println(i, "th particle to be added")
 		status := false
 		for status == false {
 			px := c.x + (-0.5+georng.Float64())*c.S
@@ -105,7 +103,7 @@ func (c Cube) Addparticles(n int) {
 			pz := c.z + (-0.5+georng.Float64())*c.S
 			status = addparticle(px, py, pz)
 		}
-	
+
 	}
 }
 
@@ -115,14 +113,13 @@ type Cuboid struct {
 	n                   int     //numberofparticles
 }
 
-//Sets origin of the cuboid 
-func (c Cuboid) Setorigin(x1,y1,z1 float64) {
+//Sets origin of the cuboid
+func (c Cuboid) Setorigin(x1, y1, z1 float64) {
 	c.x = x1
 	c.y = y1
 	c.z = z1
-	
-}
 
+}
 
 //Sets viscosity of particles in the cuboid (e.g. different viscosity regions possible)
 func (c Cuboid) Setviscosity(visc float64) {
@@ -131,7 +128,7 @@ func (c Cuboid) Setviscosity(visc float64) {
 	}
 	viscositycalled = true
 	viscosity = visc
-	
+
 }
 
 //Adds a number of particles at random locations in a cubic region
@@ -148,7 +145,6 @@ func (c Cuboid) Addparticles(n int) {
 		}
 	}
 }
-
 
 //Defines the universe, its center and its diameter
 func World(x, y, z, r float64) {
@@ -187,7 +183,7 @@ func Setviscosity(visc float64) {
 	}
 	viscositycalled = true
 	viscosity = visc
-	
+
 }
 
 func getradius() float64 {
@@ -207,9 +203,8 @@ func getradius() float64 {
 }
 
 func getradius_h() float64 {
-	return constradius_h 		
+	return constradius_h
 }
-
 
 //Sets the radius of all entries in radii to a constant value
 func Particle_radius(x float64) {
@@ -225,7 +220,7 @@ func Particle_radius(x float64) {
 //Sets the hydrodynamic radius of all entries in radii to a constant value or constant coating in case core distribution
 func Particle_radius_h(x float64) {
 	radius_hcalled = true
-	
+
 	if radiuscalled == false {
 		log.Fatal("You have to specify the core size of the particles before setting the hydrodynamic radius")
 	}
@@ -233,7 +228,7 @@ func Particle_radius_h(x float64) {
 	if constradiuscalled {
 		if x < constradius {
 			log.Fatal("particles can't have a hydrodynamic radius (core and coating together) smaller than the core radius")
-		}	
+		}
 	}
 	constradius_h = x
 }

@@ -28,25 +28,25 @@ var output_u_anis_xy = false
 func Output(interval float64) {
 	//Print1 = false
 	//Print0 = false
-	if interval != 0{
-	outputcalled = true
-	if Test == false {
-	f, err = os.Create(outdir + "/table.txt")
-	check(err)
-	//	defer f.Close()
-	}
-	if Test == true {
-	name := fmt.Sprintf("table%d.txt",Counter)
-	f, err = os.OpenFile(outdir + "/" + name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	check(err)
-	//defer file.Close()
-	Counter += 1
-	}
-	writeheader()
+	if interval != 0 {
+		outputcalled = true
+		if Test == false {
+			f, err = os.Create(outdir + "/table.txt")
+			check(err)
+			//	defer f.Close()
+		}
+		if Test == true {
+			name := fmt.Sprintf("table%d.txt", Counter)
+			f, err = os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			check(err)
+			//defer file.Close()
+			Counter += 1
+		}
+		writeheader()
 	}
 	outputinterval = interval
 	twrite = interval
-	
+
 }
 
 //Helemaal extra
@@ -86,76 +86,74 @@ func averages_u(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	for i := range lijst {
 		if lijst[i].u_anis[0] < 0 {
-			lijst[i].u_anis[0] = (-1)*lijst[i].u_anis[0]
-			lijst[i].u_anis[1] = (-1)*lijst[i].u_anis[1]
-			lijst[i].u_anis[2] = (-1)*lijst[i].u_anis[2]
-		
+			lijst[i].u_anis[0] = (-1) * lijst[i].u_anis[0]
+			lijst[i].u_anis[1] = (-1) * lijst[i].u_anis[1]
+			lijst[i].u_anis[2] = (-1) * lijst[i].u_anis[2]
+
 		}
 		avgs[0] += lijst[i].u_anis[0]
 		avgs[1] += lijst[i].u_anis[1]
 		avgs[2] += lijst[i].u_anis[2]
-		
-		
-		
+
 		//if lijst[i].u_anis[0] > 0.8 {
 		// print1 = true
-		 //T = 4.1e-3
+		//T = 4.1e-3
 		//}
 		//if lijst[i].u_anis[0] < 0.6 {
-		 //print0 = true
-		 //T = 4.1e-3		
+		//print0 = true
+		//T = 4.1e-3
 		//}
-		
+
 	}
 	avgs = avgs.times(1. / float64(len(lijst)))
-	
-	if T >= 3./Freq && T < 4./Freq {//T < 1./Freq {
-			if avgs[0] > Max_u_anis_x{
+
+	if T >= 3./Freq && T < 4./Freq { //T < 1./Freq {
+		if avgs[0] > Max_u_anis_x {
 			//fmt.Println("maximal x value",avgs[0])
 			Max_u_anis_x = avgs[0]
-			}
-			if avgs[2] >Max_u_anis_z{
+		}
+		if avgs[2] > Max_u_anis_z {
 			//fmt.Println("maximal z value",avgs[2])
 			Max_u_anis_z = avgs[2]
-			}
-			if avgs[0] < Min_u_anis_x{
+		}
+		if avgs[0] < Min_u_anis_x {
 			Min_u_anis_x = avgs[0]
-			}
-			if avgs[2] < Min_u_anis_z{
+		}
+		if avgs[2] < Min_u_anis_z {
 			Min_u_anis_z = avgs[2]
-			}
 		}
-		if T >= 4./Freq && T < 5./Freq {
-			if avgs[0] >Max_u_anis_x_2{
+	}
+	if T >= 4./Freq && T < 5./Freq {
+		if avgs[0] > Max_u_anis_x_2 {
 			Max_u_anis_x_2 = avgs[0]
-			}
-			if avgs[2] >Max_u_anis_z_2{
+		}
+		if avgs[2] > Max_u_anis_z_2 {
 			Max_u_anis_z_2 = avgs[2]
-			}
-			if avgs[0] < Min_u_anis_x_2{
+		}
+		if avgs[0] < Min_u_anis_x_2 {
 			Min_u_anis_x_2 = avgs[0]
-			}
-			if avgs[2] < Min_u_anis_z_2{
+		}
+		if avgs[2] < Min_u_anis_z_2 {
 			Min_u_anis_z_2 = avgs[2]
-			}
 		}
-		if T >= 6./Freq {
-			Trigger = true
-		}
-		if Trigger {
-			//fmt.Println("x2 - x1: %d",Max_u_anis_x_2-Max_u_anis_x)
-			//fmt.Println("z2 - z1: %d",Max_u_anis_z_2-Max_u_anis_z)
-			T = 4.1e-3
-			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) > ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
-				
-				Print1 = true	
+	}
+	if T >= 6./Freq {
+		Trigger = true
+	}
+	if Trigger {
+		//fmt.Println("x2 - x1: %d",Max_u_anis_x_2-Max_u_anis_x)
+		//fmt.Println("z2 - z1: %d",Max_u_anis_z_2-Max_u_anis_z)
+		T = 4.1e-3
+		if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) > ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2) {
 
-			}	
-			if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) < ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2)  {
-				Print0 = true
+			Print1 = true
 
-			}
 		}
+		if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) < ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2) {
+			Print0 = true
+
+		}
+	}
 	return avgs
 }
 
@@ -163,12 +161,12 @@ func averages_u_xy(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	for i := range lijst {
 		if lijst[i].u_anis[0] < 0 {
-			lijst[i].u_anis[0] = (-1)*lijst[i].u_anis[0]
-			lijst[i].u_anis[1] = (-1)*lijst[i].u_anis[1]
-			lijst[i].u_anis[2] = (-1)*lijst[i].u_anis[2]
-		
+			lijst[i].u_anis[0] = (-1) * lijst[i].u_anis[0]
+			lijst[i].u_anis[1] = (-1) * lijst[i].u_anis[1]
+			lijst[i].u_anis[2] = (-1) * lijst[i].u_anis[2]
+
 		}
-		avgs[0] += math.Sqrt(lijst[i].u_anis[0]*lijst[i].u_anis[0]) + (lijst[i].u_anis[1]*lijst[i].u_anis[1])
+		avgs[0] += math.Sqrt(lijst[i].u_anis[0]*lijst[i].u_anis[0]) + (lijst[i].u_anis[1] * lijst[i].u_anis[1])
 		avgs[2] += lijst[i].u_anis[2]
 	}
 	return avgs.times(1. / float64(len(lijst)))
@@ -250,12 +248,12 @@ func writeheader() {
 	if output_u_anis {
 		header := fmt.Sprintf("\tu_anis_x\tu_anis_y\tu_anis_z")
 		_, err = f.WriteString(header)
-		check(err)		
+		check(err)
 	}
 	if output_u_anis_xy {
 		header := fmt.Sprintf("\tu_anis_xy\tu_anis_z")
 		_, err = f.WriteString(header)
-		check(err)		
+		check(err)
 	}
 	for i := range locations {
 
@@ -330,13 +328,13 @@ func write(avg vector) {
 		}
 		if output_u_anis {
 			averaged_u_anis := averages_u(universe.lijst)
-			string = fmt.Sprintf("\t%v\t%v\t%v",averaged_u_anis[0],averaged_u_anis[1],averaged_u_anis[2])
+			string = fmt.Sprintf("\t%v\t%v\t%v", averaged_u_anis[0], averaged_u_anis[1], averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
 		if output_u_anis_xy {
 			averaged_u_anis := averages_u_xy(universe.lijst)
-			string = fmt.Sprintf("\t%v\t%v",averaged_u_anis[0],averaged_u_anis[2])
+			string = fmt.Sprintf("\t%v\t%v", averaged_u_anis[0], averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -357,32 +355,33 @@ func write(avg vector) {
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
-	file, error := os.OpenFile(outdir + "/" + name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, error := os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	check(error)
 	defer file.Close()
 	filecounter += 1
 	switch a {
 
 	case "phasediagram":
-		{ 	if Print1 {
-			string := fmt.Sprintf("%d\n",1)
-			_, error = file.WriteString(string)
-			check(error)
+		{
+			if Print1 {
+				string := fmt.Sprintf("%d\n", 1)
+				_, error = file.WriteString(string)
+				check(error)
 			}
 			if Print0 {
-			string := fmt.Sprintf("%d\n",0)
-			_, error = file.WriteString(string)
-			check(error)
+				string := fmt.Sprintf("%d\n", 0)
+				_, error = file.WriteString(string)
+				check(error)
 			}
 			filecounter -= 1
 			if (Print1 == false) && (Print0 == false) {
-			fmt.Println("er is een simulatie niet uitgelopen, onduidelijk resultaat")
-			string := fmt.Sprintf("%d\n",2)
-			_, error = file.WriteString(string)
-			check(error)
+				fmt.Println("er is een simulatie niet uitgelopen, onduidelijk resultaat")
+				string := fmt.Sprintf("%d\n", 2)
+				_, error = file.WriteString(string)
+				check(error)
 			}
 			if (Print1 == true) && (Print0 == true) {
-			log.Fatal("dit kan niet")
+				log.Fatal("dit kan niet")
 			}
 		}
 
@@ -466,7 +465,7 @@ func Tableadd(a string) {
 	case "u_anis_xy":
 		{
 			output_u_anis_xy = true
-		}	
+		}
 
 	default:
 		{
