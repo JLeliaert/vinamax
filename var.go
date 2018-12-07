@@ -170,7 +170,7 @@ func syntaxrun() {
 		log.Fatal("You have to specify which temperature you want to use: \"Jumpnoise\" or \"Brown\"")
 	}
 	if Brown {
-		calculatetempnumbers(universe.lijst)
+		calculatetemp_prefactors(universe.lijst)
 	}
 	if BrownianRotation {
 		calculaterandomvprefacts(universe.lijst)

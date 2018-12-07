@@ -21,7 +21,7 @@ type particle struct {
 	r_h                 float64 // radius core and coating together
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 // time of next flip event
-	tempnumber          float64
+	temp_prefactor          float64
 	randomvprefact      float64
 	eta                 float64 //viscosity of particle surroundings
 

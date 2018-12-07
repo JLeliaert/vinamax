@@ -19,13 +19,13 @@ func Setrandomseed(a int64) {
 }
 
 // factor 4/3pi in "number" because they are spherical
-func (p *particle) calculatetempnumber() {
-	p.tempnumber = math.Sqrt((2. * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r)))
+func (p *particle) calculatetemp_prefactor() {
+	p.temp_prefactor = math.Sqrt((2. * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r)))
 }
 
-func calculatetempnumbers(lijst []*particle) {
+func calculatetemp_prefactors(lijst []*particle) {
 	for i := range lijst {
-		lijst[i].calculatetempnumber()
+		lijst[i].calculatetemp_prefactor()
 	}
 }
 
@@ -39,7 +39,7 @@ func (p *particle) temp() vector {
 			etaz := rng.NormFloat64()
 
 			B_therm = vector{etax, etay, etaz}
-			B_therm = B_therm.times(p.tempnumber / math.Sqrt(Dt))
+			B_therm = B_therm.times(p.temp_prefactor / math.Sqrt(Dt))
 		}
 	}
 	return B_therm
