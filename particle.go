@@ -54,6 +54,7 @@ type particle struct {
 	fehlk11        vector
 	fehlk12        vector
 	fehlk13        vector
+	fixed	       bool
 }
 
 //print position and magnitisation of a particle
@@ -184,3 +185,55 @@ func Msat(x float64) {
 		universe.lijst[i].msat = x
 	}
 }
+
+
+
+
+//Adds a single particle at specified coordinates with fixed spin, returns false if unsuccesfull
+func addfixedparticle(x, y, z, mx, my, mz float64) bool {
+	if radiuscalled == false {
+		log.Fatal("You have to specify the size of the particles before creating new particles")
+	}
+
+	radius := getradius()
+
+	var radius_h float64
+	if radius_hcalled == false { //when no hydrodynamic radius is specified, consider it equal to core radius
+		radius_h = radius
+	}
+	if logradiuscalled { //when distribution of core sizes use a fixed coating size
+		radius_h = getradius_h() + radius
+	}
+	if constradiuscalled {
+		radius_h = getradius_h()
+	}
+	if overlap(x, y, z, radius_h) == true {
+		return false
+	}
+
+	if BrownianRotation == true && viscositycalled == false {
+		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
+	}
+
+	if universe.inworld(vector{x, y, z}) {
+		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h,m:vector{mx,my,mz},fixed:true}
+		if BrownianRotation {
+			a.eta = viscosity
+		}
+		universe.lijst = append(universe.lijst, &a)
+		universe.number += 1
+		msatcalled = false
+	} else {
+		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
+	}
+
+	return true
+}
+
+func Addfixedparticle(x, y, z,mx, my, mz float64) {
+	if addfixedparticle(x, y, z,mx,my,mz) == false {
+		log.Fatal("Trying to add particle at overlapping locations")
+	}
+}
+
+
