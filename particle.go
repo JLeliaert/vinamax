@@ -65,6 +65,9 @@ func (p particle) string() string {
 func Anisotropy_axis(x, y, z float64) {
 	uaniscalled = true
 	global_u_anis = norm(vector{x, y, z})
+	for i := range universe.lijst {
+		universe.lijst[i].u_anis = global_u_anis
+	}
 }
 
 //Gives all particles the same specified cubic1anisotropy-axis
@@ -104,7 +107,7 @@ func Anisotropy_random() {
 	for i := range universe.lijst {
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
-		universe.lijst[i].u_anis = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		universe.lijst[i].u_anis = norm(vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)})
 		if math.Cos(theta) < 0. {
 			universe.lijst[i].u_anis = universe.lijst[i].u_anis.times(-1.)
 		}
