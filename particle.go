@@ -128,9 +128,11 @@ func Anisotropy_random_xy() {
 func M_random() {
 	magnetisationcalled = true
 	for i := range universe.lijst {
+		if universe.lijst[i].fixed==false{
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
 		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		}
 	}
 }
 
@@ -138,8 +140,10 @@ func M_random() {
 func M_random_xy() {
 	magnetisationcalled = true
 	for i := range universe.lijst {
+		if universe.lijst[i].fixed==false{
 		phi := rng.Float64() * (2 * math.Pi)
 		universe.lijst[i].m = vector{math.Cos(phi), math.Sin(phi), 0}
+		}
 	}
 }
 
@@ -148,6 +152,7 @@ func M_MSM(tmag, field float64) {
 	r := rand.New(rand.NewSource(99))
 	magnetisationcalled = true
 	for i := range universe.lijst {
+		if universe.lijst[i].fixed==false{
 		volume := cube(universe.lijst[i].r) * 4. / 3. * math.Pi
 		gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
 		delta := Ku1 * volume / (kb * Temp)
@@ -166,6 +171,7 @@ func M_MSM(tmag, field float64) {
 		} else {
 			universe.lijst[i].m = universe.lijst[i].u_anis.times(-1.)
 		}
+		}
 	}
 }
 
@@ -174,7 +180,9 @@ func M_uniform(x, y, z float64) {
 	magnetisationcalled = true
 	a := norm(vector{x, y, z})
 	for i := range universe.lijst {
+		if universe.lijst[i].fixed==false{
 		universe.lijst[i].m = a
+		}
 	}
 }
 
