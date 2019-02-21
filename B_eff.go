@@ -49,7 +49,7 @@ func (p *particle) temp() vector {
 func (p *particle) zeeman() vector {
 	x, y, z := B_ext(T)
 	x2, y2, z2 := B_ext_space(T, p.x, p.y, p.z)
-	return vector{x + x2, y + y2, z + z2}
+	return vector{x + x2, y + y2, z + z2}.add(p.biasfield)
 }
 
 //Calculates the anisotropy field working on a particle

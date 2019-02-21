@@ -26,6 +26,7 @@ type particle struct {
 	eta                 float64 //viscosity of particle surroundings
 
 	heff           vector //effective field
+	biasfield      vector //effective field
 	dmdt           vector //dm/dt for use in du/dt when condition 1
 	omega          vector //for dm/dt and du/dt in condition 1
 	tempfield      vector
@@ -248,5 +249,17 @@ func Addfixedparticle(x, y, z,mx, my, mz float64) {
 		log.Fatal("Trying to add particle at overlapping locations")
 	}
 }
+
+
+func (p *particle) SetBiasField(x,y,z float64){
+p.biasfield=vector{x,y,z}
+}
+
+
+func (p *particle) GetBiasField() vector{
+return p.biasfield
+}
+
+
 
 
