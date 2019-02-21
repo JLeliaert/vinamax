@@ -41,16 +41,16 @@ func addparticle(x, y, z float64) bool {
 		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
 	}
 
-	if universe.inworld(vector{x, y, z}) {
+	if Universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
 		if BrownianRotation {
 			a.eta = viscosity
 		}
-		universe.lijst = append(universe.lijst, &a)
-		universe.number += 1
+		Universe.lijst = append(Universe.lijst, &a)
+		Universe.number += 1
 		msatcalled = false
 	} else {
-		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
+		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of Universe")
 	}
 	//fmt.Printf("particle core diamter is %#v \n",radius)
 	//fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
@@ -146,11 +146,11 @@ func (c Cuboid) Addparticles(n int) {
 	}
 }
 
-//Defines the universe, its center and its diameter
+//Defines the Universe, its center and its diameter
 func World(x, y, z, r float64) {
 	worldcalled = true
-	universe.origin = vector{x, y, z}
-	universe.diameter = r
+	Universe.origin = vector{x, y, z}
+	Universe.diameter = r
 }
 
 func (w node) inworld(r vector) bool {
@@ -175,7 +175,7 @@ func (w node) inworld(r vector) bool {
 	return true
 }
 
-//Sets viscosity of particles to be added directly to the universe
+//Sets viscosity of particles to be added directly to the Universe
 func Setviscosity(visc float64) {
 	//check if Brownian rotation calculations are on
 	if BrownianRotation == false {
@@ -244,11 +244,11 @@ func Lognormal_diameter(mean, stdev float64) {
 //returns true if the position of a particle overlaps with another particle
 //easiest implementation, assumes cubic particles instead of spheres
 func overlap(x, y, z, r_h float64) bool {
-	for i := range universe.lijst {
-		x2 := universe.lijst[i].x
-		y2 := universe.lijst[i].y
-		z2 := universe.lijst[i].z
-		r_h2 := universe.lijst[i].r_h
+	for i := range Universe.lijst {
+		x2 := Universe.lijst[i].x
+		y2 := Universe.lijst[i].y
+		z2 := Universe.lijst[i].z
+		r_h2 := Universe.lijst[i].r_h
 		if math.Abs(x-x2) < (r_h + r_h2) {
 			if math.Abs(y-y2) < (r_h + r_h2) {
 				if math.Abs(z-z2) < (r_h + r_h2) {

@@ -21,7 +21,7 @@ type particle struct {
 	r_h                 float64 // radius core and coating together
 	msat                float64 // Saturation magnetisation in A/m
 	flip                float64 // time of next flip event
-	temp_prefactor          float64
+	temp_prefactor      float64
 	randomvprefact      float64
 	eta                 float64 //viscosity of particle surroundings
 
@@ -62,12 +62,17 @@ func (p particle) string() string {
 	return fmt.Sprintf("particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
 }
 
+//returns the magnetization of the particle
+func (p particle) Mag() vector {
+return p.m
+}
+
 //Gives all particles the same specified uniaxialanisotropy-axis
 func Anisotropy_axis(x, y, z float64) {
 	uaniscalled = true
 	global_u_anis = norm(vector{x, y, z})
-	for i := range universe.lijst {
-		universe.lijst[i].u_anis = global_u_anis
+	for i := range Universe.lijst {
+		Universe.lijst[i].u_anis = global_u_anis
 	}
 }
 
@@ -75,16 +80,16 @@ func Anisotropy_axis(x, y, z float64) {
 func C1anisotropy_axis(x, y, z float64) {
 	c1called = true
 	a := norm(vector{x, y, z})
-	for i := range universe.lijst {
-		universe.lijst[i].c1_anis = a
+	for i := range Universe.lijst {
+		Universe.lijst[i].c1_anis = a
 	}
 }
 
 //Gives all particles the same specified second uniaxial anisotropy-axis
 func U2anisotropy_axis(x, y, z float64) {
 	a := norm(vector{x, y, z})
-	for i := range universe.lijst {
-		universe.lijst[i].u2_anis = a
+	for i := range Universe.lijst {
+		Universe.lijst[i].u2_anis = a
 	}
 }
 
@@ -92,10 +97,10 @@ func U2anisotropy_axis(x, y, z float64) {
 func C2anisotropy_axis(x, y, z float64) {
 	c2called = true
 	a := norm(vector{x, y, z})
-	for i := range universe.lijst {
-		if universe.lijst[i].c1_anis.dot(a) == 0 {
-			universe.lijst[i].c2_anis = a
-			universe.lijst[i].c3_anis = norm(universe.lijst[i].c1_anis.cross(a))
+	for i := range Universe.lijst {
+		if Universe.lijst[i].c1_anis.dot(a) == 0 {
+			Universe.lijst[i].c2_anis = a
+			Universe.lijst[i].c3_anis = norm(Universe.lijst[i].c1_anis.cross(a))
 		} else {
 			log.Fatal("c1 and c2 should be orthogonal")
 		}
@@ -105,12 +110,12 @@ func C2anisotropy_axis(x, y, z float64) {
 //Gives all particles a random anisotropy-axis
 func Anisotropy_random() {
 	uaniscalled = true
-	for i := range universe.lijst {
+	for i := range Universe.lijst {
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
-		universe.lijst[i].u_anis = norm(vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)})
+		Universe.lijst[i].u_anis = norm(vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)})
 		if math.Cos(theta) < 0. {
-			universe.lijst[i].u_anis = universe.lijst[i].u_anis.times(-1.)
+			Universe.lijst[i].u_anis = Universe.lijst[i].u_anis.times(-1.)
 		}
 	}
 }
@@ -118,20 +123,20 @@ func Anisotropy_random() {
 //Gives all particles a random anisotropy-axis in the xy plane
 func Anisotropy_random_xy() {
 	uaniscalled = true
-	for i := range universe.lijst {
+	for i := range Universe.lijst {
 		phi := rng.Float64() * (2 * math.Pi)
-		universe.lijst[i].u_anis = vector{math.Cos(phi), math.Sin(phi), 0}
+		Universe.lijst[i].u_anis = vector{math.Cos(phi), math.Sin(phi), 0}
 	}
 }
 
 //Gives all particles with random magnetisation orientation
 func M_random() {
 	magnetisationcalled = true
-	for i := range universe.lijst {
-		if universe.lijst[i].fixed==false{
+	for i := range Universe.lijst {
+		if Universe.lijst[i].fixed==false{
 		phi := rng.Float64() * (2 * math.Pi)
 		theta := 2 * math.Asin(math.Sqrt(rng.Float64()))
-		universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
+		Universe.lijst[i].m = vector{math.Sin(theta) * math.Cos(phi), math.Sin(theta) * math.Sin(phi), math.Cos(theta)}
 		}
 	}
 }
@@ -139,10 +144,10 @@ func M_random() {
 //Gives all particles with random magnetisation orientation in the xy plane
 func M_random_xy() {
 	magnetisationcalled = true
-	for i := range universe.lijst {
-		if universe.lijst[i].fixed==false{
+	for i := range Universe.lijst {
+		if Universe.lijst[i].fixed==false{
 		phi := rng.Float64() * (2 * math.Pi)
-		universe.lijst[i].m = vector{math.Cos(phi), math.Sin(phi), 0}
+		Universe.lijst[i].m = vector{math.Cos(phi), math.Sin(phi), 0}
 		}
 	}
 }
@@ -151,12 +156,12 @@ func M_random_xy() {
 func M_MSM(tmag, field float64) {
 	r := rand.New(rand.NewSource(99))
 	magnetisationcalled = true
-	for i := range universe.lijst {
-		if universe.lijst[i].fixed==false{
-		volume := cube(universe.lijst[i].r) * 4. / 3. * math.Pi
+	for i := range Universe.lijst {
+		if Universe.lijst[i].fixed==false{
+		volume := cube(Universe.lijst[i].r) * 4. / 3. * math.Pi
 		gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
 		delta := Ku1 * volume / (kb * Temp)
-		msat := universe.lijst[i].msat
+		msat := Universe.lijst[i].msat
 		hk := 2. * Ku1 / (msat * mu0)
 		tau0 := gprime * hk * math.Sqrt(delta/math.Pi)
 		tauN := 1. / tau0 * math.Exp(Ku1*volume/(kb*Temp)*(1.-0.82*msat*field*mu0/Ku1))
@@ -167,9 +172,9 @@ func M_MSM(tmag, field float64) {
 		M := langevin * (1. - math.Exp(-tmag/tauN))
 		up := (2.*M + 1.) / (2.) //2.M because of random anisotropy axes
 		if r.Float64() < up {
-			universe.lijst[i].m = universe.lijst[i].u_anis
+			Universe.lijst[i].m = Universe.lijst[i].u_anis
 		} else {
-			universe.lijst[i].m = universe.lijst[i].u_anis.times(-1.)
+			Universe.lijst[i].m = Universe.lijst[i].u_anis.times(-1.)
 		}
 		}
 	}
@@ -179,9 +184,9 @@ func M_MSM(tmag, field float64) {
 func M_uniform(x, y, z float64) {
 	magnetisationcalled = true
 	a := norm(vector{x, y, z})
-	for i := range universe.lijst {
-		if universe.lijst[i].fixed==false{
-		universe.lijst[i].m = a
+	for i := range Universe.lijst {
+		if Universe.lijst[i].fixed==false{
+		Universe.lijst[i].m = a
 		}
 	}
 }
@@ -189,8 +194,8 @@ func M_uniform(x, y, z float64) {
 //Sets the saturation magnetisation of all particles in A/m
 func Msat(x float64) {
 	msatcalled = true
-	for i := range universe.lijst {
-		universe.lijst[i].msat = x
+	for i := range Universe.lijst {
+		Universe.lijst[i].msat = x
 	}
 }
 
@@ -223,16 +228,16 @@ func addfixedparticle(x, y, z, mx, my, mz float64) bool {
 		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
 	}
 
-	if universe.inworld(vector{x, y, z}) {
+	if Universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h,m:vector{mx,my,mz},fixed:true}
 		if BrownianRotation {
 			a.eta = viscosity
 		}
-		universe.lijst = append(universe.lijst, &a)
-		universe.number += 1
+		Universe.lijst = append(Universe.lijst, &a)
+		Universe.number += 1
 		msatcalled = false
 	} else {
-		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of universe")
+		log.Fatal("Trying to add particle at location (", x, ",", y, ",", z, ") which lies outside of Universe")
 	}
 
 	return true

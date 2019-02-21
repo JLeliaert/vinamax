@@ -22,7 +22,7 @@ var (
 	Errortolerance float64 = 1e-5
 	Thresholdbeta  float64 = 0.3 // The threshold value for the FMM
 	demagtime      float64
-	universe       node           // The entire universe of the simulation
+	Universe       node           // The entire Universe of the simulation
 	FMM            bool   = false // Calculate demag with FMM method
 	Demag          bool   = true  // Calculate demag
 	demagevery     bool   = false // Calculate demag only after certain interval
@@ -105,7 +105,7 @@ func testinput() {
 	if Temp < 0 {
 		log.Fatal("Temp cannot be smaller than 0, did you forget to initialise?")
 	}
-	if universe.number == 0 {
+	if Universe.number == 0 {
 		log.Fatal("There are no particles in the geometry")
 	}
 }
@@ -164,15 +164,15 @@ func syntaxrun() {
 	//	log.Fatal("Brown Temperature can only be used with fixed timestep")
 	//}
 	if Jumpnoise == true {
-		resetswitchtimes(universe.lijst)
+		resetswitchtimes(Universe.lijst)
 	}
 	if Temp != 0 && Brown == false && Jumpnoise == false {
 		log.Fatal("You have to specify which temperature you want to use: \"Jumpnoise\" or \"Brown\"")
 	}
 	if Brown {
-		calculatetemp_prefactors(universe.lijst)
+		calculatetemp_prefactors(Universe.lijst)
 	}
 	if BrownianRotation {
-		calculaterandomvprefacts(universe.lijst)
+		calculaterandomvprefacts(Universe.lijst)
 	}
 }

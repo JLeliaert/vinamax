@@ -51,12 +51,12 @@ func Output(interval float64) {
 
 //Helemaal extra
 //func plotswitchtime(){
-//	if (updownswitch==true && universe.lijst[0].m[2]<=-0.8){
+//	if (updownswitch==true && Universe.lijst[0].m[2]<=-0.8){
 //		updownswitch=false
 //		fmt.Println(T-timelastswitch)
 //		timelastswitch=T
 //	}
-//	if (updownswitch ==false && universe.lijst[0].m[2]>=0.8){
+//	if (updownswitch ==false && Universe.lijst[0].m[2]>=0.8){
 //		updownswitch=true
 //		fmt.Println(T-timelastswitch)
 //		timelastswitch=T
@@ -238,7 +238,7 @@ func writeheader() {
 		check(err)
 	}
 	if output_allmag {
-		for range universe.lijst {
+		for range Universe.lijst {
 			header := fmt.Sprintf("\tm_x\tm_y\tm_z")
 			_, err = f.WriteString(header)
 			check(err)
@@ -288,7 +288,7 @@ func Tableadd_b_at_location(x, y, z float64) {
 }
 
 func Give_mz() float64 {
-	return averagemoments(universe.lijst)[2]
+	return averagemoments(Universe.lijst)[2]
 }
 
 //Writes the time and the vector of average magnetisation in the table
@@ -310,30 +310,30 @@ func write(avg vector) {
 			check(err)
 		}
 		if output_nrmzpos {
-			string = fmt.Sprintf("\t%v", nrmzpositive(universe.lijst))
+			string = fmt.Sprintf("\t%v", nrmzpositive(Universe.lijst))
 			_, err = f.WriteString(string)
 			check(err)
 		}
 		if output_mdoth {
-			string = fmt.Sprintf("\t%v", averagemdoth(universe.lijst))
+			string = fmt.Sprintf("\t%v", averagemdoth(Universe.lijst))
 			_, err = f.WriteString(string)
 			check(err)
 		}
 		if output_allmag {
-			for _, i := range universe.lijst {
+			for _, i := range Universe.lijst {
 				string = fmt.Sprintf("\t%v\t%v\t%v", i.m[0], i.m[1], i.m[2])
 				_, err = f.WriteString(string)
 				check(err)
 			}
 		}
 		if output_u_anis {
-			averaged_u_anis := averages_u(universe.lijst)
+			averaged_u_anis := averages_u(Universe.lijst)
 			string = fmt.Sprintf("\t%v\t%v\t%v", averaged_u_anis[0], averaged_u_anis[1], averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
 		}
 		if output_u_anis_xy {
-			averaged_u_anis := averages_u_xy(universe.lijst)
+			averaged_u_anis := averages_u_xy(Universe.lijst)
 			string = fmt.Sprintf("\t%v\t%v", averaged_u_anis[0], averaged_u_anis[2])
 			_, err = f.WriteString(string)
 			check(err)
@@ -392,8 +392,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat)
+			for i := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat)
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -405,8 +405,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].m[0], universe.lijst[i].m[1], universe.lijst[i].m[2])
+			for i := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat, Universe.lijst[i].m[0], Universe.lijst[i].m[1], Universe.lijst[i].m[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -418,8 +418,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", universe.lijst[i].x, universe.lijst[i].y, universe.lijst[i].z, universe.lijst[i].r, universe.lijst[i].msat, universe.lijst[i].u_anis[0], universe.lijst[i].u_anis[1], universe.lijst[i].u_anis[2])
+			for i := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat, Universe.lijst[i].u_anis[0], Universe.lijst[i].u_anis[1], Universe.lijst[i].u_anis[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}

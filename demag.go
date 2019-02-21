@@ -6,11 +6,11 @@ import (
 
 func calculatedemag() {
 	if FMM {
-		universe.calculatem()
+		Universe.calculatem()
 	}
 
-	for i := range universe.lijst {
-		universe.lijst[i].demagnetising_field = universe.lijst[i].demag()
+	for i := range Universe.lijst {
+		Universe.lijst[i].demagnetising_field = Universe.lijst[i].demag()
 	}
 }
 
@@ -19,23 +19,23 @@ func demag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
 
-	for i := range universe.lijst {
-		if universe.lijst[i].x != x || universe.lijst[i].y != y || universe.lijst[i].z != z {
-			radius := universe.lijst[i].r
+	for i := range Universe.lijst {
+		if Universe.lijst[i].x != x || Universe.lijst[i].y != y || Universe.lijst[i].z != z {
+			radius := Universe.lijst[i].r
 			volume := 4. / 3 * math.Pi * cube(radius)
-			r_vect := vector{x - universe.lijst[i].x, y - universe.lijst[i].y, z - universe.lijst[i].z}
-			r := universe.lijst[i].dist(x, y, z)
+			r_vect := vector{x - Universe.lijst[i].x, y - Universe.lijst[i].y, z - Universe.lijst[i].z}
+			r := Universe.lijst[i].dist(x, y, z)
 			r2 := r * r
 			r3 := r * r2
 			r5 := r3 * r2
 
-			dotproduct := universe.lijst[i].m.dot(r_vect)
+			dotproduct := Universe.lijst[i].m.dot(r_vect)
 
-			demag[0] += universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (universe.lijst[i].m[0] / r3))
+			demag[0] += Universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (Universe.lijst[i].m[0] / r3))
 
-			demag[1] += universe.lijst[i].msat * volume * prefactor * ((3. * dotproduct * r_vect[1] / r5) - (universe.lijst[i].m[1] / r3))
+			demag[1] += Universe.lijst[i].msat * volume * prefactor * ((3. * dotproduct * r_vect[1] / r5) - (Universe.lijst[i].m[1] / r3))
 
-			demag[2] += universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (universe.lijst[i].m[2] / r3))
+			demag[2] += Universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (Universe.lijst[i].m[2] / r3))
 
 		}
 	}
@@ -61,8 +61,8 @@ func fMMdemag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
 	//make list with nodes
-	//put node universe in box
-	nodelist := []*node{&universe}
+	//put node Universe in box
+	nodelist := []*node{&Universe}
 	//for lijst!=empty
 	for len(nodelist) > 0 {
 		i := 0

@@ -2,6 +2,7 @@ package vinamax
 
 import (
 	"math"
+	"log"
 )
 
 type node struct {
@@ -23,6 +24,15 @@ type node struct {
 	lijst    []*particle //lijst met alle particles
 	volume   float64     //the total volume of all particles in the node
 	m        vector      //magnetisation of the node
+}
+
+func ReturnParticle(num int) *particle{
+if (num>len(Universe.lijst)){
+	log.Fatal("there aren't that many particle")
+}
+
+
+return Universe.lijst[num]
 }
 
 //adds particle to node
@@ -179,11 +189,11 @@ func (w *node) descend() {
 	}
 }
 
-//Build the tree needed for the FMM method, descends in the "universe" node
+//Build the tree needed for the FMM method, descends in the "Universe" node
 func Maketree() {
 	treecalled = true
-	universe.descend()
-	universe.calculatevolume()
+	Universe.descend()
+	Universe.calculatevolume()
 }
 
 //returns the position of a particle in a node (in terms of subnode position), or -1 if the particle is not in the node
