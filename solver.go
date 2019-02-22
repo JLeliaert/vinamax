@@ -135,7 +135,9 @@ func Run(time float64) {
 						Dt = Maxdt
 					}
 					//fmt.Println("dt:   ", Dt)
+					if relax==false{
 					maxtauwitht = 1.e-12
+					}
 				}
 			}
 		case "fehl56":
@@ -522,7 +524,9 @@ func rk4step(Lijst []*particle) {
 // Gebruik maken van de FSAL (enkel bij niet-brown noise!!!)
 
 func dopristep(Lijst []*particle) {
+		var k1,k2,k3,k4,k5,k6,k7 vector
 	for _, p := range Lijst {
+
 		p.tempm = p.m
 		p.previousm = p.m
 		if Condition_1 { //necessary to have noise field of anisodynamics
@@ -530,7 +534,12 @@ func dopristep(Lijst []*particle) {
 		}
 
 		temp := p.temp()
-		k1 := p.tau(temp)
+		if relax==false{
+		k1 = p.tau(temp)
+		}
+		if relax==true{
+		k1 = p.noprecess()
+		}
 		p.tempfield = temp
 		p.fehlk1 = k1
 		p.dmdt = k1
@@ -571,7 +580,12 @@ func dopristep(Lijst []*particle) {
 
 		temp := p.tempfield
 		k1 := p.fehlk1
-		k2 := p.tau(temp)
+		if relax==false{
+		k2 = p.tau(temp)
+		}
+		if relax==true{
+		k2 = p.noprecess()
+		}
 		p.fehlk2 = k2
 		p.dmdt = k2
 
@@ -604,7 +618,13 @@ func dopristep(Lijst []*particle) {
 		temp := p.tempfield
 		k1 := p.fehlk1
 		k2 := p.fehlk2
-		k3 := p.tau(temp)
+		if relax==false{
+		k3 = p.tau(temp)
+		}
+		if relax==true{
+		k3 = p.noprecess()
+		}
+
 		p.fehlk3 = k3
 		p.dmdt = k3
 
@@ -638,7 +658,12 @@ func dopristep(Lijst []*particle) {
 		k1 := p.fehlk1
 		k2 := p.fehlk2
 		k3 := p.fehlk3
-		k4 := p.tau(temp)
+		if relax==false{
+		k4 = p.tau(temp)
+		}
+		if relax==true{
+		k4 = p.noprecess()
+		}
 		p.fehlk4 = k4
 		p.dmdt = k4
 
@@ -674,7 +699,12 @@ func dopristep(Lijst []*particle) {
 		k2 := p.fehlk2
 		k3 := p.fehlk3
 		k4 := p.fehlk4
-		k5 := p.tau(temp)
+		if relax==false{
+		k5 = p.tau(temp)
+		}
+		if relax==true{
+		k5 = p.noprecess()
+		}
 		p.fehlk5 = k5
 		p.dmdt = k5
 
@@ -713,7 +743,13 @@ func dopristep(Lijst []*particle) {
 		k3 := p.fehlk3
 		k4 := p.fehlk4
 		k5 := p.fehlk5
-		k6 := p.tau(temp)
+		if relax==false{
+		k6 = p.tau(temp)
+		}
+		if relax==true{
+		k6 = p.noprecess()
+		}
+
 		p.fehlk6 = k6
 		p.dmdt = k6
 
@@ -736,11 +772,18 @@ func dopristep(Lijst []*particle) {
 
 		p.m = p.tempm
 		if p.fixed==false{
-		p.m[0] += ((35/384.*k1[0] + 0.*k2[0] + 500/1113.*k3[0] + 125/192.*k4[0] - 2187/6784.*k5[0] + 11/84.*k6[0]) * Dt)
-		p.m[1] += ((35/384.*k1[1] + 0.*k2[1] + 500/1113.*k3[1] + 125/192.*k4[1] - 2187/6784.*k5[1] + 11/84.*k6[1]) * Dt)
-		p.m[2] += ((35/384.*k1[2] + 0.*k2[2] + 500/1113.*k3[2] + 125/192.*k4[2] - 2187/6784.*k5[2] + 11/84.*k6[2]) * Dt)
-		}
+		torquex:=((35/384.*k1[0] + 0.*k2[0] + 500/1113.*k3[0] + 125/192.*k4[0] - 2187/6784.*k5[0] + 11/84.*k6[0]) * Dt)
+		torquey:=((35/384.*k1[1] + 0.*k2[1] + 500/1113.*k3[1] + 125/192.*k4[1] - 2187/6784.*k5[1] + 11/84.*k6[1]) * Dt)
+		torquez:=((35/384.*k1[2] + 0.*k2[2] + 500/1113.*k3[2] + 125/192.*k4[2] - 2187/6784.*k5[2] + 11/84.*k6[2]) * Dt)
+		p.m[0] += torquex
+		p.m[1] += torquey
+		p.m[2] += torquez
+
 		//and this is also the fifth order solution
+		if relax==true{
+		maxtauwitht=math.Sqrt(math.Pow(torquex,2.)+math.Pow(torquey,2.)+math.Pow(torquez,2.))
+		}
+}
 
 	}
 	if Demag {
@@ -755,7 +798,12 @@ func dopristep(Lijst []*particle) {
 		k4 := p.fehlk4
 		k5 := p.fehlk5
 		k6 := p.fehlk6
-		k7 := p.tau(temp)
+		if relax==false{
+		k7 = p.tau(temp)
+		}
+		if relax==true{
+		k7 = p.noprecess()
+		}
 		p.fehlk7 = k7
 		p.dmdt = k7
 
@@ -790,7 +838,7 @@ func dopristep(Lijst []*particle) {
 		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
 
 		//fmt.Println("error    :", error)
-		if Adaptivestep {
+		if Adaptivestep&&relax==false {
 			if error > maxtauwitht {
 				maxtauwitht = error
 			}
@@ -806,7 +854,7 @@ func dopristep(Lijst []*particle) {
 			error := math.Sqrt(sqr(p.u_anis[0]-p.tempu_anis[0]) + sqr(p.u_anis[1]-p.tempu_anis[1]) + sqr(p.u_anis[2]-p.tempu_anis[2]))
 
 			//fmt.Println("error    :", error)
-			if Adaptivestep {
+			if Adaptivestep&&relax==false {
 				if error > maxtauwitht { //in LLG dynamics already set to maxtauwitht if error is larger
 					maxtauwitht = error
 				}
@@ -1332,3 +1380,7 @@ func undobadstep_u_anis(Lijst []*particle) {
 	}
 	//T -= Dt //do not repeat this! is already done for both!!!
 }
+
+
+
+
