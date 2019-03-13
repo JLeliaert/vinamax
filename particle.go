@@ -302,7 +302,7 @@ func addanisotropicparticle(x, y, z, ux, uy, uz float64) bool {
 }
 
 func AddAnisotropicParticle(x, y, z,ux, uy, uz float64) {
-	if addfixedparticle(x, y, z,ux,uy,uz) == false {
+	if addanisotropicparticle(x, y, z,ux,uy,uz) == false {
 		log.Fatal("Trying to add particle at overlapping locations")
 	}
 }
