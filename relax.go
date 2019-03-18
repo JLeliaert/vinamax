@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	"fmt"
+//	"fmt"
 	"log"
 	"math"
 )
@@ -10,15 +10,14 @@ import (
 
 func Relax() {
 
+			gammaoveralpha = gamma0 / (1. + (Alpha * Alpha))
 				relax=true
 if Demag {
 					calculatedemag()
 				}
 				dopristep(Universe.lijst)
 
-
-		for maxtauwitht>1e-9{
-		fmt.Println(maxtauwitht)
+		for maxtauwitht>1e-10{
 
 				if Demag {
 					calculatedemag()

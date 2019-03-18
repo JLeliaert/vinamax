@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//"fmt"
+//	"fmt"
 	"math"
 )
 
@@ -45,7 +45,6 @@ func (p *particle) noprecess() vector {
 		pm := &p.m
 		//check with Jonathan
 		p.heff = p.b_eff(vector{0.,0.,0.})
-		// was originally not saved to heff
 		mxB = pm.cross(p.heff)
 		amxmxB := pm.cross(mxB).times(-1*Alpha*gammaoveralpha)
 
