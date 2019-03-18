@@ -52,6 +52,11 @@ func (p *particle) zeeman() vector {
 	return vector{x + x2, y + y2, z + z2}.add(p.biasfield)
 }
 
+//calculates the zeeman energy in a particle
+func (p *particle) e_zeeman() float64 {
+	return -1*p.msat*p.Volume()*p.m.dot(p.zeeman())
+}
+
 //Calculates the anisotropy field working on a particle
 func (p *particle) anis() vector {
 	//2*Ku1*(m.u)*u/p.msat
@@ -73,4 +78,21 @@ func (p *particle) anis() vector {
 		cubic = firstterm.add(secondterm.add(thirdterm)).times(-2. * Kc1 / p.msat)
 	}
 	return uniax.add(cubic).add(uniax2)
+}
+
+//calculates the anisotropy energy in a particle
+func (p *particle) e_anis() float64 {
+	return -0.5*p.msat*p.Volume()*p.m.dot(p.anis())
+}
+
+
+//calculates the thermal energy in a particle
+func (p *particle) e_therm() float64 {
+	return -1*p.msat*p.Volume()*p.m.dot(p.tempfield)
+}
+
+
+//calculates the demag energy in a particle
+func (p *particle) e_demag() float64 {
+	return -0.5*p.msat*p.Volume()*p.m.dot(p.demag())
 }

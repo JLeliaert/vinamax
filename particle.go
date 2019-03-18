@@ -307,3 +307,7 @@ func AddAnisotropicParticle(x, y, z,ux, uy, uz float64) {
 	}
 }
 
+//calculates particle volume
+func (p *particle) Volume() float64{
+	return 4./3.*math.Pi*math.Pow(p.r,3.)
+}

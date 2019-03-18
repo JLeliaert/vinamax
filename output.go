@@ -20,6 +20,7 @@ var output_mdoth = false
 var output_allmag = false
 var output_u_anis = false
 var output_u_anis_xy = false
+var output_energy = false
 
 //var timelastswitch =0.//EXTRA
 //var updownswitch =true//EXTRA
@@ -250,6 +251,11 @@ func writeheader() {
 		_, err = f.WriteString(header)
 		check(err)
 	}
+	if output_energy {
+		header := fmt.Sprintf("\tE_zeeman\tE_demag\tE_anis\tE_therm\tE_total")
+		_, err = f.WriteString(header)
+		check(err)
+	}
 	if output_u_anis_xy {
 		header := fmt.Sprintf("\tu_anis_xy\tu_anis_z")
 		_, err = f.WriteString(header)
@@ -332,6 +338,26 @@ func write(avg vector) {
 			_, err = f.WriteString(string)
 			check(err)
 		}
+
+		if output_energy {
+			e_zeeman:=0.
+			e_demag:=0.
+			e_anis:=0.
+			e_therm:=0.
+			//TODO LOOP OVER ALL PARTICLES
+			for i := range Universe.lijst {
+				e_zeeman+=Universe.lijst[i].e_zeeman()
+				e_demag+=Universe.lijst[i].e_demag()
+				e_anis+=Universe.lijst[i].e_anis()
+				e_therm+=Universe.lijst[i].e_therm()
+			}
+			e_total:=e_zeeman+e_demag+e_anis+e_therm
+			string = fmt.Sprintf("\t%v\t%v\t%v\t%v\t%v", e_zeeman, e_demag, e_anis,e_therm,e_total)
+			_, err = f.WriteString(string)
+			check(err)
+		}
+
+
 		if output_u_anis_xy {
 			averaged_u_anis := averages_u_xy(Universe.lijst)
 			string = fmt.Sprintf("\t%v\t%v", averaged_u_anis[0], averaged_u_anis[2])
@@ -461,6 +487,10 @@ func Tableadd(a string) {
 	case "u_anis":
 		{
 			output_u_anis = true
+		}
+	case "energy":
+		{
+			output_energy = true
 		}
 	case "u_anis_xy":
 		{
