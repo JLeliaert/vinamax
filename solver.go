@@ -72,7 +72,7 @@ func Run(time float64) {
 	for i := range Universe.lijst {
 		norm(Universe.lijst[i].m)
 	}
-	write(averagemoments(Universe.lijst))
+	write(averagemoments(Universe.lijst),false)
 	//averages is not weighted with volume, averagemoments is
 	//write(averages(Universe.lijst))
 	previousdemagcalc := T - demagtime
@@ -201,7 +201,7 @@ func Run(time float64) {
 		}
 		//fmt.Println(Dt)
 		//write(averages(Universe.lijst))
-		write(averagemoments(Universe.lijst))
+		write(averagemoments(Universe.lijst),false)
 		if (T > j+time-Dt) && (T < j+time) {
 			undobadstep(Universe.lijst)
 			Dt = j + time - T + 1e-15

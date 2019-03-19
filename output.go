@@ -298,8 +298,8 @@ func Give_mz() float64 {
 }
 
 //Writes the time and the vector of average magnetisation in the table
-func write(avg vector) {
-	if twrite >= outputinterval && outputinterval != 0 {
+func write(avg vector,forced bool) {
+	if forced||(twrite >= outputinterval && outputinterval != 0) {
 		string := fmt.Sprintf("%e\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
@@ -340,23 +340,22 @@ func write(avg vector) {
 		}
 
 		if output_energy {
-			e_zeeman:=0.
-			e_demag:=0.
-			e_anis:=0.
-			e_therm:=0.
+			e_zeeman := 0.
+			e_demag := 0.
+			e_anis := 0.
+			e_therm := 0.
 			//TODO LOOP OVER ALL PARTICLES
 			for i := range Universe.lijst {
-				e_zeeman+=Universe.lijst[i].e_zeeman()
-				e_demag+=Universe.lijst[i].e_demag()
-				e_anis+=Universe.lijst[i].e_anis()
-				e_therm+=Universe.lijst[i].e_therm()
+				e_zeeman += Universe.lijst[i].e_zeeman()
+				e_demag += Universe.lijst[i].e_demag()
+				e_anis += Universe.lijst[i].e_anis()
+				e_therm += Universe.lijst[i].e_therm()
 			}
-			e_total:=e_zeeman+e_demag+e_anis+e_therm
-			string = fmt.Sprintf("\t%v\t%v\t%v\t%v\t%v", e_zeeman, e_demag, e_anis,e_therm,e_total)
+			e_total := e_zeeman + e_demag + e_anis + e_therm
+			string = fmt.Sprintf("\t%v\t%v\t%v\t%v\t%v", e_zeeman, e_demag, e_anis, e_therm, e_total)
 			_, err = f.WriteString(string)
 			check(err)
 		}
-
 
 		if output_u_anis_xy {
 			averaged_u_anis := averages_u_xy(Universe.lijst)
@@ -513,4 +512,14 @@ func Writeintable(a string) {
 	string := fmt.Sprintf("%v\n", a)
 	_, err = f.WriteString(string)
 	check(err)
+}
+
+func Tablesave() {
+	if outputcalled == false {
+		outputcalled = true
+		f, err = os.Create(outdir + "/table.txt")
+		check(err)
+		writeheader()
+	}
+	write(averagemoments(Universe.lijst),true)
 }
