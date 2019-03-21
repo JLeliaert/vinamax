@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-//	"fmt"
+	//	"fmt"
 	"log"
 	"math"
 )
@@ -17,8 +17,8 @@ func Relax() {
 		calculatedemag()
 	}
 	dopristep(Universe.lijst)
-	Errortolerance=1e-3
-		for maxtauwitht > 1e-10 {
+	Errortolerance = 1e-3
+	for maxtauwitht > 1e-10 {
 
 		if Demag {
 			calculatedemag()
@@ -43,15 +43,15 @@ func Relax() {
 		if Dt > Maxdt {
 			Dt = Maxdt
 		}
-		if maxtauwitht < Errortolerance/16{
-			Errortolerance/=1.44
+		if maxtauwitht < Errortolerance/16 {
+			Errortolerance /= 1.44
 		}
-		T=backuptime
+		T = backuptime
 	}
 
 	Errortolerance = backuptol
-	T=backuptime
-	Dt=backupdt
+	T = backuptime
+	Dt = backupdt
 	relax = false
 
 }

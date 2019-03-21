@@ -63,7 +63,7 @@ var (
 	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics
 	Condition_1    bool    = false
 	Condition_2    bool    = false
-	relax		bool =false
+	relax          bool    = false
 	Test           bool    = false
 	Counter        int     = 0
 	Max_u_anis_x   float64 = 0.

@@ -1,8 +1,8 @@
 package vinamax
 
 import (
-	"math"
 	"log"
+	"math"
 )
 
 type node struct {
@@ -26,13 +26,12 @@ type node struct {
 	m        vector      //magnetisation of the node
 }
 
-func ReturnParticle(num int) *particle{
-if (num>len(Universe.lijst)){
-	log.Fatal("there aren't that many particle")
-}
+func ReturnParticle(num int) *particle {
+	if num > len(Universe.lijst) {
+		log.Fatal("there aren't that many particle")
+	}
 
-
-return Universe.lijst[num]
+	return Universe.lijst[num]
 }
 
 //adds particle to node

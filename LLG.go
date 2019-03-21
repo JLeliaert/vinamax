@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-//	"fmt"
+	//	"fmt"
 	"math"
 )
 
@@ -39,14 +39,13 @@ func (p *particle) tau(temp vector) vector {
 	return mxB
 }
 
-
 func (p *particle) noprecess() vector {
 	mxB := vector{0., 0., 0.}
-		pm := &p.m
-		//check with Jonathan
-		p.heff = p.b_eff(vector{0.,0.,0.})
-		mxB = pm.cross(p.heff)
-		amxmxB := pm.cross(mxB).times(-1*Alpha*gammaoveralpha)
+	pm := &p.m
+	//check with Jonathan
+	p.heff = p.b_eff(vector{0., 0., 0.})
+	mxB = pm.cross(p.heff)
+	amxmxB := pm.cross(mxB).times(-1 * Alpha * gammaoveralpha)
 
 	return amxmxB
 }
