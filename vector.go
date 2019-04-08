@@ -42,6 +42,11 @@ func (x vector) add(i vector) vector {
 	return x
 }
 
+func (x *vector) directadd(i vector) {
+	x[0] += i[0]
+	x[1] += i[1]
+	x[2] += i[2]
+}
 //cubes a number
 func cube(x float64) float64 {
 	return x * x * x

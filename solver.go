@@ -25,6 +25,12 @@ func Setsolver(a string) {
 			solver = "rk3"
 			order = 3
 		}
+	case "rk23":
+		{
+			solver = "rk23"
+			order = 3
+		}
+
 	case "annelies":
 		{
 			solver = "annelies"
@@ -99,6 +105,36 @@ func Run(time float64) {
 			{
 				rk3step(Universe.lijst)
 				T += Dt
+			}
+		case "rk23":
+			{
+				rk23step(Universe.lijst)
+				T += Dt
+				//fmt.Println(Dt)
+				if Adaptivestep {
+					if maxtauwitht > Errortolerance {
+						undobadstep(Universe.lijst)
+						if BrownianRotation {
+							undobadstep_u_anis(Universe.lijst)
+						}
+						if Dt == Mindt {
+							log.Fatal("mindt is too small for your specified error tolerance")
+						}
+					}
+
+					Dt = 0.95 * Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+
+					if Dt < Mindt {
+						Dt = Mindt
+					}
+					if Dt > Maxdt {
+						Dt = Maxdt
+					}
+					//fmt.Println("dt:   ", Dt)
+					if relax == false {
+						maxtauwitht = 1.e-12
+					}
+				}
 			}
 		case "annelies":
 			{
@@ -1379,4 +1415,220 @@ func undobadstep_u_anis(Lijst []*particle) {
 		p.u_anis = p.previousu_anis
 	}
 	//T -= Dt //do not repeat this! is already done for both!!!
+}
+
+
+
+
+//#########################################################################
+//perform a timestep using Bogacki Shampine
+
+// Gebruik maken van de FSAL (enkel bij niet-brown noise!!!)
+
+func rk23step(Lijst []*particle) {
+	var k1, k2, k3, k4 vector
+	for _, p := range Lijst {
+
+		p.tempm = p.m
+		p.previousm = p.m
+		if Condition_1 { //necessary to have noise field of anisodynamics
+			p.randomvfield = p.randomv()
+		}
+
+		temp := p.temp()
+		if relax == false {
+			k1 = p.tau(temp)
+		}
+		if relax == true {
+			k1 = p.noprecess()
+		}
+		p.tempfield = temp
+		p.fehlk1 = k1
+		p.dmdt = k1
+
+		if BrownianRotation { //only calculate anisodynamics when requested
+			p.tempu_anis = p.u_anis
+			p.previousu_anis = p.u_anis
+			randomv := vector{0., 0., 0.}
+			if Condition_1 {
+				randomv = p.randomvfield
+			} else { //we still need to calculate randomv
+				randomv = p.randomv()
+				p.randomvfield = randomv
+			}
+			k1_u := p.tau_u(randomv)
+			p.fehlk1_u = k1_u
+			//fmt.Println("k1_u0   ", k1_u[0])
+			//fmt.Println("k1_u1   ", k1_u[1])
+			//fmt.Println("k1_u2   ", k1_u[2])
+
+			p.u_anis[0] += k1_u[0] * 1 / 2. * Dt
+			p.u_anis[1] += k1_u[1] * 1 / 2. * Dt
+			p.u_anis[2] += k1_u[2] * 1 / 2. * Dt
+		}
+
+		if p.fixed == false {
+			p.m[0] += k1[0] * 1 / 2. * Dt
+			p.m[1] += k1[1] * 1 / 2. * Dt
+			p.m[2] += k1[2] * 1 / 2. * Dt
+		}
+
+	}
+	T += 1 / 2. * Dt
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+
+		temp := p.tempfield
+		k1 := p.fehlk1
+		if relax == false {
+			k2 = p.tau(temp)
+		}
+		if relax == true {
+			k2 = p.noprecess()
+		}
+		p.fehlk2 = k2
+		p.dmdt = k2
+
+		if BrownianRotation { //only calculate anisodynamics when requested
+
+			randomv := p.randomvfield
+			k1_u := p.fehlk1_u
+			k2_u := p.tau_u(randomv)
+			p.fehlk2_u = k2_u
+
+			p.u_anis = p.tempu_anis
+			p.u_anis[0] += ((0/40.*k1_u[0] + 3/4.*k2_u[0]) * Dt)
+			p.u_anis[1] += ((0/40.*k1_u[1] + 3/4.*k2_u[1]) * Dt)
+			p.u_anis[2] += ((0/40.*k1_u[2] + 3/4.*k2_u[2]) * Dt)
+		}
+
+		p.m = p.tempm
+		if p.fixed == false {
+			p.m[0] += ((0/40.*k1[0] + 3/4.*k2[0]) * Dt)
+			p.m[1] += ((0/40.*k1[1] + 3/4.*k2[1]) * Dt)
+			p.m[2] += ((0/40.*k1[2] + 3/4.*k2[2]) * Dt)
+		}
+
+	}
+	T += 1 / 4. * Dt
+	if Demag {
+		calculatedemag()
+	}
+	for _, p := range Lijst {
+		temp := p.tempfield
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		if relax == false {
+			k3 = p.tau(temp)
+		}
+		if relax == true {
+			k3 = p.noprecess()
+		}
+
+		p.fehlk3 = k3
+		p.dmdt = k3
+
+		if BrownianRotation { //only calculate anisodynamics when requested
+			randomv := p.randomvfield
+			k1_u := p.fehlk1_u
+			k2_u := p.fehlk2_u
+			k3_u := p.tau_u(randomv)
+			p.fehlk3_u = k3_u
+
+			p.u_anis = p.tempu_anis
+			p.u_anis[0] += ((2/9.*k1_u[0] + 1/3.*k2_u[0] + 4/9.*k3_u[0]) * Dt)
+			p.u_anis[1] += ((2/9.*k1_u[1] + 1/3.*k2_u[1] + 4/9.*k3_u[1]) * Dt)
+			p.u_anis[2] += ((2/9.*k1_u[2] + 1/3.*k2_u[2] + 4/9.*k3_u[2]) * Dt)
+		}
+
+		p.m = p.tempm
+		if p.fixed == false {
+			torquex := ((2./9.*k1[0] + 1/3.*k2[0] + 4/9.*k3[0]) * Dt)
+			torquey := ((2./9.*k1[1] + 1/3.*k2[1] + 4/9.*k3[1]) * Dt)
+			torquez := ((2./9.*k1[2] + 1/3.*k2[2] + 4/9.*k3[2]) * Dt)
+			p.m[0] += torquex
+			p.m[1] += torquey
+			p.m[2] += torquez
+
+			//and this is also the second order solution
+			if relax == true {
+				maxtauwitht = math.Sqrt(math.Pow(torquex, 2.) + math.Pow(torquey, 2.) + math.Pow(torquez, 2.))
+			}
+		}
+
+	}
+	if Demag {
+		calculatedemag()
+	}
+
+	for _, p := range Lijst {
+		temp := p.tempfield
+		k1 := p.fehlk1
+		k2 := p.fehlk2
+		k3 := p.fehlk3
+		if relax == false {
+			k4 = p.tau(temp)
+		}
+		if relax == true {
+			k4 = p.noprecess()
+		}
+		p.fehlk4 = k4
+		p.dmdt = k4
+
+		if p.fixed == false {
+			p.tempm[0] += ((7./24.*k1[0] + 1./4.*k2[0] + 1/3.*k3[0] + 1/3.*k4[0]) * Dt)
+			p.tempm[1] += ((7./24.*k1[1] + 1./4.*k2[1] + 1/3.*k3[1] + 1/3.*k4[1]) * Dt)
+			p.tempm[2] += ((7./24.*k1[2] + 1./4.*k2[2] + 1/3.*k3[2] + 1/3.*k4[2]) * Dt)
+		}
+		//and this is also the third order solution
+
+		if BrownianRotation { //only calculate anisodynamics when requested
+			randomv := p.randomvfield
+			k1_u := p.fehlk1_u
+			k2_u := p.fehlk2_u
+			k3_u := p.fehlk3_u
+			k4_u := p.tau_u(randomv)
+			p.fehlk4_u = k4_u
+
+			p.tempu_anis[0] += ((7./24.*k1_u[0] + 1./4.*k2_u[0] + 1/3.*k3_u[0] + 1/3.*k4_u[0]) * Dt)
+			p.tempu_anis[1] += ((7./24.*k1_u[1] + 1./4.*k2_u[1] + 1/3.*k3_u[1] + 1/3.*k4_u[1]) * Dt)
+			p.tempu_anis[2] += ((7./24.*k1_u[2] + 1./4.*k2_u[2] + 1/3.*k3_u[2] + 1/3.*k4_u[2]) * Dt)
+			//and this is also the third order solution
+		}
+
+		p.m = norm(p.m)
+		p.tempm = norm(p.tempm)
+
+		//the error is the difference between the two solutions
+		error := math.Sqrt(sqr(p.m[0]-p.tempm[0]) + sqr(p.m[1]-p.tempm[1]) + sqr(p.m[2]-p.tempm[2]))
+
+		//fmt.Println("error    :", error)
+		if Adaptivestep && relax == false {
+			if error > maxtauwitht {
+				maxtauwitht = error
+			}
+		}
+		//if you have to save mdotH
+		p.heff = p.b_eff(temp)
+
+		if BrownianRotation { //only calculate anisodynamics when requested
+			p.u_anis = norm(p.u_anis)
+			p.tempu_anis = norm(p.tempu_anis)
+
+			//the error is the difference between the two solutions
+			error := math.Sqrt(sqr(p.u_anis[0]-p.tempu_anis[0]) + sqr(p.u_anis[1]-p.tempu_anis[1]) + sqr(p.u_anis[2]-p.tempu_anis[2]))
+
+			//fmt.Println("error    :", error)
+			if Adaptivestep && relax == false {
+				if error > maxtauwitht { //in LLG dynamics already set to maxtauwitht if error is larger
+					maxtauwitht = error
+				}
+
+			}
+		}
+
+	}
+	T -= Dt
 }

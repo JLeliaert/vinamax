@@ -2,6 +2,7 @@ package vinamax
 
 import (
 	"math"
+	"sync"
 )
 
 func calculatedemag() {
@@ -9,9 +10,46 @@ func calculatedemag() {
 		Universe.calculatem()
 	}
 
+	N:=len(Universe.lijst)
+	cleandemag()
+	var waitgroup sync.WaitGroup
+	waitgroup.Add(N)
 	for i := range Universe.lijst {
-		Universe.lijst[i].demagnetising_field = Universe.lijst[i].demag()
+		go demagloop(i,N,&waitgroup)
 	}
+	waitgroup.Wait()
+}
+
+func demagloop(min, max int,w *sync.WaitGroup){
+	defer w.Done()
+	for j:=0; j<max;j++{
+		if j!=min{
+		demag2p(Universe.lijst[min],Universe.lijst[j])
+		}
+	}
+}
+
+func cleandemag(){
+	for i := range Universe.lijst {
+		Universe.lijst[i].demagnetising_field=vector{0,0,0}
+	}
+}
+
+
+
+//adds the demagfield of p1 to p2 and vice versa
+func demag2p(p1, p2 *particle) {
+		prefactor := mu0/3.
+		ms_volume2 :=  cube(p2.r)*p2.msat*prefactor
+		r_vect := vector{p1.x - p2.x, p1.y - p2.y, p1.z - p2.z}
+		r := p1.dist(p2.x, p2.y, p2.z)
+		r2 := r * r
+		r3 := r * r2
+		r5 := r3 * r2
+
+		dotproduct2 := p2.m.dot(r_vect)
+
+		p1.demagnetising_field= p1.demagnetising_field.add(vector{ms_volume2 * ((3 * dotproduct2 * r_vect[0] / r5) - (p2.m[0] / r3)), ms_volume2 * ((3 * dotproduct2 * r_vect[1] / r5) - (p2.m[1] / r3)), ms_volume2 * ((3 * dotproduct2 * r_vect[2] / r5) - (p2.m[2] / r3))})
 }
 
 //Demag is calculated on a position
@@ -22,7 +60,7 @@ func demag(x, y, z float64) vector {
 	for i := range Universe.lijst {
 		if Universe.lijst[i].x != x || Universe.lijst[i].y != y || Universe.lijst[i].z != z {
 			radius := Universe.lijst[i].r
-			volume := 4. / 3 * math.Pi * cube(radius)
+			ms_volume := 4. / 3 * math.Pi * cube(radius)*Universe.lijst[i].msat*prefactor
 			r_vect := vector{x - Universe.lijst[i].x, y - Universe.lijst[i].y, z - Universe.lijst[i].z}
 			r := Universe.lijst[i].dist(x, y, z)
 			r2 := r * r
@@ -31,11 +69,9 @@ func demag(x, y, z float64) vector {
 
 			dotproduct := Universe.lijst[i].m.dot(r_vect)
 
-			demag[0] += Universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[0] / r5) - (Universe.lijst[i].m[0] / r3))
-
-			demag[1] += Universe.lijst[i].msat * volume * prefactor * ((3. * dotproduct * r_vect[1] / r5) - (Universe.lijst[i].m[1] / r3))
-
-			demag[2] += Universe.lijst[i].msat * volume * prefactor * ((3 * dotproduct * r_vect[2] / r5) - (Universe.lijst[i].m[2] / r3))
+			demag[0] += ms_volume * ((3 * dotproduct * r_vect[0] / r5) - (Universe.lijst[i].m[0] / r3))
+			demag[1] += ms_volume * ((3. * dotproduct * r_vect[1] / r5) - (Universe.lijst[i].m[1] / r3))
+			demag[2] += ms_volume * ((3 * dotproduct * r_vect[2] / r5) - (Universe.lijst[i].m[2] / r3))
 
 		}
 	}
