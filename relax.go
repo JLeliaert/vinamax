@@ -44,7 +44,7 @@ func Relax() {
 			Dt = Maxdt
 		}
 		//fmt.Println(maxtauwitht,"\t",Errortolerance)
-		if maxtauwitht < Errortolerance/2 {
+		if maxtauwitht < Errortolerance/4 {
 			Errortolerance /= 1.4142
 		}
 		T = backuptime

@@ -2,7 +2,6 @@ package vinamax
 
 import (
 	"math"
-	"sync"
 )
 
 func calculatedemag() {
@@ -12,20 +11,14 @@ func calculatedemag() {
 
 	N:=len(Universe.lijst)
 	cleandemag()
-	var waitgroup sync.WaitGroup
-	waitgroup.Add(N)
 	for i := range Universe.lijst {
-		go demagloop(i,N,&waitgroup)
+		demagloop(i+1,N)
 	}
-	waitgroup.Wait()
 }
 
-func demagloop(min, max int,w *sync.WaitGroup){
-	defer w.Done()
-	for j:=0; j<max;j++{
-		if j!=min{
-		demag2p(Universe.lijst[min],Universe.lijst[j])
-		}
+func demagloop(min, max int){
+	for j:=min; j<max;j++{
+		demag2p(Universe.lijst[min-1],Universe.lijst[j])
 	}
 }
 
@@ -40,6 +33,7 @@ func cleandemag(){
 //adds the demagfield of p1 to p2 and vice versa
 func demag2p(p1, p2 *particle) {
 		prefactor := mu0/3.
+		ms_volume1 :=  cube(p1.r)*p1.msat*prefactor
 		ms_volume2 :=  cube(p2.r)*p2.msat*prefactor
 		r_vect := vector{p1.x - p2.x, p1.y - p2.y, p1.z - p2.z}
 		r := p1.dist(p2.x, p2.y, p2.z)
@@ -47,9 +41,11 @@ func demag2p(p1, p2 *particle) {
 		r3 := r * r2
 		r5 := r3 * r2
 
+		dotproduct1 := p1.m.dot(r_vect)
 		dotproduct2 := p2.m.dot(r_vect)
 
 		p1.demagnetising_field= p1.demagnetising_field.add(vector{ms_volume2 * ((3 * dotproduct2 * r_vect[0] / r5) - (p2.m[0] / r3)), ms_volume2 * ((3 * dotproduct2 * r_vect[1] / r5) - (p2.m[1] / r3)), ms_volume2 * ((3 * dotproduct2 * r_vect[2] / r5) - (p2.m[2] / r3))})
+		p2.demagnetising_field= p2.demagnetising_field.add(vector{ms_volume1 * ((3 * dotproduct1 * r_vect[0] / r5) - (p1.m[0] / r3)),ms_volume1 * ((3 * dotproduct1 * r_vect[1] / r5) - (p1.m[1] / r3)), ms_volume1 * ((3 * dotproduct1 * r_vect[2] / r5) - (p1.m[2] / r3))})
 }
 
 //Demag is calculated on a position
