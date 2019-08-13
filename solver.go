@@ -1417,9 +1417,6 @@ func undobadstep_u_anis(Lijst []*particle) {
 	//T -= Dt //do not repeat this! is already done for both!!!
 }
 
-
-
-
 //#########################################################################
 //perform a timestep using Bogacki Shampine
 
