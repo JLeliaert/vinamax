@@ -8,6 +8,7 @@ import (
 
 var anisrng = rand.New(rand.NewSource(0))
 
+//"xi" prefactor for the mechanical rotations
 func xi(radius float64) float64 {
 	return 6. * Viscosity.value * volume(radius)
 }
@@ -29,17 +30,19 @@ func Setrandomseed_anis(a int64) {
 	anisrng = rand.New(rand.NewSource(a))
 }
 
+// sets the prefactor for brownian rotations for one particle
 func (p *particle) calculaterandomvprefact() {
 	p.randomvprefact = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
 }
 
-func calculaterandomvprefacts(lijst []*particle) {
-	for i := range lijst {
-		lijst[i].calculaterandomvprefact()
+// sets the prefactor for brownian rotations
+func calculaterandomvprefacts() {
+	for _, p := range lijst {
+		p.calculaterandomvprefact()
 	}
 }
 
-//Calculates the randomness working on the particles' anisotropy axis
+//Calculates the Brownian torques on the particles' anisotropy axis
 func (p *particle) randomv() vector {
 	rand_tor := vector{0., 0., 0.}
 	if BrownianRotation {

@@ -1,10 +1,5 @@
 package vinamax
 
-import (
-//	"fmt"
-//"math"
-)
-
 //Calculates the torque working on the magnetisation of a particle
 //using the Landau Lifshitz equation
 func (p *particle) tau() vector {
@@ -17,6 +12,8 @@ func (p *particle) tau() vector {
 	return mxB
 }
 
+//Calculates the torque working on the magnetisation of a particle
+//using only the damping factor in the Landau Lifshitz equation
 func (p *particle) noprecess() vector {
 	mxB := vector{0., 0., 0.}
 	pm := &p.m

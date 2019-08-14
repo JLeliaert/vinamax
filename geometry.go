@@ -82,7 +82,7 @@ func Lognormal_diameter(mean, stdev float64) {
 //returns true if the position of a particle overlaps with another particle
 //easiest implementation, assumes cubic particles instead of spheres
 func overlap(x, y, z, r_h float64) bool {
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		x2 := p.x
 		y2 := p.y
 		z2 := p.z

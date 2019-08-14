@@ -43,18 +43,18 @@ var (
 	// Global variables
 	B_ext          func(t float64) (float64, float64, float64)          // External applied field in T
 	B_ext_space    func(t, x, y, z float64) (float64, float64, float64) // External applied field in T
-	Dt             = scalarvariable{"dt", "s", "timestep", false, 1e-15}
-	MinDt          = scalarvariable{"minDt", "s", "minimum allowed timestep", false, 1e-20}
-	MaxDt          = scalarvariable{"MaxDt", "s", "maximum allowed timestep", false, 1}
-	T              = scalarvariable{"t", "s", "time", false, 0}
-	Temp           = scalarvariable{"temp", "K", "Temperature", false, 0.}
-	Universe       node          // The entire Universe of the simulation
-	Demag          bool   = true // Calculate demag
-	outdir         string        // The output directory
+	Dt                                                                  = scalarvariable{"dt", "s", "timestep", false, 1e-15}
+	MinDt                                                               = scalarvariable{"minDt", "s", "minimum allowed timestep", false, 1e-20}
+	MaxDt                                                               = scalarvariable{"MaxDt", "s", "maximum allowed timestep", false, 1}
+	T                                                                   = scalarvariable{"t", "s", "time", false, 0}
+	Temp                                                                = scalarvariable{"temp", "K", "Temperature", false, 0.}
+	Demag          bool                                                 = true // Calculate demag
+	outdir         string                                                      // The output directory
 	outputinterval float64
 	solver         solvertype
-	Errortolerance float64 = 1e-7
-	Adaptivestep   bool    = false
+	Errortolerance float64     = 1e-7
+	Adaptivestep   bool        = false
+	lijst          []*particle //lijst met alle particles
 
 	//"default values for particle-specific variables"
 	Alpha     = scalarvariable{"alpha", "", "Gilbert damping constant", false, 0.01}
@@ -66,7 +66,7 @@ var (
 	Rh        = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}
 	Msat      = scalarvariable{"Msat", "A/m", "Saturation magnetizatoin", false, 400e3}
 
-	maxtauwitht float64 = 0. //maximum torque during the simulations with temperature
+	magErr float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
 	constradius   float64
 	constradius_h float64
@@ -88,8 +88,6 @@ var (
 	Counter int     = 0
 	Trigger bool    = false
 	Freq    float64 = 0.0
-	Print1  bool    = false
-	Print0  bool    = false
 )
 
 //initialised B_ext functions
@@ -106,9 +104,6 @@ func testinput() {
 	if Temp.value < 0 {
 		log.Fatal("Temp cannot be smaller than 0, did you forget to initialise?")
 	}
-	if Universe.number == 0 {
-		log.Fatal("There are no particles in the geometry")
-	}
 }
 
 //checks the inputfiles for functions that should have been called but weren't
@@ -123,15 +118,10 @@ func syntaxrun() {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
 	if BrownianRotation {
-		calculaterandomvprefacts(Universe.lijst)
+		calculaterandomvprefacts()
 	}
 }
 
 func volume(radius float64) float64 {
 	return 4. / 3. * math.Pi * cube(radius)
-}
-
-//Sets viscosity
-func SetViscosity(visc float64) {
-	Viscosity.value = visc
 }

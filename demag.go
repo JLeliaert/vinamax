@@ -5,22 +5,22 @@ import (
 )
 
 func calculatedemag() {
-
-	N := len(Universe.lijst)
+	N := len(lijst)
 	cleandemag()
-	for i := range Universe.lijst {
+	for i := range lijst {
 		demagloop(i+1, N)
 	}
 }
 
 func demagloop(min, max int) {
 	for j := min; j < max; j++ {
-		demag2p(Universe.lijst[min-1], Universe.lijst[j])
+		demag2p(lijst[min-1], lijst[j])
 	}
 }
 
+//resets all demag fields to zero
 func cleandemag() {
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		p.demagnetising_field = vector{0, 0, 0}
 	}
 }
@@ -48,7 +48,7 @@ func demag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
 
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		if p.x != x || p.y != y || p.z != z {
 			ms_volume := volume(p.rc) * p.msat * prefactor
 			r_vect := vector{x - p.x, y - p.y, z - p.z}
@@ -59,9 +59,9 @@ func demag(x, y, z float64) vector {
 
 			dotproduct := p.m.dot(r_vect)
 
-			demag[0] += ms_volume * ((3 * dotproduct * r_vect[0] / r5) - (p.m[0] / r3))
-			demag[1] += ms_volume * ((3. * dotproduct * r_vect[1] / r5) - (p.m[1] / r3))
-			demag[2] += ms_volume * ((3 * dotproduct * r_vect[2] / r5) - (p.m[2] / r3))
+			for q := 0; q < 3; q++ {
+				demag[q] += ms_volume * ((3 * dotproduct * r_vect[q] / r5) - (p.m[q] / r3))
+			}
 
 		}
 	}

@@ -15,23 +15,23 @@ func Relax() {
 	if Demag {
 		calculatedemag()
 	}
-	dopristep(Universe.lijst)
+	dopristep()
 	Errortolerance = 1e-1
-	for maxtauwitht > 5e-8 {
+	for magErr > 5e-8 {
 
 		if Demag {
 			calculatedemag()
 		}
-		dopristep(Universe.lijst)
+		dopristep()
 
-		if maxtauwitht > Errortolerance {
-			undobadstep(Universe.lijst)
+		if magErr > Errortolerance {
+			undobadstep()
 			if Dt.value == MinDt.value {
 				log.Fatal("Mindt is too small for your specified error tolerance")
 			}
 		}
 
-		Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/maxtauwitht, (1./float64(solver.order)))
+		Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/magErr, (1./float64(solver.order)))
 
 		if Dt.value < MinDt.value {
 			Dt.value = MinDt.value
@@ -39,8 +39,7 @@ func Relax() {
 		if Dt.value > MaxDt.value {
 			Dt.value = MaxDt.value
 		}
-		//fmt.Println(maxtauwitht,"\t",Errortolerance)
-		if maxtauwitht < Errortolerance/4 {
+		if magErr < Errortolerance/4 {
 			Errortolerance /= 1.4142
 		}
 		T.value = backuptime

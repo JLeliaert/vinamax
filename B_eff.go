@@ -14,11 +14,11 @@ func (p *particle) b_eff(thermField vector) vector {
 
 //Set the randomseed for the temperature
 func Setrandomseed(a int64) {
-	//randomseedcalled = true
 	rng = rand.New(rand.NewSource(a))
 }
 
-func setThermPrefac(lijst []*particle) {
+//sets the prefactor for the thermal fields
+func setThermPrefac() {
 	for _, p := range lijst {
 		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * Temp.value) / (gamma0 * p.msat * volume(p.rc)))
 	}

@@ -23,7 +23,7 @@ func (p *particle) e_demag() float64 {
 //returns total zeeman energy
 func E_zeeman() float64 {
 	sum := 0.
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		sum += p.e_zeeman()
 	}
 	return sum
@@ -32,7 +32,7 @@ func E_zeeman() float64 {
 //returns total anisotropy energy
 func E_anis() float64 {
 	sum := 0.
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		sum += p.e_anis()
 	}
 	return sum
@@ -41,7 +41,7 @@ func E_anis() float64 {
 //returns total demag energy
 func E_demag() float64 {
 	sum := 0.
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		sum += p.e_demag()
 	}
 	return sum
@@ -50,7 +50,7 @@ func E_demag() float64 {
 //returns total thermal energy
 func E_therm() float64 {
 	sum := 0.
-	for _, p := range Universe.lijst {
+	for _, p := range lijst {
 		sum += p.e_therm()
 	}
 	return sum

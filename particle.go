@@ -29,8 +29,8 @@ type particle struct {
 	previousm      vector
 	tempu_anis     vector
 	previousu_anis vector
-	fehlk          [7]vector
-	fehlk_u        [7]vector
+	k              [7]vector
+	k_u            [7]vector
 }
 
 //returns the magnetization of the particle
@@ -50,13 +50,12 @@ func addParticle(x, y, z float64) bool {
 	}
 
 	a := particle{x: x, y: y, z: z, rc: Rc.value, rh: Rh.value, m: M.value, alpha: Alpha.value, msat: Msat.value, u_anis: U_anis.value, ku1: Ku1.value}
-	Universe.lijst = append(Universe.lijst, &a)
-	Universe.number += 1
+	lijst = append(lijst, &a)
 
 	return true
 }
 
-func AddParticle(x, y, z, r float64) {
+func AddParticle(x, y, z float64) {
 	if addParticle(x, y, z) == false {
 		log.Fatal("Trying to add particle at overlapping locations")
 	}
