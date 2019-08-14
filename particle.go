@@ -12,22 +12,21 @@ type particle struct {
 	x, y, z             float64
 	m                   vector
 	demagnetising_field vector
-	u_anis              vector  // Uniaxial anisotropy axis
-	u2_anis             vector  // Uniaxial anisotropy axis
-	c1_anis             vector  // cubic anisotropy axis
-	c2_anis             vector  // cubic anisotropy axis
-	c3_anis             vector  // cubic anisotropy axis
-	r                   float64 // radius core
-	r_h                 float64 // radius core and coating together
-	msat                float64 // Saturation magnetisation in A/m
-	flip                float64 // time of next flip event
-	temp_prefactor      float64
-	randomvprefact      float64
-	eta                 float64 //viscosity of particle surroundings
+	u_anis              vector // Uniaxial anisotropy axis
+	u2_anis             vector // Uniaxial anisotropy axis
+	c1_anis             vector // cubic anisotropy axis
+	c2_anis             vector // cubic anisotropy axis
+	c3_anis             vector // cubic anisotropy axis
+
+	r              float64 // radius core
+	r_h            float64 // radius core and coating together
+	msat           float64 // Saturation magnetisation in A/m
+	flip           float64 // time of next flip event
+	temp_prefactor float64
+	randomvprefact float64
 
 	heff           vector //effective field
 	biasfield      vector //effective field
-	dmdt           vector //dm/dt for use in du/dt when condition 1
 	omega          vector //for dm/dt and du/dt in condition 1
 	tempfield      vector
 	randomvfield   vector
@@ -35,27 +34,11 @@ type particle struct {
 	previousm      vector
 	tempu_anis     vector
 	previousu_anis vector
-	fehlk1         vector
-	fehlk1_u       vector
-	fehlk2         vector
-	fehlk2_u       vector
-	fehlk3         vector
-	fehlk3_u       vector
-	fehlk4         vector
-	fehlk4_u       vector
-	fehlk5         vector
-	fehlk5_u       vector
-	fehlk6         vector
-	fehlk6_u       vector
-	fehlk7         vector
-	fehlk7_u       vector
-	fehlk8         vector
-	fehlk9         vector
-	fehlk10        vector
-	fehlk11        vector
-	fehlk12        vector
-	fehlk13        vector
-	fixed          bool
+
+	fehlk   [7]vector
+	fehlk_u [7]vector
+
+	fixed bool
 }
 
 //print position and magnitisation of a particle
@@ -160,13 +143,13 @@ func M_MSM(tmag, field float64) {
 	for i := range Universe.lijst {
 		if Universe.lijst[i].fixed == false {
 			volume := cube(Universe.lijst[i].r) * 4. / 3. * math.Pi
-			gprime := Alpha * gamma0 * mu0 / (1. + (Alpha * Alpha))
-			delta := Ku1 * volume / (kb * Temp)
+			gprime := Alpha.value * gamma0 * mu0 / (1. + (sqr(Alpha.value)))
+			delta := Ku1 * volume / (kb * Temp.value)
 			msat := Universe.lijst[i].msat
 			hk := 2. * Ku1 / (msat * mu0)
 			tau0 := gprime * hk * math.Sqrt(delta/math.Pi)
-			tauN := 1. / tau0 * math.Exp(Ku1*volume/(kb*Temp)*(1.-0.82*msat*field*mu0/Ku1))
-			x := volume * field * msat * mu0 / (kb * Temp)
+			tauN := 1. / tau0 * math.Exp(Ku1*volume/(kb*Temp.value)*(1.-0.82*msat*field*mu0/Ku1))
+			x := volume * field * msat * mu0 / (kb * Temp.value)
 
 			langevin := 1./math.Tanh(x) - 1./x
 
@@ -222,15 +205,8 @@ func addfixedparticle(x, y, z, mx, my, mz float64) bool {
 		return false
 	}
 
-	if BrownianRotation == true && viscositycalled == false {
-		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
-	}
-
 	if Universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h, m: vector{mx, my, mz}, fixed: true}
-		if BrownianRotation {
-			a.eta = viscosity
-		}
 		Universe.lijst = append(Universe.lijst, &a)
 		Universe.number += 1
 		msatcalled = false
@@ -277,15 +253,8 @@ func addanisotropicparticle(x, y, z, ux, uy, uz float64) bool {
 		return false
 	}
 
-	if BrownianRotation == true && viscositycalled == false {
-		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
-	}
-
 	if Universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h, u_anis: norm(vector{ux, uy, uz})}
-		if BrownianRotation {
-			a.eta = viscosity
-		}
 		Universe.lijst = append(Universe.lijst, &a)
 		Universe.number += 1
 		msatcalled = false

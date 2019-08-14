@@ -14,13 +14,13 @@ func (p *particle) b_eff(temp vector) vector {
 
 //Set the randomseed for the temperature
 func Setrandomseed(a int64) {
-	randomseedcalled = true
+	//randomseedcalled = true
 	rng = rand.New(rand.NewSource(a))
 }
 
 // factor 4/3pi in "number" because they are spherical
 func (p *particle) calculatetemp_prefactor() {
-	p.temp_prefactor = math.Sqrt((2. * kb * Alpha * Temp) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r)))
+	p.temp_prefactor = math.Sqrt((2. * kb * Alpha.value * Temp.value) / (gamma0 * p.msat * 4. / 3. * math.Pi * cube(p.r)))
 }
 
 func calculatetemp_prefactors(lijst []*particle) {
@@ -33,13 +33,13 @@ func calculatetemp_prefactors(lijst []*particle) {
 func (p *particle) temp() vector {
 	B_therm := vector{0., 0., 0.}
 	if Brown {
-		if Temp != 0. {
+		if Temp.value != 0. {
 			etax := rng.NormFloat64()
 			etay := rng.NormFloat64()
 			etaz := rng.NormFloat64()
 
 			B_therm = vector{etax, etay, etaz}
-			B_therm = B_therm.times(p.temp_prefactor / math.Sqrt(Dt))
+			B_therm = B_therm.times(p.temp_prefactor / math.Sqrt(Dt.value))
 		}
 	}
 	return B_therm
@@ -47,8 +47,8 @@ func (p *particle) temp() vector {
 
 //Calculates the Zeeman field working on a particle
 func (p *particle) zeeman() vector {
-	x, y, z := B_ext(T)
-	x2, y2, z2 := B_ext_space(T, p.x, p.y, p.z)
+	x, y, z := B_ext(T.value)
+	x2, y2, z2 := B_ext_space(T.value, p.x, p.y, p.z)
 	return vector{x + x2, y + y2, z + z2}.add(p.biasfield)
 }
 

@@ -8,51 +8,48 @@ import (
 
 func Relax() {
 	backuptol := Errortolerance
-	backuptime := T
-	backupdt := Dt
+	backuptime := T.value
+	backupdt := Dt.value
 
-	gammaoveralpha = gamma0 / (1. + (Alpha * Alpha))
+	gammaoveralpha = gamma0 / (1. + (sqr(Alpha.value)))
 	relax = true
 	if Demag {
 		calculatedemag()
 	}
-	rk23step(Universe.lijst)
+	dopristep(Universe.lijst)
 	Errortolerance = 1e-1
 	for maxtauwitht > 5e-8 {
 
 		if Demag {
 			calculatedemag()
 		}
-		rk23step(Universe.lijst)
+		dopristep(Universe.lijst)
 
 		if maxtauwitht > Errortolerance {
 			undobadstep(Universe.lijst)
-			if BrownianRotation {
-				undobadstep_u_anis(Universe.lijst)
-			}
-			if Dt == Mindt {
-				log.Fatal("mindt is too small for your specified error tolerance")
+			if Dt.value == MinDt.value {
+				log.Fatal("Mindt is too small for your specified error tolerance")
 			}
 		}
 
-		Dt = 0.95 * Dt * math.Pow(Errortolerance/maxtauwitht, (1./float64(order)))
+		Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/maxtauwitht, (1./float64(solver.order)))
 
-		if Dt < Mindt {
-			Dt = Mindt
+		if Dt.value < MinDt.value {
+			Dt.value = MinDt.value
 		}
-		if Dt > Maxdt {
-			Dt = Maxdt
+		if Dt.value > MaxDt.value {
+			Dt.value = MaxDt.value
 		}
 		//fmt.Println(maxtauwitht,"\t",Errortolerance)
 		if maxtauwitht < Errortolerance/4 {
 			Errortolerance /= 1.4142
 		}
-		T = backuptime
+		T.value = backuptime
 	}
 
 	Errortolerance = backuptol
-	T = backuptime
-	Dt = backupdt
+	T.value = backuptime
+	Dt.value = backupdt
 	relax = false
 
 }

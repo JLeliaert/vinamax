@@ -11,15 +11,15 @@ var georng = rand.New(rand.NewSource(0))
 
 //Set the randomseed for the geometry
 func Setgeorandomseed(a int64) {
-	randomseedcalled = true
+	//	randomseedcalled = true
 	georng = rand.New(rand.NewSource(a))
 }
 
 //Adds a single particle at specified coordinates, returns false if unsuccesfull
 func addparticle(x, y, z float64) bool {
-	if radiuscalled == false {
-		log.Fatal("You have to specify the size of the particles before creating new particles")
-	}
+	//	if radiuscalled == false {
+	//		log.Fatal("You have to specify the size of the particles before creating new particles")
+	//	}
 
 	radius := getradius()
 
@@ -37,15 +37,8 @@ func addparticle(x, y, z float64) bool {
 		return false
 	}
 
-	if BrownianRotation == true && viscositycalled == false {
-		log.Fatal("You have to specify the viscosity of the particles' surroundings before adding new particles")
-	}
-
 	if Universe.inworld(vector{x, y, z}) {
 		a := particle{x: x, y: y, z: z, r: radius, r_h: radius_h}
-		if BrownianRotation {
-			a.eta = viscosity
-		}
 		Universe.lijst = append(Universe.lijst, &a)
 		Universe.number += 1
 		msatcalled = false
@@ -54,8 +47,6 @@ func addparticle(x, y, z float64) bool {
 	}
 	//fmt.Printf("particle core diamter is %#v \n",radius)
 	//fmt.Printf("particle hydrodynamic diamter is %#v \n",radius_h)
-	//fmt.Printf("Viscosity of particle is %#v \n", viscosity)
-	//fmt.Printf("Viscosity called %#v \n", viscositycalled)
 	//fmt.Printf("Brownian rotation? %#v \n", BrownianRotation)
 
 	return true
@@ -81,14 +72,10 @@ func (c Cube) Setorigin(x1, y1, z1 float64) {
 
 }
 
-//Sets viscosity of particles in the cube (e.g. different viscosity regions possible)
-func (c Cube) Setviscosity(visc float64) {
-	if BrownianRotation == false {
-		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
-	}
-	viscositycalled = true
-	viscosity = visc
-
+//Sets viscosity
+func SetViscosity(visc float64) {
+	viscosity.value = visc
+	viscosity.called = true
 }
 
 //Adds a number of particles at random locations in a cubic region
@@ -118,16 +105,6 @@ func (c Cuboid) Setorigin(x1, y1, z1 float64) {
 	c.x = x1
 	c.y = y1
 	c.z = z1
-
-}
-
-//Sets viscosity of particles in the cuboid (e.g. different viscosity regions possible)
-func (c Cuboid) Setviscosity(visc float64) {
-	if BrownianRotation == false {
-		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
-	}
-	viscositycalled = true
-	viscosity = visc
 
 }
 
@@ -175,17 +152,6 @@ func (w node) inworld(r vector) bool {
 	return true
 }
 
-//Sets viscosity of particles to be added directly to the Universe
-func Setviscosity(visc float64) {
-	//check if Brownian rotation calculations are on
-	if BrownianRotation == false {
-		log.Fatal("You need to set BrownianRotation in order to calculate the impact of the particles' viscosity")
-	}
-	viscositycalled = true
-	viscosity = visc
-
-}
-
 func getradius() float64 {
 	if constradiuscalled {
 		return constradius
@@ -206,7 +172,7 @@ func getradius_h() float64 {
 	return constradius_h
 }
 
-//Sets the radius of all entries in radii to a constant value
+//Sets the radius of all entries in radii to a constanT.value
 func Particle_radius(x float64) {
 	radiuscalled = true
 	constradiuscalled = true
@@ -217,26 +183,26 @@ func Particle_radius(x float64) {
 	constradius = x
 }
 
-//Sets the hydrodynamic radius of all entries in radii to a constant value or constant coating in case core distribution
+//Sets the hydrodynamic radius of all entries in radii to a constanT.value or constant coating in case core distribution
 func Particle_radius_h(x float64) {
-	radius_hcalled = true
+	//	radius_hcalled = true
 
-	if radiuscalled == false {
-		log.Fatal("You have to specify the core size of the particles before setting the hydrodynamic radius")
-	}
+	//	if radiuscalled == false {
+	//		log.Fatal("You have to specify the core size of the particles before setting the hydrodynamic radius")
+	//	}
 
-	if constradiuscalled {
-		if x < constradius {
-			log.Fatal("particles can't have a hydrodynamic radius (core and coating together) smaller than the core radius")
-		}
-	}
+	//	if constradiuscalled {
+	//		if x < constradius {
+	//			log.Fatal("particles can't have a hydrodynamic radius (core and coating together) smaller than the core radius")
+	//		}
+	//	}
 	constradius_h = x
 }
 
 //set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev
 func Lognormal_diameter(mean, stdev float64) {
-	radiuscalled = true
-	logradiuscalled = true
+	//	radiuscalled = true
+	//	logradiuscalled = true
 	logradius_m = mean * 1e9
 	logradius_s = stdev * 1e9
 }

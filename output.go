@@ -95,66 +95,8 @@ func averages_u(lijst []*particle) vector {
 		avgs[0] += lijst[i].u_anis[0]
 		avgs[1] += lijst[i].u_anis[1]
 		avgs[2] += lijst[i].u_anis[2]
-
-		//if lijst[i].u_anis[0] > 0.8 {
-		// print1 = true
-		//T = 4.1e-3
-		//}
-		//if lijst[i].u_anis[0] < 0.6 {
-		//print0 = true
-		//T = 4.1e-3
-		//}
-
 	}
 	avgs = avgs.times(1. / float64(len(lijst)))
-
-	if T >= 3./Freq && T < 4./Freq { //T < 1./Freq {
-		if avgs[0] > Max_u_anis_x {
-			//fmt.Println("maximal x value",avgs[0])
-			Max_u_anis_x = avgs[0]
-		}
-		if avgs[2] > Max_u_anis_z {
-			//fmt.Println("maximal z value",avgs[2])
-			Max_u_anis_z = avgs[2]
-		}
-		if avgs[0] < Min_u_anis_x {
-			Min_u_anis_x = avgs[0]
-		}
-		if avgs[2] < Min_u_anis_z {
-			Min_u_anis_z = avgs[2]
-		}
-	}
-	if T >= 4./Freq && T < 5./Freq {
-		if avgs[0] > Max_u_anis_x_2 {
-			Max_u_anis_x_2 = avgs[0]
-		}
-		if avgs[2] > Max_u_anis_z_2 {
-			Max_u_anis_z_2 = avgs[2]
-		}
-		if avgs[0] < Min_u_anis_x_2 {
-			Min_u_anis_x_2 = avgs[0]
-		}
-		if avgs[2] < Min_u_anis_z_2 {
-			Min_u_anis_z_2 = avgs[2]
-		}
-	}
-	if T >= 6./Freq {
-		Trigger = true
-	}
-	if Trigger {
-		//fmt.Println("x2 - x1: %d",Max_u_anis_x_2-Max_u_anis_x)
-		//fmt.Println("z2 - z1: %d",Max_u_anis_z_2-Max_u_anis_z)
-		T = 4.1e-3
-		if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) > ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2) {
-
-			Print1 = true
-
-		}
-		if ((Max_u_anis_x_2-Min_u_anis_x_2)/2 + Min_u_anis_x_2) < ((Max_u_anis_z_2-Min_u_anis_z_2)/2 + Min_u_anis_z_2) {
-			Print0 = true
-
-		}
-	}
 	return avgs
 }
 
@@ -300,18 +242,18 @@ func Give_mz() float64 {
 //Writes the time and the vector of average magnetisation in the table
 func write(avg vector, forced bool) {
 	if forced || (twrite >= outputinterval && outputinterval != 0) {
-		string := fmt.Sprintf("%e\t%v\t%v\t%v", T, avg[0], avg[1], avg[2])
+		string := fmt.Sprintf("%e\t%v\t%v\t%v", T.value, avg[0], avg[1], avg[2])
 		_, err = f.WriteString(string)
 		check(err)
 
 		if output_B_ext {
-			B_ext_x, B_ext_y, B_ext_z := B_ext(T)
+			B_ext_x, B_ext_y, B_ext_z := B_ext(T.value)
 			string = fmt.Sprintf("\t%v\t%v\t%v", B_ext_x, B_ext_y, B_ext_z)
 			_, err = f.WriteString(string)
 			check(err)
 		}
 		if output_Dt {
-			string = fmt.Sprintf("\t%v", Dt)
+			string = fmt.Sprintf("\t%v", Dt.value)
 			_, err = f.WriteString(string)
 			check(err)
 		}
@@ -363,7 +305,7 @@ func write(avg vector, forced bool) {
 		}
 		twrite = 0.
 	}
-	twrite += Dt
+	twrite += Dt.value
 }
 
 //Saves different quantities. At the moment only "geometry" and "m" are possible
@@ -416,7 +358,7 @@ func Save(a string) {
 	case "m":
 		{
 			// loop over entire list with particles and print location, radius, msat and mag
-			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tm_x\tm_y\tm_z\n", T)
+			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tm_x\tm_y\tm_z\n", T.value)
 			_, err = file.WriteString(header)
 			check(err)
 
@@ -429,7 +371,7 @@ func Save(a string) {
 	case "anis":
 		{
 			// loop over entire list with particles and print location, radius, msat and mag
-			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tu_anis_x\tu_anis_y\tu_anis_z\n", T)
+			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tu_anis_x\tu_anis_y\tu_anis_z\n", T.value)
 			_, err = file.WriteString(header)
 			check(err)
 
