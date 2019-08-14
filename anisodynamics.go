@@ -8,12 +8,8 @@ import (
 
 var anisrng = rand.New(rand.NewSource(0))
 
-func volume(radius float64) float64 {
-	return 4. / 3. * math.Pi * cube(radius)
-}
-
 func xi(radius float64) float64 {
-	return 6. * viscosity.value * volume(radius)
+	return 6. * Viscosity.value * volume(radius)
 }
 
 //Calculates the torque working on the uniaxial anisotropy axis of a particle
@@ -23,7 +19,7 @@ func (p *particle) tau_u(randomv vector) vector {
 	upart := vector{0., 0., 0.}
 	mdotu := p.m.dot(p.u_anis)
 	uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
-	upart = uminm.times((-1) * mdotu * (2 * Ku1 * volume(p.r)) / (xi(p.r_h)))
+	upart = uminm.times((-1) * mdotu * (2 * p.ku1 * volume(p.rc)) / (xi(p.rh)))
 	return upart.add(randomv)
 }
 
@@ -34,7 +30,7 @@ func Setrandomseed_anis(a int64) {
 }
 
 func (p *particle) calculaterandomvprefact() {
-	p.randomvprefact = math.Sqrt((2. * kb * Temp.value) / (xi(p.r_h)))
+	p.randomvprefact = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
 }
 
 func calculaterandomvprefacts(lijst []*particle) {

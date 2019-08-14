@@ -49,11 +49,13 @@ func SetSolver(a string) {
 //Runs the simulation for a certain time
 
 func Run(time float64) {
-	gammaoveralpha = gamma0 / (1. + (sqr(Alpha.value)))
+	//update prefactors
+	setThermPrefac(Universe.lijst)
+
 	testinput()
 	syntaxrun()
-	for i := range Universe.lijst {
-		norm(Universe.lijst[i].m)
+	for _, p := range Universe.lijst {
+		norm(p.m)
 	}
 
 	for j := T.value; T.value < j+time; {
@@ -87,7 +89,7 @@ func Run(time float64) {
 					if Dt.value > MaxDt.value {
 						Dt.value = MaxDt.value
 					}
-					// TODO WHY IS THIS HERE???
+					// TODO WHY WAS THIS HERE???
 					//	if relax == false {
 					//		maxtauwitht = 1.e-12
 					//	}
@@ -105,13 +107,11 @@ func Run(time float64) {
 //Perform a timestep using euler forward method
 func eulerstep(Lijst []*particle) {
 	for _, p := range Lijst {
-		temp := p.temp()
-		tau := p.tau(temp)
+		p.setThermField()
+		tau := p.tau()
 
-		if p.fixed == false {
-			for q := 0; q < 3; q++ {
-				p.m[q] += tau[q] * Dt.value
-			}
+		for q := 0; q < 3; q++ {
+			p.m[q] += tau[q] * Dt.value
 		}
 		p.m = norm(p.m)
 		//only calculate anisodynamics when necessary
@@ -142,7 +142,7 @@ func dopristep(Lijst []*particle) {
 		p.previousm = p.m
 		p.tempu_anis = p.u_anis
 		p.previousu_anis = p.u_anis
-		p.tempfield = p.temp()
+		p.setThermField()
 		p.randomvfield = p.randomv()
 	}
 
@@ -152,12 +152,11 @@ func dopristep(Lijst []*particle) {
 			calculatedemag()
 		}
 		for _, p := range Lijst {
-			temp := p.tempfield
 			for r := 0; r < q; r++ {
 				k[r] = p.fehlk[r]
 			}
 			if relax == false {
-				k[q] = p.tau(temp)
+				k[q] = p.tau()
 			}
 			if relax == true {
 				k[q] = p.noprecess()
@@ -165,12 +164,10 @@ func dopristep(Lijst []*particle) {
 			p.fehlk[q] = k[q]
 
 			p.m = p.tempm
-			if p.fixed == false {
-				for r := 0; r < q; r++ {
-					p.m[0] += (solver.bt[q][r] * k[r][0] * Dt.value)
-					p.m[1] += (solver.bt[q][r] * k[r][1] * Dt.value)
-					p.m[2] += (solver.bt[q][r] * k[r][1] * Dt.value)
-				}
+			for r := 0; r < q; r++ {
+				p.m[0] += (solver.bt[q][r] * k[r][0] * Dt.value)
+				p.m[1] += (solver.bt[q][r] * k[r][1] * Dt.value)
+				p.m[2] += (solver.bt[q][r] * k[r][1] * Dt.value)
 				p.m = norm(p.m)
 				//p.tempm = norm(p.tempm)
 			}
@@ -204,48 +201,43 @@ func dopristep(Lijst []*particle) {
 	var torquex, torquey, torquez, temptorquex, temptorquey, temptorquez float64
 	for _, p := range Lijst {
 		p.m = p.tempm
-		if p.fixed == false {
-			torquex = ((solver.bt[6][0]*k[0][0] + solver.bt[6][1]*k[1][0] + solver.bt[6][2]*k[2][0] + solver.bt[6][3]*k[3][0] + solver.bt[6][4]*k[4][0] + solver.bt[6][5]*k[5][0]) * Dt.value)
-			torquey = ((solver.bt[6][0]*k[0][1] + solver.bt[6][1]*k[1][1] + solver.bt[6][2]*k[2][1] + solver.bt[6][3]*k[3][1] + solver.bt[6][4]*k[4][1] + solver.bt[6][5]*k[5][1]) * Dt.value)
-			torquez = ((solver.bt[6][0]*k[0][2] + solver.bt[6][1]*k[1][2] + solver.bt[6][2]*k[2][2] + solver.bt[6][3]*k[3][2] + solver.bt[6][4]*k[4][2] + solver.bt[6][5]*k[5][2]) * Dt.value)
-			p.m[0] += torquex
-			p.m[1] += torquey
-			p.m[2] += torquez
-			p.m = norm(p.m)
+		torquex = ((solver.bt[6][0]*k[0][0] + solver.bt[6][1]*k[1][0] + solver.bt[6][2]*k[2][0] + solver.bt[6][3]*k[3][0] + solver.bt[6][4]*k[4][0] + solver.bt[6][5]*k[5][0]) * Dt.value)
+		torquey = ((solver.bt[6][0]*k[0][1] + solver.bt[6][1]*k[1][1] + solver.bt[6][2]*k[2][1] + solver.bt[6][3]*k[3][1] + solver.bt[6][4]*k[4][1] + solver.bt[6][5]*k[5][1]) * Dt.value)
+		torquez = ((solver.bt[6][0]*k[0][2] + solver.bt[6][1]*k[1][2] + solver.bt[6][2]*k[2][2] + solver.bt[6][3]*k[3][2] + solver.bt[6][4]*k[4][2] + solver.bt[6][5]*k[5][2]) * Dt.value)
+		p.m[0] += torquex
+		p.m[1] += torquey
+		p.m[2] += torquez
+		p.m = norm(p.m)
 
-			//and this is also the fifth order solution
+		//and this is also the fifth order solution
 
-			//if relax == true {
-			maxtauwitht = math.Sqrt(math.Pow(torquex, 2.) + math.Pow(torquey, 2.) + math.Pow(torquez, 2.))
-			//	}
-		}
+		//if relax == true {
+		maxtauwitht = math.Sqrt(math.Pow(torquex, 2.) + math.Pow(torquey, 2.) + math.Pow(torquez, 2.))
+		//	}
 
 		if Demag {
 			calculatedemag()
 		}
 
 		for _, p := range Lijst {
-			temp := p.tempfield
 			for r := 0; r < 7; r++ {
 				k[r] = p.fehlk[r]
 			}
 			if relax == false {
-				k[6] = p.tau(temp)
+				k[6] = p.tau()
 			}
 			if relax == true {
 				k[6] = p.noprecess()
 			}
 			p.fehlk[6] = k[6]
 
-			if p.fixed == false {
-				temptorquex = ((5179/57600.*k[0][0] + 0.*k[1][0] + 7571/16695.*k[2][0] + 393/640.*k[3][0] - 92097/339200.*k[4][0] + 187/2100.*k[5][0] + 1/40.*k[6][0]) * Dt.value)
-				temptorquey = ((5179/57600.*k[0][1] + 0.*k[1][1] + 7571/16695.*k[2][1] + 393/640.*k[3][1] - 92097/339200.*k[4][1] + 187/2100.*k[5][1] + 1/40.*k[6][1]) * Dt.value)
-				temptorquez = ((5179/57600.*k[0][2] + 0.*k[1][2] + 7571/16695.*k[2][2] + 393/640.*k[3][2] - 92097/339200.*k[4][2] + 187/2100.*k[5][2] + 1/40.*k[6][2]) * Dt.value)
-				p.tempm[0] += temptorquex
-				p.tempm[1] += temptorquey
-				p.tempm[2] += temptorquez
-				p.tempm = norm(p.tempm)
-			}
+			temptorquex = ((5179/57600.*k[0][0] + 0.*k[1][0] + 7571/16695.*k[2][0] + 393/640.*k[3][0] - 92097/339200.*k[4][0] + 187/2100.*k[5][0] + 1/40.*k[6][0]) * Dt.value)
+			temptorquey = ((5179/57600.*k[0][1] + 0.*k[1][1] + 7571/16695.*k[2][1] + 393/640.*k[3][1] - 92097/339200.*k[4][1] + 187/2100.*k[5][1] + 1/40.*k[6][1]) * Dt.value)
+			temptorquez = ((5179/57600.*k[0][2] + 0.*k[1][2] + 7571/16695.*k[2][2] + 393/640.*k[3][2] - 92097/339200.*k[4][2] + 187/2100.*k[5][2] + 1/40.*k[6][2]) * Dt.value)
+			p.tempm[0] += temptorquex
+			p.tempm[1] += temptorquey
+			p.tempm[2] += temptorquez
+			p.tempm = norm(p.tempm)
 			//and this is also the fourth order solution
 
 			if BrownianRotation { //only calculate anisodynamics when requested

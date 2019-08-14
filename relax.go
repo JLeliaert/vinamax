@@ -11,7 +11,6 @@ func Relax() {
 	backuptime := T.value
 	backupdt := Dt.value
 
-	gammaoveralpha = gamma0 / (1. + (sqr(Alpha.value)))
 	relax = true
 	if Demag {
 		calculatedemag()

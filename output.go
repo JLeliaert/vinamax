@@ -50,20 +50,6 @@ func Output(interval float64) {
 
 }
 
-//Helemaal extra
-//func plotswitchtime(){
-//	if (updownswitch==true && Universe.lijst[0].m[2]<=-0.8){
-//		updownswitch=false
-//		fmt.Println(T-timelastswitch)
-//		timelastswitch=T
-//	}
-//	if (updownswitch ==false && Universe.lijst[0].m[2]>=0.8){
-//		updownswitch=true
-//		fmt.Println(T-timelastswitch)
-//		timelastswitch=T
-//	}
-//}
-
 //checks the error
 func check(e error) {
 	if e != nil {
@@ -120,13 +106,13 @@ func averages_u_xy(lijst []*particle) vector {
 func averagemoments(lijst []*particle) vector {
 	avgs := vector{0, 0, 0}
 	totalvolume := 0.
-	for i := range lijst {
-		radius := lijst[i].r
+	for _, p := range lijst {
+		radius := p.rc
 		volume := cube(radius) * 4. / 3. * math.Pi
 		totalvolume += volume
-		avgs[0] += lijst[i].m[0] * volume
-		avgs[1] += lijst[i].m[1] * volume
-		avgs[2] += lijst[i].m[2] * volume
+		avgs[0] += p.m[0] * volume
+		avgs[1] += p.m[1] * volume
+		avgs[2] += p.m[2] * volume
 	}
 	//divide by total volume
 	return avgs.times(1. / totalvolume)
@@ -349,8 +335,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range Universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat)
+			for _, p := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat)
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -362,8 +348,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range Universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat, Universe.lijst[i].m[0], Universe.lijst[i].m[1], Universe.lijst[i].m[2])
+			for _, p := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.m[0], p.m[1], p.m[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -375,8 +361,8 @@ func Save(a string) {
 			_, err = file.WriteString(header)
 			check(err)
 
-			for i := range Universe.lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", Universe.lijst[i].x, Universe.lijst[i].y, Universe.lijst[i].z, Universe.lijst[i].r, Universe.lijst[i].msat, Universe.lijst[i].u_anis[0], Universe.lijst[i].u_anis[1], Universe.lijst[i].u_anis[2])
+			for _, p := range Universe.lijst {
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.u_anis[0], p.u_anis[1], p.u_anis[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}
@@ -454,4 +440,9 @@ func Tablesave() {
 		writeheader()
 	}
 	write(averagemoments(Universe.lijst), true)
+}
+
+//print position and magnitisation of a particle
+func (p particle) string() string {
+	return fmt.Sprintf("particle@(%v, %v, %v), %v %v %v", p.x, p.y, p.z, p.m[0], p.m[1], p.m[2])
 }
