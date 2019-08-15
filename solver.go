@@ -151,29 +151,24 @@ func dopristep() {
 		p.randomvfield = p.randomv()
 	}
 	magErr = 0.
+	magTorque = 0.
 
 	//actual solver
-	var torque [3]float64
 	for q := 0; q < len(solver.tt); q++ {
 		T.value += solver.tt[q] * Dt.value
 		if Demag {
 			calculatedemag()
 		}
 		for _, p := range lijst {
-			//if relax == false {
 			p.k[q] = p.tau()
-			//	}
-			//	if relax == true {
-			//		k[q] = p.noprecess()
-			//	}
 
 			p.m = p.tempm
 			for i := 0; i < 3; i++ {
-				torque[i] = 0.
+				p.torque[i] = 0.
 				for r := 0; r < q; r++ {
-					torque[i] += (solver.bt[q][r] * p.k[r][i] * Dt.value)
+					p.torque[i] += (solver.bt[q][r] * p.k[r][i] * Dt.value)
 				}
-				p.m[i] += torque[i]
+				p.m[i] += p.torque[i]
 				p.m = norm(p.m)
 			}
 
@@ -184,6 +179,12 @@ func dopristep() {
 	}
 
 	for _, p := range lijst {
+		if magTorque < size(p.torque) {
+			magTorque = size(p.torque)
+		}
+	}
+
+	for _, p := range lijst {
 		temptorquex := ((5179/57600.*p.k[0][0] + 0.*p.k[1][0] + 7571/16695.*p.k[2][0] + 393/640.*p.k[3][0] - 92097/339200.*p.k[4][0] + 187/2100.*p.k[5][0] + 1/40.*p.k[6][0]) * Dt.value)
 		temptorquey := ((5179/57600.*p.k[0][1] + 0.*p.k[1][1] + 7571/16695.*p.k[2][1] + 393/640.*p.k[3][1] - 92097/339200.*p.k[4][1] + 187/2100.*p.k[5][1] + 1/40.*p.k[6][1]) * Dt.value)
 		temptorquez := ((5179/57600.*p.k[0][2] + 0.*p.k[1][2] + 7571/16695.*p.k[2][2] + 393/640.*p.k[3][2] - 92097/339200.*p.k[4][2] + 187/2100.*p.k[5][2] + 1/40.*p.k[6][2]) * Dt.value)
@@ -191,7 +192,7 @@ func dopristep() {
 		p.tempm[1] += temptorquey
 		p.tempm[2] += temptorquez
 		p.tempm = norm(p.tempm)
-		diff := math.Sqrt(sqr(torque[0]-temptorquex) + sqr(torque[1]-temptorquey) + sqr(torque[2]-temptorquez))
+		diff := math.Sqrt(sqr(p.torque[0]-temptorquex) + sqr(p.torque[1]-temptorquey) + sqr(p.torque[2]-temptorquez))
 		if diff > magErr {
 			magErr = diff
 		}
@@ -201,9 +202,6 @@ func dopristep() {
 	//the error is the difference between the two solutions
 
 	//		//fmt.Println("error    :", error)
-	//		//if relax == false {
-	//		maxtauwitht = error
-	//		//	}
 
 }
 

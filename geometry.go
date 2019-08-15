@@ -87,13 +87,13 @@ func overlap(x, y, z, r_h float64) bool {
 		y2 := p.y
 		z2 := p.z
 		r_h2 := p.rh
-		if math.Abs(x-x2) < (r_h + r_h2) {
-			if math.Abs(y-y2) < (r_h + r_h2) {
-				if math.Abs(z-z2) < (r_h + r_h2) {
-					return true
-				}
-			}
+		if math.Abs(x-x2) < (r_h+r_h2) && math.Abs(y-y2) < (r_h+r_h2) && math.Abs(z-z2) < (r_h+r_h2) {
+			return true
 		}
 	}
 	return false
+}
+
+func Clear() {
+	lijst = nil
 }

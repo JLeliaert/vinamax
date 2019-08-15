@@ -27,6 +27,7 @@ type particle struct {
 	randomvfield   vector
 	tempm          vector
 	previousm      vector
+	torque         vector
 	tempu_anis     vector
 	previousu_anis vector
 	k              [7]vector

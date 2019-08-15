@@ -41,15 +41,17 @@ func (v *vectorvariable) Get() vector {
 
 var (
 	// Global variables
-	B_ext          func(t float64) (float64, float64, float64)          // External applied field in T
-	B_ext_space    func(t, x, y, z float64) (float64, float64, float64) // External applied field in T
-	Dt                                                                  = scalarvariable{"dt", "s", "timestep", false, 1e-15}
-	MinDt                                                               = scalarvariable{"minDt", "s", "minimum allowed timestep", false, 1e-20}
-	MaxDt                                                               = scalarvariable{"MaxDt", "s", "maximum allowed timestep", false, 1}
-	T                                                                   = scalarvariable{"t", "s", "time", false, 0}
-	Temp                                                                = scalarvariable{"temp", "K", "Temperature", false, 0.}
-	Demag          bool                                                 = true // Calculate demag
-	outdir         string                                                      // The output directory
+	B_ext       func(t float64) (float64, float64, float64)          // External applied field in T
+	B_ext_space func(t, x, y, z float64) (float64, float64, float64) // External applied field in T
+
+	Dt                    = scalarvariable{"dt", "s", "timestep", false, 1e-15}
+	MinDt                 = scalarvariable{"minDt", "s", "minimum allowed timestep", false, 1e-20}
+	MaxDt                 = scalarvariable{"MaxDt", "s", "maximum allowed timestep", false, 1}
+	T                     = scalarvariable{"t", "s", "time", false, 0}
+	Temp                  = scalarvariable{"temp", "K", "Temperature", false, 0.}
+	Viscosity             = scalarvariable{"viscosity", "Pa s", "Viscosity", false, 0.001}
+	Demag          bool   = true // Calculate demag
+	outdir         string        // The output directory
 	outputinterval float64
 	solver         solvertype
 	Errortolerance float64     = 1e-7
@@ -57,16 +59,16 @@ var (
 	lijst          []*particle //lijst met alle particles
 
 	//"default values for particle-specific variables"
-	Alpha     = scalarvariable{"alpha", "", "Gilbert damping constant", false, 0.01}
-	Viscosity = scalarvariable{"viscosity", "Pa s", "Viscosity", false, 0.001}
-	Ku1       = scalarvariable{"Ku1", "J/m**3", "uniaxial anistropy constant", false, 0.}
-	U_anis    = vectorvariable{"U_ani", "", "uniaxial anistropy axis", false, vector{0., 0., 1.}}
-	M         = vectorvariable{"M", "", "normalized magnetization direction", false, vector{0., 0., 1.}}
-	Rc        = scalarvariable{"Rc", "m", "core radius", false, 1.e-8}
-	Rh        = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}
-	Msat      = scalarvariable{"Msat", "A/m", "Saturation magnetizatoin", false, 400e3}
+	Alpha  = scalarvariable{"alpha", "", "Gilbert damping constant", false, 0.01}
+	Ku1    = scalarvariable{"Ku1", "J/m**3", "uniaxial anistropy constant", false, 0.}
+	U_anis = vectorvariable{"U_ani", "", "uniaxial anistropy axis", false, vector{0., 0., 1.}}
+	M      = vectorvariable{"M", "", "normalized magnetization direction", false, vector{0., 0., 1.}}
+	Rc     = scalarvariable{"Rc", "m", "core radius", false, 1.e-8}
+	Rh     = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}
+	Msat   = scalarvariable{"Msat", "A/m", "Saturation magnetizatoin", false, 400e3}
 
-	magErr float64 = 0. //maximum torque during the simulations with temperature
+	magErr    float64 = 0. //maximum error during the simulations with temperature
+	magTorque float64 = 0. //maximum torque during the simulations with temperature
 	//	suggest_timestep bool    = false
 	constradius   float64
 	constradius_h float64
@@ -79,7 +81,6 @@ var (
 	randomseedcalled      bool = false
 	randomseedcalled_anis bool = false
 	tableaddcalled        bool = false
-	Brown                 bool = false
 	BrownianRotation      bool = false
 	viscositycalled       bool = false
 	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics
@@ -108,9 +109,6 @@ func testinput() {
 
 //checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {
-	if Temp.value != 0 && randomseedcalled == false {
-		log.Fatal("You have to run Setrandomseed() when using nonzero temperatures")
-	}
 	if BrownianRotation == true && randomseedcalled_anis == false {
 		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anisotropy dynamics) of the particle")
 	}

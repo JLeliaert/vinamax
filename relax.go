@@ -12,16 +12,13 @@ func Relax() {
 	backupdt := Dt.value
 
 	relax = true
-	if Demag {
-		calculatedemag()
+	//minimum 10 steps
+	for i := 0; i < 10; i++ {
+		dopristep()
 	}
-	dopristep()
-	Errortolerance = 1e-1
-	for magErr > 5e-8 {
 
-		if Demag {
-			calculatedemag()
-		}
+	Errortolerance = 1e-1
+	for magErr > 1e-8 || magTorque > 1e-10 {
 		dopristep()
 
 		if magErr > Errortolerance {
@@ -31,7 +28,7 @@ func Relax() {
 			}
 		}
 
-		Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/magErr, (1./float64(solver.order)))
+		Dt.value = math.Min(Dt.value, 0.95*Dt.value*math.Pow(Errortolerance/magErr, (1./float64(solver.order))))
 
 		if Dt.value < MinDt.value {
 			Dt.value = MinDt.value

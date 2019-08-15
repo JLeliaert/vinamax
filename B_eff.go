@@ -27,7 +27,7 @@ func setThermPrefac() {
 //Calculates the the thermal field B_therm working on a particle
 func (p *particle) setThermField() {
 	B_therm := vector{0., 0., 0.}
-	if Brown && Temp.value != 0 {
+	if Temp.value != 0 {
 		etax := rng.NormFloat64()
 		etay := rng.NormFloat64()
 		etaz := rng.NormFloat64()
