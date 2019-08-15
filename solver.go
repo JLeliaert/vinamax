@@ -32,12 +32,12 @@ func SetSolver(a string) {
 				b := make([]float64, 7)
 				solver.bt = append(solver.bt, b)
 			}
-			solver.bt[1][0] = 1. / 5
-			solver.bt[2] = []float64{3. / 40, 9. / 40.}
-			solver.bt[3] = []float64{44. / 45, -56. / 15., 32. / 9.}
-			solver.bt[4] = []float64{19372. / 6561., -25360. / 2187., 64448. / 6561., -212. / 729.}
-			solver.bt[5] = []float64{9017. / 3168., -355. / 33., 46732. / 5247., 49. / 176., -5103. / 18656.}
-			solver.bt[6] = []float64{35. / 384., 0., 500. / 1113., 125. / 192., -2187. / 6784., 11. / 84.}
+			solver.bt[0][0] = 1. / 5
+			solver.bt[1] = []float64{3. / 40, 9. / 40.}
+			solver.bt[2] = []float64{44. / 45, -56. / 15., 32. / 9.}
+			solver.bt[3] = []float64{19372. / 6561., -25360. / 2187., 64448. / 6561., -212. / 729.}
+			solver.bt[4] = []float64{9017. / 3168., -355. / 33., 46732. / 5247., 49. / 176., -5103. / 18656.}
+			solver.bt[5] = []float64{35. / 384., 0., 500. / 1113., 125. / 192., -2187. / 6784., 11. / 84.}
 		}
 	default:
 		{
@@ -155,7 +155,7 @@ func dopristep() {
 
 	//actual solver
 
-	for q := 0; q < len(solver.tt); q++ {
+	for q := 0; q < len(solver.tt)-1; q++ {
 		T.value += solver.tt[q] * Dt.value
 		if Demag {
 			calculatedemag()
@@ -166,7 +166,7 @@ func dopristep() {
 			p.m = p.tempm
 			for i := 0; i < 3; i++ {
 				p.torque[i] = 0.
-				for r := 0; r < q; r++ {
+				for r := 0; r <= q; r++ {
 					p.torque[i] += (solver.bt[q][r] * p.k[r][i] * Dt.value)
 				}
 				p.m[i] += p.torque[i]
@@ -186,6 +186,7 @@ func dopristep() {
 	}
 
 	for _, p := range lijst {
+		p.k[6] = p.tau()
 		temptorquex := ((5179/57600.*p.k[0][0] + 0.*p.k[1][0] + 7571/16695.*p.k[2][0] + 393/640.*p.k[3][0] - 92097/339200.*p.k[4][0] + 187/2100.*p.k[5][0] + 1/40.*p.k[6][0]) * Dt.value)
 		temptorquey := ((5179/57600.*p.k[0][1] + 0.*p.k[1][1] + 7571/16695.*p.k[2][1] + 393/640.*p.k[3][1] - 92097/339200.*p.k[4][1] + 187/2100.*p.k[5][1] + 1/40.*p.k[6][1]) * Dt.value)
 		temptorquez := ((5179/57600.*p.k[0][2] + 0.*p.k[1][2] + 7571/16695.*p.k[2][2] + 393/640.*p.k[3][2] - 92097/339200.*p.k[4][2] + 187/2100.*p.k[5][2] + 1/40.*p.k[6][2]) * Dt.value)

@@ -54,7 +54,7 @@ var (
 	outdir         string        // The output directory
 	outputinterval float64
 	solver         solvertype
-	Errortolerance float64     = 1e-7
+	Errortolerance float64     = 1e-5
 	Adaptivestep   bool        = false
 	lijst          []*particle //lijst met alle particles
 
