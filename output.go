@@ -92,11 +92,11 @@ func averages_u() vector {
 	avgs := vector{0, 0, 0}
 	for _, p := range lijst {
 		for i := 0; i < 3; i++ {
-			if p.u_anis[0] < 0 {
-				p.u_anis[i] = (-1) * p.u_anis[i]
+			if p.u[0] < 0 {
+				p.u[i] = (-1) * p.u[i]
 
 			}
-			avgs[i] += p.u_anis[i]
+			avgs[i] += p.u[i]
 		}
 	}
 	avgs = avgs.times(1. / float64(len(lijst)))
@@ -234,12 +234,12 @@ func Save(a string) {
 	case "anis":
 		{
 			// loop over entire list with particles and print location, radius, msat and mag
-			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tu_anis_x\tu_anis_y\tu_anis_z\n", T.value)
+			header := fmt.Sprintf("#t= %v\n#position_x\tposition_y\tposition_z\tradius\tmsat\tu_x\tu_y\tu_z\n", T.value)
 			_, err = file.WriteString(header)
 			check(err)
 
 			for _, p := range lijst {
-				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.u_anis[0], p.u_anis[1], p.u_anis[2])
+				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.u[0], p.u[1], p.u[2])
 				_, error = file.WriteString(string)
 				check(error)
 			}

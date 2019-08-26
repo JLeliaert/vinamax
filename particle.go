@@ -10,7 +10,7 @@ type particle struct {
 	//properties
 	x, y, z float64
 	m       vector
-	u_anis  vector  // Uniaxial anisotropy axis
+	u       vector  // Uniaxial anisotropy axis
 	rc      float64 // core radius
 	rh      float64 // hydrodynamic radius
 	msat    float64 // Saturation magnetisation in A/m
@@ -20,18 +20,19 @@ type particle struct {
 	//helper variables
 	demagnetising_field vector
 	thermPrefac         float64
-	randomvprefact      float64
+	thermRotPrefac      float64
 
-	heff           vector //effective field
-	thermField     vector
-	randomvfield   vector
-	tempm          vector
-	previousm      vector
-	torque         vector
-	tempu_anis     vector
-	previousu_anis vector
-	k              [7]vector
-	k_u            [7]vector
+	heff          vector //effective field
+	thermField    vector
+	rotThermField vector
+	tempm         vector
+	previousm     vector
+	torque        vector
+	rotTorque     vector
+	tempu         vector
+	previousu     vector
+	k             [7]vector
+	k_u           [7]vector
 }
 
 //returns the magnetization of the particle
@@ -50,7 +51,7 @@ func addParticle(x, y, z float64) bool {
 		return false
 	}
 
-	a := particle{x: x, y: y, z: z, rc: Rc.value, rh: Rh.value, m: M.value, alpha: Alpha.value, msat: Msat.value, u_anis: U_anis.value, ku1: Ku1.value}
+	a := particle{x: x, y: y, z: z, rc: Rc.value, rh: Rh.value, m: M.value, alpha: Alpha.value, msat: Msat.value, u: U_anis.value, ku1: Ku1.value}
 	lijst = append(lijst, &a)
 
 	return true

@@ -21,6 +21,7 @@ func Setrandomseed(a int64) {
 func setThermPrefac() {
 	for _, p := range lijst {
 		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * Temp.value) / (gamma0 * p.msat * volume(p.rc)))
+		p.thermRotPrefac = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
 	}
 }
 
@@ -48,6 +49,6 @@ func (p *particle) zeeman() vector {
 //Calculates the anisotropy field working on a particle
 //2*Ku1*(m.u)*u/p.msat
 func (p *particle) anis() vector {
-	mdotu := p.m.dot(p.u_anis)
-	return p.u_anis.times(2. * p.ku1 * mdotu / p.msat)
+	mdotu := p.m.dot(p.u)
+	return p.u.times(2. * p.ku1 * mdotu / p.msat)
 }

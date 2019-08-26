@@ -6,7 +6,7 @@ import (
 	"math/rand"
 )
 
-var anisrng = rand.New(rand.NewSource(0))
+var rotrng = rand.New(rand.NewSource(0))
 
 //"xi" prefactor for the mechanical rotations
 func xi(radius float64) float64 {
@@ -15,43 +15,30 @@ func xi(radius float64) float64 {
 
 //Calculates the torque working on the uniaxial anisotropy axis of a particle
 //  2KV/Xi (m.u)[(m.u)u-m]
-func (p *particle) tau_u(randomv vector) vector {
-	//exit condition 1 and 2
+func (p *particle) tau_u() vector {
 	upart := vector{0., 0., 0.}
-	mdotu := p.m.dot(p.u_anis)
-	uminm := (p.u_anis.times(mdotu)).add(p.m.times(-1))
+	mdotu := p.m.dot(p.u)
+	uminm := (p.u.times(mdotu)).add(p.m.times(-1))
 	upart = uminm.times((-1) * mdotu * (2 * p.ku1 * volume(p.rc)) / (xi(p.rh)))
-	return upart.add(randomv)
+	return upart.add(p.rotThermField)
 }
 
 //Set the randomseed for the anisotropy dynamics
 func Setrandomseed_anis(a int64) {
 	//randomseedcalled_anis = true
-	anisrng = rand.New(rand.NewSource(a))
-}
-
-// sets the prefactor for brownian rotations for one particle
-func (p *particle) calculaterandomvprefact() {
-	p.randomvprefact = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
-}
-
-// sets the prefactor for brownian rotations
-func calculaterandomvprefacts() {
-	for _, p := range lijst {
-		p.calculaterandomvprefact()
-	}
+	rotrng = rand.New(rand.NewSource(a))
 }
 
 //Calculates the Brownian torques on the particles' anisotropy axis
-func (p *particle) randomv() vector {
-	rand_tor := vector{0., 0., 0.}
-	if BrownianRotation {
-		etax := anisrng.NormFloat64()
-		etay := anisrng.NormFloat64()
-		etaz := anisrng.NormFloat64()
+func (p *particle) setRotThermField() {
+	Rot_torque := vector{0., 0., 0.}
+	if Temp.value != 0 {
+		etax := rotrng.NormFloat64()
+		etay := rotrng.NormFloat64()
+		etaz := rotrng.NormFloat64()
 
-		rand_tor = vector{etax, etay, etaz}
-		rand_tor = rand_tor.times(p.randomvprefact / math.Sqrt(Dt.value))
+		Rot_torque = vector{etax, etay, etaz}
+		Rot_torque = Rot_torque.times(p.thermRotPrefac / math.Sqrt(Dt.value))
 	}
-	return rand_tor
+	p.rotThermField = Rot_torque
 }

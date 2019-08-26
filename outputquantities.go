@@ -107,12 +107,12 @@ type output_U_anis struct {
 }
 
 func (o output_U_anis) header() string {
-	return "\tu_anis_x\tu_anis_y\tu_anis_z"
+	return "\tu_x\tu_y\tu_z"
 }
 
 func (o output_U_anis) value() string {
-	averaged_u_anis := averages_u()
-	return fmt.Sprintf("\t%v\t%v\t%v", averaged_u_anis[0], averaged_u_anis[1], averaged_u_anis[2])
+	averaged_u := averages_u()
+	return fmt.Sprintf("\t%v\t%v\t%v", averaged_u[0], averaged_u[1], averaged_u[2])
 }
 
 //OutputQuantity Energy

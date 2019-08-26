@@ -49,7 +49,7 @@ func SetSolver(a string) {
 func undobadstep() {
 	for _, p := range lijst {
 		p.m = p.previousm
-		p.u_anis = p.previousu_anis
+		p.u = p.previousu
 	}
 	T.value -= Dt.value
 }
@@ -82,14 +82,14 @@ func Run(time float64) {
 				T.value += Dt.value
 
 				if Adaptivestep && T.value < j+time {
-					if magErr > Errortolerance {
+					if totalErr > Errortolerance {
 						undobadstep()
 						if Dt.value == MinDt.value {
 							log.Fatal("Mindt is too small for your specified error tolerance")
 						}
 					}
 
-					Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/magErr, (1./float64(solver.order)))
+					Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/totalErr, (1./float64(solver.order))) //roterr
 
 					if Dt.value < MinDt.value {
 						Dt.value = MinDt.value
@@ -127,16 +127,14 @@ func eulerstep() {
 			p.m[q] += tau[q] * Dt.value
 		}
 		p.m = norm(p.m)
-		//only calculate anisodynamics when necessary
 		if BrownianRotation {
-			randomv := p.randomv()
-			p.randomvfield = randomv
-			tau_u := p.tau_u(randomv)
+			p.setRotThermField()
+			tau_u := p.tau_u()
 
 			for q := 0; q < 3; q++ {
-				p.u_anis[q] += tau_u[q] * Dt.value
+				p.u[q] += tau_u[q] * Dt.value
 			}
-			p.u_anis = norm(p.u_anis)
+			p.u = norm(p.u)
 		}
 	}
 }
@@ -151,13 +149,14 @@ func dopristep() {
 	for _, p := range lijst {
 		p.tempm = p.m
 		p.previousm = p.m
-		p.tempu_anis = p.u_anis
-		p.previousu_anis = p.u_anis
+		p.tempu = p.u
+		p.previousu = p.u
 		p.setThermField()
-		p.randomvfield = p.randomv()
+		p.setRotThermField()
 	}
-	magErr = 0.
+	totalErr = 0.
 	magTorque = 0.
+	rotTorque = 0.
 
 	//actual solver
 
@@ -179,7 +178,18 @@ func dopristep() {
 			}
 			p.m = norm(p.m)
 
-			//TODO include brownian dynamics
+			if BrownianRotation {
+				p.k_u[q] = p.tau_u()
+				p.u = p.tempu
+				for i := 0; i < 3; i++ {
+					p.rotTorque[i] = 0.
+					for r := 0; r <= q; r++ {
+						p.rotTorque[i] += (solver.bt[q][r] * p.k_u[r][i] * Dt.value)
+					}
+					p.u[i] += p.rotTorque[i]
+				}
+				p.u = norm(p.u)
+			}
 
 		}
 		T.value -= solver.tt[q] * Dt.value
@@ -188,6 +198,14 @@ func dopristep() {
 	for _, p := range lijst {
 		if magTorque < size(p.torque) {
 			magTorque = size(p.torque)
+		}
+	}
+
+	if BrownianRotation {
+		for _, p := range lijst {
+			if rotTorque < size(p.rotTorque) {
+				rotTorque = size(p.rotTorque)
+			}
 		}
 	}
 
@@ -201,51 +219,28 @@ func dopristep() {
 		p.tempm[2] += temptorquez
 		p.tempm = norm(p.tempm)
 		diff := math.Sqrt(sqr(p.torque[0]-temptorquex) + sqr(p.torque[1]-temptorquey) + sqr(p.torque[2]-temptorquez))
-		if diff > magErr {
-			magErr = diff
+		if diff > totalErr {
+			totalErr = diff
 		}
 	}
 
-	//and this is also the fourth order solution
-	//the error is the difference between the two solutions
+	if BrownianRotation {
 
-	//		//fmt.Println("error    :", error)
+		for _, p := range lijst {
+			p.k_u[6] = p.tau_u()
+			temptorquex := ((5179/57600.*p.k_u[0][0] + 0.*p.k_u[1][0] + 7571/16695.*p.k_u[2][0] + 393/640.*p.k_u[3][0] - 92097/339200.*p.k_u[4][0] + 187/2100.*p.k_u[5][0] + 1/40.*p.k_u[6][0]) * Dt.value)
+			temptorquey := ((5179/57600.*p.k_u[0][1] + 0.*p.k_u[1][1] + 7571/16695.*p.k_u[2][1] + 393/640.*p.k_u[3][1] - 92097/339200.*p.k_u[4][1] + 187/2100.*p.k_u[5][1] + 1/40.*p.k_u[6][1]) * Dt.value)
+			temptorquez := ((5179/57600.*p.k_u[0][2] + 0.*p.k_u[1][2] + 7571/16695.*p.k_u[2][2] + 393/640.*p.k_u[3][2] - 92097/339200.*p.k_u[4][2] + 187/2100.*p.k_u[5][2] + 1/40.*p.k_u[6][2]) * Dt.value)
+			p.tempu[0] += temptorquex
+			p.tempu[1] += temptorquey
+			p.tempu[2] += temptorquez
+			p.tempu = norm(p.tempu)
+			diff := math.Sqrt(sqr(p.rotTorque[0]-temptorquex) + sqr(p.rotTorque[1]-temptorquey) + sqr(p.rotTorque[2]-temptorquez))
+			if diff > totalErr {
+				totalErr = diff
+			}
+		}
+
+	}
 
 }
-
-//TODO error control and adaptive timestep
-
-// THE SOLUTIONS
-
-//		if BrownianRotation { //only calculate anisodynamics when requested
-//			randomv := p.randomvfield
-//			for r := 0; r < 7; r++ {
-//				k_u[r] = p.fehlk_u[r]
-//			}
-//			k_u[6] = p.tau_u(randomv)
-//			p.fehlk_u[6] = k_u[6]
-
-//			p.tempu_anis[0] += ((5179/57600.*k_u[0][0] + 0.*k_u[1][0] + 7571/16695.*k_u[2][0] + 393/640.*k_u[3][0] - 92097/339200.*k_u[4][0] + 187/2100.*k_u[5][0] + 1/40.*k_u[6][0]) * Dt.value)
-//			p.tempu_anis[1] += ((5179/57600.*k_u[0][1] + 0.*k_u[1][1] + 7571/16695.*k_u[2][1] + 393/640.*k_u[3][1] - 92097/339200.*k_u[4][1] + 187/2100.*k_u[5][1] + 1/40.*k_u[6][1]) * Dt.value)
-//			p.tempu_anis[2] += ((5179/57600.*k_u[0][2] + 0.*k_u[1][2] + 7571/16695.*k_u[2][2] + 393/640.*k_u[3][2] - 92097/339200.*k_u[4][2] + 187/2100.*k_u[5][2] + 1/40.*k_u[6][2]) * Dt.value)
-//			//and this is also the fourth order solution
-//		}
-
-//		// ERROR CONTROL
-
-//		if BrownianRotation { //only calculate anisodynamics when requested
-//			//the error is the difference between the two solutions
-//			error := math.Sqrt(sqr(p.u_anis[0]-p.tempu_anis[0]) + sqr(p.u_anis[1]-p.tempu_anis[1]) + sqr(p.u_anis[2]-p.tempu_anis[2]))
-
-//			//fmt.Println("error    :", error)
-//			if Adaptivestep { // && relax == false {
-//				if error > maxtauwitht { //in LLG dynamics already set to maxtauwitht if error is larger
-//					maxtauwitht = error
-//				}
-
-//			}
-//		}
-
-//	}
-//}
-//T.value += Dt.value

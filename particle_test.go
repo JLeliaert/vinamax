@@ -15,8 +15,8 @@ func TestParticle(t *testing.T) {
 	if p.ku1 != 0.00 {
 		t.Error("wrong default ku1")
 	}
-	if p.u_anis[0] != 0. || p.u_anis[1] != 0. || p.u_anis[2] != 1. {
-		t.Error("wrong default u_anis")
+	if p.u[0] != 0. || p.u[1] != 0. || p.u[2] != 1. {
+		t.Error("wrong default u")
 	}
 	if p.m[0] != 0. || p.m[1] != 0. || p.m[2] != 1. {
 		t.Error("wrong default m")
@@ -56,8 +56,8 @@ func TestParticle(t *testing.T) {
 		t.Error("wrong set ku1")
 	}
 
-	if p.u_anis[0] != 1. || p.u_anis[1] != 0. || p.u_anis[2] != 0. {
-		t.Error("wrong set u_anis")
+	if p.u[0] != 1. || p.u[1] != 0. || p.u[2] != 0. {
+		t.Error("wrong set u")
 	}
 	if p.m[0] != 1. || p.m[1] != 0. || p.m[2] != 0. {
 		t.Error("wrong set m")

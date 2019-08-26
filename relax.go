@@ -10,6 +10,8 @@ func Relax() {
 	backuptol := Errortolerance
 	backuptime := T.value
 	backupdt := Dt.value
+	backupBrownianRotation := BrownianRotation
+	BrownianRotation = false
 
 	relax = true
 	//minimum 5 tiny steps
@@ -20,17 +22,17 @@ func Relax() {
 
 	Dt.value = 1e-10
 	Errortolerance = 1e-1
-	for magErr > 1e-7 || magTorque > 1e-10 {
+	for totalErr > 1e-7 || magTorque > 1e-10 {
 		dopristep()
 
-		if magErr > Errortolerance {
+		if totalErr > Errortolerance {
 			undobadstep()
 			if Dt.value == MinDt.value {
 				log.Fatal("Mindt is too small for your specified error tolerance")
 			}
 		}
 
-		Dt.value = math.Min(Dt.value, 0.95*Dt.value*math.Pow(Errortolerance/magErr, (1./float64(solver.order))))
+		Dt.value = math.Min(Dt.value, 0.95*Dt.value*math.Pow(Errortolerance/totalErr, (1./float64(solver.order))))
 
 		if Dt.value < MinDt.value {
 			Dt.value = MinDt.value
@@ -38,7 +40,7 @@ func Relax() {
 		if Dt.value > MaxDt.value {
 			Dt.value = MaxDt.value
 		}
-		if magErr < Errortolerance/4 {
+		if totalErr < Errortolerance/4 {
 			Errortolerance /= 1.4142
 			Errortolerance = math.Max(1e-10, Errortolerance)
 		}
@@ -49,5 +51,6 @@ func Relax() {
 	T.value = backuptime
 	Dt.value = backupdt
 	relax = false
+	BrownianRotation = backupBrownianRotation
 
 }

@@ -67,8 +67,10 @@ var (
 	Rh     = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}
 	Msat   = scalarvariable{"Msat", "A/m", "Saturation magnetizatoin", false, 400e3}
 
-	magErr    float64 = 0. //maximum error during the simulations with temperature
 	magTorque float64 = 0. //maximum torque during the simulations with temperature
+	rotTorque float64 = 0. //maximum torque during the simulations with temperature
+	totalErr  float64 = 0. //maximum error during the simulations with temperature
+
 	//	suggest_timestep bool    = false
 	constradius   float64
 	constradius_h float64
@@ -114,9 +116,6 @@ func syntaxrun() {
 	}
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
-	}
-	if BrownianRotation {
-		calculaterandomvprefacts()
 	}
 }
 
