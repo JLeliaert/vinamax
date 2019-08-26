@@ -74,13 +74,14 @@ func Run(time float64) {
 			{
 				eulerstep()
 				T.value += Dt.value
+
 			}
 		case "dopri":
 			{
 				dopristep()
 				T.value += Dt.value
 
-				if Adaptivestep {
+				if Adaptivestep && T.value < j+time {
 					if magErr > Errortolerance {
 						undobadstep()
 						if Dt.value == MinDt.value {
@@ -97,6 +98,11 @@ func Run(time float64) {
 						Dt.value = MaxDt.value
 					}
 				}
+				if Adaptivestep && T.value > j+time {
+					undobadstep()
+					Dt.value = j + time - T.value
+				}
+
 			}
 		case "":
 			{

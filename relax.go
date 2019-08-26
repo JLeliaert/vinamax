@@ -1,7 +1,7 @@
 package vinamax
 
 import (
-	//"fmt"
+	//	"fmt"
 	"log"
 	"math"
 )
@@ -12,13 +12,15 @@ func Relax() {
 	backupdt := Dt.value
 
 	relax = true
-	//minimum 10 steps
-	for i := 0; i < 10; i++ {
+	//minimum 5 tiny steps
+	Dt.value = 1e-17
+	for i := 0; i < 5; i++ {
 		dopristep()
 	}
 
+	Dt.value = 1e-10
 	Errortolerance = 1e-1
-	for magErr > 1e-8 || magTorque > 1e-10 {
+	for magErr > 1e-7 || magTorque > 1e-10 {
 		dopristep()
 
 		if magErr > Errortolerance {
@@ -38,6 +40,7 @@ func Relax() {
 		}
 		if magErr < Errortolerance/4 {
 			Errortolerance /= 1.4142
+			Errortolerance = math.Max(1e-10, Errortolerance)
 		}
 		T.value = backuptime
 	}
