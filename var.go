@@ -111,14 +111,11 @@ func testinput() {
 
 //checks the inputfiles for functions that should have been called but weren't
 func syntaxrun() {
-	if BrownianRotation == true && randomseedcalled_anis == false {
-		log.Fatal("You have to run Setrandomseed_anis() when taking into account Brownian rotation (i.e. anisotropy dynamics) of the particle")
-	}
 	if tableaddcalled == true && outputcalled == false {
 		log.Fatal("You have to run Output(interval) when calling tableadd")
 	}
 }
 
-func volume(radius float64) float64 {
+func Volume(radius float64) float64 {
 	return 4. / 3. * math.Pi * cube(radius)
 }

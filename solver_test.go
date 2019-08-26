@@ -11,15 +11,20 @@ func TestSolver(t *testing.T) {
 	Ku1.Set(0.)
 	M.Set(1., 0., 0.)
 	Rc.Set(25.e-9)
-	Rh.Set(25.e-9)
+	Rh.Set(35.e-9)
 	Msat.Set(100e3)
 	Temp.Set(300)
+	Viscosity.Set(1.e-3)
 	AddParticle(0, 0, 0)
 
 	setThermPrefac()
 	if math.Abs(lijst[0].thermPrefac-8.481414372111154e-08) > 1e-12 {
-		t.Error("thermal prefactors nog set correctly")
+		t.Error("thermal prefactors not set correctly")
 	}
+	if math.Abs(lijst[0].thermRotPrefac-87.6789040924) > 1e-4 {
+		t.Error("thermal prefactors not set correctly")
+	}
+
 	Setrandomseed(4)
 	if math.Abs(rng.NormFloat64()-0.7133352143941205) > 1e-12 {
 		t.Error("Random generator gives unexpected result")

@@ -43,14 +43,14 @@ func demag2p(p1, p2 *particle) {
 	p2.demagnetising_field = p2.demagnetising_field.add(vector{ms_volume1 * ((3 * dotproduct1 * r_vect[0] / r5) - (p1.m[0] / r3)), ms_volume1 * ((3 * dotproduct1 * r_vect[1] / r5) - (p1.m[1] / r3)), ms_volume1 * ((3 * dotproduct1 * r_vect[2] / r5) - (p1.m[2] / r3))})
 }
 
-//Demag is calculated on a position
+//Demag calculated on a position
 func demag(x, y, z float64) vector {
 	prefactor := mu0 / (4 * math.Pi)
 	demag := vector{0, 0, 0}
 
 	for _, p := range lijst {
 		if p.x != x || p.y != y || p.z != z {
-			ms_volume := volume(p.rc) * p.msat * prefactor
+			ms_volume := Volume(p.rc) * p.msat * prefactor
 			r_vect := vector{x - p.x, y - p.y, z - p.z}
 			r := p.dist(x, y, z)
 			r2 := r * r

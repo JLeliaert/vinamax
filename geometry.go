@@ -1,7 +1,6 @@
 package vinamax
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 )
@@ -29,10 +28,9 @@ func (c Cube) Setorigin(x1, y1, z1 float64) {
 }
 
 //Adds a number of particles at random locations in a cubic region
-func (c Cube) Addparticles(n int) {
+func (c Cube) AddParticles(n int) {
 	c.n += n
 	for i := 0; i < n; i++ {
-		fmt.Println(i, "th particle to be added")
 		status := false
 		for status == false {
 			px := c.x + (-0.5+georng.Float64())*c.S
@@ -59,7 +57,7 @@ func (c Cuboid) Setorigin(x1, y1, z1 float64) {
 }
 
 //Adds a number of particles at random locations in a cubic region
-func (c Cuboid) Addparticles(n int) {
+func (c Cuboid) AddParticles(n int) {
 
 	c.n += n
 	for i := 0; i < n; i++ {

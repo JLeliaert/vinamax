@@ -1,7 +1,6 @@
 package vinamax
 
 import (
-	//	"fmt"
 	"log"
 	"math"
 )
@@ -89,7 +88,7 @@ func Run(time float64) {
 						}
 					}
 
-					Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/totalErr, (1./float64(solver.order))) //roterr
+					Dt.value = 0.95 * Dt.value * math.Pow(Errortolerance/totalErr, (1./float64(solver.order)))
 
 					if Dt.value < MinDt.value {
 						Dt.value = MinDt.value
@@ -144,7 +143,6 @@ func eulerstep() {
 
 //include FSAL but only at zero temperature
 func dopristep() {
-
 	//preparations
 	for _, p := range lijst {
 		p.tempm = p.m

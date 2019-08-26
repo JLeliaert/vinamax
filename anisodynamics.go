@@ -10,7 +10,7 @@ var rotrng = rand.New(rand.NewSource(0))
 
 //"xi" prefactor for the mechanical rotations
 func xi(radius float64) float64 {
-	return 6. * Viscosity.value * volume(radius)
+	return 6. * Viscosity.value * Volume(radius)
 }
 
 //Calculates the torque working on the uniaxial anisotropy axis of a particle
@@ -19,13 +19,12 @@ func (p *particle) tau_u() vector {
 	upart := vector{0., 0., 0.}
 	mdotu := p.m.dot(p.u)
 	uminm := (p.u.times(mdotu)).add(p.m.times(-1))
-	upart = uminm.times((-1) * mdotu * (2 * p.ku1 * volume(p.rc)) / (xi(p.rh)))
+	upart = uminm.times((-1) * mdotu * (2 * p.ku1 * Volume(p.rc)) / (xi(p.rh)))
 	return upart.add(p.rotThermField)
 }
 
 //Set the randomseed for the anisotropy dynamics
 func Setrandomseed_anis(a int64) {
-	//randomseedcalled_anis = true
 	rotrng = rand.New(rand.NewSource(a))
 }
 

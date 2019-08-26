@@ -20,7 +20,7 @@ func Setrandomseed(a int64) {
 //sets the prefactor for the thermal fields
 func setThermPrefac() {
 	for _, p := range lijst {
-		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * Temp.value) / (gamma0 * p.msat * volume(p.rc)))
+		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * Temp.value) / (gamma0 * p.msat * Volume(p.rc)))
 		p.thermRotPrefac = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
 	}
 }
