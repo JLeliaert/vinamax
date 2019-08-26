@@ -1,7 +1,6 @@
 package vinamax
 
 import (
-	//"math"
 	"testing"
 )
 
