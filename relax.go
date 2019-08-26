@@ -1,7 +1,6 @@
 package vinamax
 
 import (
-	//	"fmt"
 	"log"
 	"math"
 )
@@ -21,7 +20,7 @@ func Relax() {
 	}
 
 	Dt.value = 1e-10
-	Errortolerance = 1e-1
+	Errortolerance = 1e-3
 	for totalErr > 1e-7 || magTorque > 1e-10 {
 		dopristep()
 

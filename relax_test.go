@@ -11,6 +11,7 @@ func TestRelax(test *testing.T) {
 	Msat.Set(400e3)
 	M.Set(1, 0, 0)
 	Alpha.Set(1.0)
+	Ku1.Set(2.e4 * math.Pi)
 	Dt.Set(1e-15)
 	T.Set(0.)
 	Temp.Set(0.)

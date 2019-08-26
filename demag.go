@@ -70,7 +70,11 @@ func demag(x, y, z float64) vector {
 
 //Demag on a particle
 func (p particle) demag() vector {
-	return demag(p.x, p.y, p.z)
+	if Demag {
+		return demag(p.x, p.y, p.z)
+	}
+	return vector{0., 0., 0.}
+
 }
 
 //The distance between a particle and a location
