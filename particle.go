@@ -40,7 +40,7 @@ func (p *particle) GetM() vector {
 }
 
 func (p *particle) SetM(v vector) {
-	p.m = v
+	p.m = norm(v)
 }
 
 //Adds a single particle at specified coordinates with fixed spin, returns false if unsuccesfull

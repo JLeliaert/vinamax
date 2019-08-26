@@ -32,7 +32,7 @@ func (v *scalarvariable) Get() float64 {
 
 func (v *vectorvariable) Set(valx, valy, valz float64) {
 	v.called = true
-	v.value = vector{valx, valy, valz}
+	v.value = norm(vector{valx, valy, valz})
 }
 
 func (v *vectorvariable) Get() vector {
