@@ -31,7 +31,7 @@ func Relax() {
 			}
 		}
 
-		Dt.value = math.Min(Dt.value, 0.95*Dt.value*math.Pow(Errortolerance/totalErr, (1./float64(solver.order))))
+		Dt.value = math.Min(Dt.value*0.99, 0.95*Dt.value*math.Pow(Errortolerance/totalErr, (1./float64(solver.order))))
 
 		if Dt.value < MinDt.value {
 			Dt.value = MinDt.value
@@ -39,7 +39,7 @@ func Relax() {
 		if Dt.value > MaxDt.value {
 			Dt.value = MaxDt.value
 		}
-		if totalErr < Errortolerance/4 {
+		if totalErr < Errortolerance/4. {
 			Errortolerance /= 1.4142
 			Errortolerance = math.Max(1e-10, Errortolerance)
 		}

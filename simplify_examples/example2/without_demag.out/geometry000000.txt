@@ -1,0 +1,3 @@
+#position_x	position_y	position_z	radius	msat
+-6.448e-08	0	0	1.6e-08	860000
+6.448e-08	0	0	1.6e-08	860000

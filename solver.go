@@ -164,17 +164,19 @@ func dopristep() {
 			calculatedemag()
 		}
 		for _, p := range lijst {
-			p.k[q] = p.tau()
+			if MagDynamics {
+				p.k[q] = p.tau()
 
-			p.m = p.tempm
-			for i := 0; i < 3; i++ {
-				p.torque[i] = 0.
-				for r := 0; r <= q; r++ {
-					p.torque[i] += (solver.bt[q][r] * p.k[r][i] * Dt.value)
+				p.m = p.tempm
+				for i := 0; i < 3; i++ {
+					p.torque[i] = 0.
+					for r := 0; r <= q; r++ {
+						p.torque[i] += (solver.bt[q][r] * p.k[r][i] * Dt.value)
+					}
+					p.m[i] += p.torque[i]
 				}
-				p.m[i] += p.torque[i]
+				p.m = norm(p.m)
 			}
-			p.m = norm(p.m)
 
 			if BrownianRotation {
 				p.k_u[q] = p.tau_u()
@@ -193,9 +195,11 @@ func dopristep() {
 		T.value -= solver.tt[q] * Dt.value
 	}
 
-	for _, p := range lijst {
-		if magTorque < size(p.torque) {
-			magTorque = size(p.torque)
+	if MagDynamics {
+		for _, p := range lijst {
+			if magTorque < size(p.torque) {
+				magTorque = size(p.torque)
+			}
 		}
 	}
 
@@ -207,18 +211,20 @@ func dopristep() {
 		}
 	}
 
-	for _, p := range lijst {
-		p.k[6] = p.tau()
-		temptorquex := ((5179/57600.*p.k[0][0] + 0.*p.k[1][0] + 7571/16695.*p.k[2][0] + 393/640.*p.k[3][0] - 92097/339200.*p.k[4][0] + 187/2100.*p.k[5][0] + 1/40.*p.k[6][0]) * Dt.value)
-		temptorquey := ((5179/57600.*p.k[0][1] + 0.*p.k[1][1] + 7571/16695.*p.k[2][1] + 393/640.*p.k[3][1] - 92097/339200.*p.k[4][1] + 187/2100.*p.k[5][1] + 1/40.*p.k[6][1]) * Dt.value)
-		temptorquez := ((5179/57600.*p.k[0][2] + 0.*p.k[1][2] + 7571/16695.*p.k[2][2] + 393/640.*p.k[3][2] - 92097/339200.*p.k[4][2] + 187/2100.*p.k[5][2] + 1/40.*p.k[6][2]) * Dt.value)
-		p.tempm[0] += temptorquex
-		p.tempm[1] += temptorquey
-		p.tempm[2] += temptorquez
-		p.tempm = norm(p.tempm)
-		diff := math.Sqrt(sqr(p.torque[0]-temptorquex) + sqr(p.torque[1]-temptorquey) + sqr(p.torque[2]-temptorquez))
-		if diff > totalErr {
-			totalErr = diff
+	if MagDynamics {
+		for _, p := range lijst {
+			p.k[6] = p.tau()
+			temptorquex := ((5179/57600.*p.k[0][0] + 0.*p.k[1][0] + 7571/16695.*p.k[2][0] + 393/640.*p.k[3][0] - 92097/339200.*p.k[4][0] + 187/2100.*p.k[5][0] + 1/40.*p.k[6][0]) * Dt.value)
+			temptorquey := ((5179/57600.*p.k[0][1] + 0.*p.k[1][1] + 7571/16695.*p.k[2][1] + 393/640.*p.k[3][1] - 92097/339200.*p.k[4][1] + 187/2100.*p.k[5][1] + 1/40.*p.k[6][1]) * Dt.value)
+			temptorquez := ((5179/57600.*p.k[0][2] + 0.*p.k[1][2] + 7571/16695.*p.k[2][2] + 393/640.*p.k[3][2] - 92097/339200.*p.k[4][2] + 187/2100.*p.k[5][2] + 1/40.*p.k[6][2]) * Dt.value)
+			p.tempm[0] += temptorquex
+			p.tempm[1] += temptorquey
+			p.tempm[2] += temptorquez
+			p.tempm = norm(p.tempm)
+			diff := math.Sqrt(sqr(p.torque[0]-temptorquex) + sqr(p.torque[1]-temptorquey) + sqr(p.torque[2]-temptorquez))
+			if diff > totalErr {
+				totalErr = diff
+			}
 		}
 	}
 

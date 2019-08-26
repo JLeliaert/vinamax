@@ -1,3 +1,3 @@
 #!/bin/bash
-go test -coverprofile=coverage.out
+go test -v -coverprofile=coverage.out
 go tool cover -html=coverage.out

@@ -71,12 +71,6 @@ func (c Cuboid) AddParticles(n int) {
 	}
 }
 
-//set the radius of all entries in radii to a diameter taken from a lognormal distribution with specified mean and stdev
-func Lognormal_diameter(mean, stdev float64) {
-	logradius_m = mean * 1e9
-	logradius_s = stdev * 1e9
-}
-
 //returns true if the position of a particle overlaps with another particle
 //easiest implementation, assumes cubic particles instead of spheres
 func overlap(x, y, z, r_h float64) bool {

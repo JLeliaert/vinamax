@@ -84,6 +84,7 @@ var (
 	randomseedcalled_anis bool = false
 	tableaddcalled        bool = false
 	BrownianRotation      bool = false
+	MagDynamics           bool = true
 	viscositycalled       bool = false
 	//noMagDyn	    bool = false //set this to true to skip calculations of magnetisation dynamics
 	relax   bool    = false

@@ -92,10 +92,10 @@ func averages_u() vector {
 	avgs := vector{0, 0, 0}
 	for _, p := range lijst {
 		for i := 0; i < 3; i++ {
-			if p.u[0] < 0 {
-				p.u[i] = (-1) * p.u[i]
+			//	if p.u[0] < 0 {
+			//		p.u[i] = (-1) * p.u[i]
 
-			}
+			//	}
 			avgs[i] += p.u[i]
 		}
 	}
