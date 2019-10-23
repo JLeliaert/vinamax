@@ -120,3 +120,7 @@ func syntaxrun() {
 func Volume(radius float64) float64 {
 	return 4. / 3. * math.Pi * cube(radius)
 }
+
+func GetParticle(N int) *particle {
+	return lijst[N]
+}

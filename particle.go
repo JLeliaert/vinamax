@@ -39,9 +39,26 @@ type particle struct {
 func (p *particle) GetM() vector {
 	return p.m
 }
+func (p *particle) GetU() vector {
+	return p.u
+}
 
 func (p *particle) SetM(v vector) {
 	p.m = norm(v)
+}
+
+func (p *particle) Set_msat(v float64) {
+	p.msat = v
+}
+
+func (p *particle) Set_ku1(v float64) {
+	p.ku1 = v
+}
+func (p *particle) Set_rc(v float64) {
+	p.rc = v
+}
+func (p *particle) Set_rh(v float64) {
+	p.rh = v
 }
 
 //Adds a single particle at specified coordinates with fixed spin, returns false if unsuccesfull
