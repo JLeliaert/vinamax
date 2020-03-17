@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"runtime"
 	"os"
 )
 
@@ -36,7 +37,11 @@ func Output(interval float64) {
 		}
 		if Test == true {
 			name := fmt.Sprintf("table%d.txt", Counter)
+		 if runtime.GOOS == "windows" {
+			f, err = os.OpenFile(outdir+"\\"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	} else {
 			f, err = os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	}
 			check(err)
 			//defer file.Close()
 			Counter += 1
@@ -199,10 +204,20 @@ func write(avg vector, forced bool) {
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
-	file, error := os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	check(error)
+	var file os.File
+	if runtime.GOOS == "windows" {
+	file, err := os.OpenFile(outdir+"\\"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+check(err)
 	defer file.Close()
-	filecounter += 1
+
+	} else {
+	file, err := os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+check(err)
+	defer file.Close()
+
+	}
+
+		filecounter += 1
 	switch a {
 
 	case "geometry":
@@ -214,8 +229,8 @@ func Save(a string) {
 
 			for _, p := range lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat)
-				_, error = file.WriteString(string)
-				check(error)
+				_, err = file.WriteString(string)
+				check(err)
 			}
 		}
 	case "m":
@@ -227,8 +242,8 @@ func Save(a string) {
 
 			for _, p := range lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.m[0], p.m[1], p.m[2])
-				_, error = file.WriteString(string)
-				check(error)
+				_, err = file.WriteString(string)
+				check(err)
 			}
 		}
 	case "anis":
@@ -240,8 +255,8 @@ func Save(a string) {
 
 			for _, p := range lijst {
 				string := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n", p.x, p.y, p.z, p.rc, p.msat, p.u[0], p.u[1], p.u[2])
-				_, error = file.WriteString(string)
-				check(error)
+				_, err = file.WriteString(string)
+				check(err)
 			}
 		}
 	default:
