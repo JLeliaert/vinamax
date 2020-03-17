@@ -35,6 +35,10 @@ type particle struct {
 	k_u           [7]vector
 }
 
+type Particle struct {
+	P *particle
+}
+
 //returns the magnetization of the particle
 func (p *particle) GetM() vector {
 	return p.m
@@ -47,8 +51,15 @@ func (p *particle) SetM(v vector) {
 	p.m = norm(v)
 }
 
+func (p *particle) SetMag(x, y, z float64) {
+	p.m = norm(vector{x, y, z})
+}
+
 func (p *particle) Set_msat(v float64) {
 	p.msat = v
+}
+func (p *particle) SetU(x, y, z float64) {
+	p.u = norm(vector{x, y, z})
 }
 
 func (p *particle) Set_ku1(v float64) {
