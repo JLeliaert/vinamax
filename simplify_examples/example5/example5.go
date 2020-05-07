@@ -8,12 +8,12 @@ import (
 func main() {
 	kb := 1.3806488E-23
 	Clear()
-	Rc.Set(6e-8)
+	Rc.Set(6e-9)
 	Rh.Set(6e-9)
 	Msat.Set(400e3)
-	M.Set(1, 0, 0)
+	M.Set(0, 0, 1)
 	Alpha.Set(1.)
-	Ku1.Set(0.)
+	Ku1.Set(1.e7)
 	U_anis.Set(0, 0, 1)
 	Dt.Set(1e-10)
 	MaxDt.Set(5e-9)
