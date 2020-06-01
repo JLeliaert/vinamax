@@ -59,6 +59,7 @@ var (
 	lijst          []*particle //lijst met alle particles
 
 	//"default values for particle-specific variables"
+	//TODO position?
 	Alpha  = scalarvariable{"alpha", "", "Gilbert damping constant", false, 0.01}
 	Ku1    = scalarvariable{"Ku1", "J/m**3", "uniaxial anistropy constant", false, 0.}
 	U_anis = vectorvariable{"U_ani", "", "uniaxial anistropy axis", false, vector{0., 0., 1.}}

@@ -7,8 +7,8 @@ import (
 	"math"
 	"os"
 	"path/filepath"
-	"strings"
 	"runtime"
+	"strings"
 )
 
 const (
@@ -43,13 +43,13 @@ contact: jonathan.leliaert@gmail.com`)
 	fname := os.Args[0]
 
 	var f2name []string
-if runtime.GOOS == "windows" {
-	f2name = strings.Split(fname, "\\")
-	outdir = fmt.Sprint(f2name[len(f2name)-1], ".out")
-outdir = strings.Replace(outdir, ".exe", "", -1)
+	if runtime.GOOS == "windows" {
+		f2name = strings.Split(fname, "\\")
+		outdir = fmt.Sprint(f2name[len(f2name)-1], ".out")
+		outdir = strings.Replace(outdir, ".exe", "", -1)
 	} else {
-	f2name = strings.Split(fname, "/")
-	outdir = fmt.Sprint(f2name[len(f2name)-1], ".out")
+		f2name = strings.Split(fname, "/")
+		outdir = fmt.Sprint(f2name[len(f2name)-1], ".out")
 	}
 	os.Mkdir(outdir, 0775)
 	f, err3 := os.Open(outdir)
