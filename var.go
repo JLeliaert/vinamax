@@ -78,6 +78,7 @@ var (
 	Freq           float64 = 0.0
 	Print1         bool    = false
 	Print0         bool    = false
+	Nsteps         int     = 0
 )
 
 //initialised B_ext functions

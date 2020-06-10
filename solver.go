@@ -82,7 +82,7 @@ func Run(time float64) {
 	//averages is not weighted with volume, averagemoments is
 	//write(averages(Universe.lijst))
 	previousdemagcalc := T - demagtime
-	for j := T; T < j+time; {
+	for j := T; T+1e-18 <= (j + time); {
 		if (demagevery == true) && (T-previousdemagcalc >= demagtime) {
 			calculatedemag()
 			previousdemagcalc = T
@@ -148,9 +148,16 @@ func Run(time float64) {
 			}
 		case "dopri":
 			{
+				if T+Dt > (j+time)+1e-20 && Adaptivestep {
+					//undobadstep(Universe.lijst)
+					Dt = j + time - T
+					if Dt < Mindt {
+						Dt = Mindt
+					}
+					//fmt.Println(Dt)
+				}
 				dopristep(Universe.lijst)
 				T += Dt
-				//fmt.Println(Dt)
 				if Adaptivestep {
 					if maxtauwitht > Errortolerance {
 						undobadstep(Universe.lijst)
@@ -238,10 +245,7 @@ func Run(time float64) {
 		//fmt.Println(Dt)
 		//write(averages(Universe.lijst))
 		write(averagemoments(Universe.lijst), false)
-		if (T > j+time-Dt) && (T < j+time) {
-			undobadstep(Universe.lijst)
-			Dt = j + time - T + 1e-15
-		}
+
 	}
 
 	//if suggest_timestep {
@@ -560,6 +564,7 @@ func rk4step(Lijst []*particle) {
 // Gebruik maken van de FSAL (enkel bij niet-brown noise!!!)
 
 func dopristep(Lijst []*particle) {
+	Nsteps++
 	var k1, k2, k3, k4, k5, k6, k7 vector
 	for _, p := range Lijst {
 
