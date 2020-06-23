@@ -189,6 +189,9 @@ func dopristep() {
 					p.u[i] += p.rotTorque[i]
 				}
 				p.u = norm(p.u)
+				if !MagDynamics {
+					p.m = p.u
+				}
 			}
 
 		}
@@ -243,6 +246,10 @@ func dopristep() {
 			if diff > totalErr {
 				totalErr = diff
 			}
+			if !MagDynamics {
+				p.m = p.u
+			}
+
 		}
 
 	}
