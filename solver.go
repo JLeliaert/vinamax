@@ -10,6 +10,7 @@ type solvertype struct {
 	order int
 	bt    [][]float64
 	tt    []float64
+	undo  bool
 }
 
 //Set the solver to use, "euler" or "heun"
@@ -20,11 +21,13 @@ func SetSolver(a string) {
 		{
 			solver.name = "euler"
 			solver.order = 1
+			solver.undo = false
 		}
 	case "dopri":
 		{
 			solver.name = "dopri"
 			solver.order = 5
+			solver.undo = false
 			solver.tt = []float64{0., 1. / 5., 3. / 10., 4. / 5., 8. / 9., 1., 1.}
 
 			for i := 0; i < 7; i++ {
@@ -78,11 +81,14 @@ func Run(time float64) {
 		case "dopri":
 			{
 				dopristep()
+				solver.undo = false
 				T.value += Dt.value
 
 				if Adaptivestep && T.value < j+time {
 					if totalErr > Errortolerance {
 						undobadstep()
+						solver.undo = true
+
 						if Dt.value == MinDt.value {
 							log.Fatal("Mindt is too small for your specified error tolerance")
 						}
@@ -99,6 +105,7 @@ func Run(time float64) {
 				}
 				if Adaptivestep && T.value > j+time {
 					undobadstep()
+					solver.undo = true
 					Dt.value = j + time - T.value
 				}
 
@@ -119,7 +126,11 @@ func Run(time float64) {
 //Perform a timestep using euler forward method
 func eulerstep() {
 	for _, p := range lijst {
-		p.setThermField()
+		if solver.undo == false {
+			p.setThermField()
+		} else {
+			p.thermField = p.thermField.times(1. / math.Sqrt(Dt.value))
+		}
 		tau := p.tau()
 
 		for q := 0; q < 3; q++ {
@@ -149,8 +160,13 @@ func dopristep() {
 		p.previousm = p.m
 		p.tempu = p.u
 		p.previousu = p.u
-		p.setThermField()
-		p.setRotThermField()
+		if solver.undo == false {
+			p.setThermField()
+			p.setRotThermField()
+		} else {
+			p.thermField = p.thermField.times(1. / math.Sqrt(Dt.value))
+			p.rotThermField = p.rotThermField.times(1. / math.Sqrt(Dt.value))
+		}
 	}
 	totalErr = 0.
 	magTorque = 0.
