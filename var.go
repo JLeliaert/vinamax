@@ -62,7 +62,7 @@ var (
 	//TODO position?
 	Alpha  = scalarvariable{"alpha", "", "Gilbert damping constant", false, 0.01}
 	Ku1    = scalarvariable{"Ku1", "J/m**3", "uniaxial anistropy constant", false, 0.}
-	U_anis = vectorvariable{"U_ani", "", "uniaxial anistropy axis", false, vector{0., 0., 1.}}
+	U_anis = vectorvariable{"U_anis", "", "uniaxial anistropy axis", false, vector{0., 0., 1.}}
 	M      = vectorvariable{"M", "", "normalized magnetization direction", false, vector{0., 0., 1.}}
 	Rc     = scalarvariable{"Rc", "m", "core radius", false, 1.e-8}
 	Rh     = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}

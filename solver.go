@@ -52,6 +52,8 @@ func undobadstep() {
 	for _, p := range lijst {
 		p.m = p.previousm
 		p.u = p.previousu
+		p.thermField = p.thermField.times(1. * math.Sqrt(Dt.value))
+		p.rotThermField = p.rotThermField.times(1. * math.Sqrt(Dt.value))
 	}
 	T.value -= Dt.value
 }

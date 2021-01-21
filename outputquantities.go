@@ -28,6 +28,22 @@ func Tableadd(a string) {
 			b := output_AllMag{}
 			outputList = append(outputList, &b)
 		}
+	case "AllB_Eff":
+		{
+			b := output_AllB_Eff{}
+			outputList = append(outputList, &b)
+		}
+	case "AllB_Therm":
+		{
+			b := output_AllB_Therm{}
+			outputList = append(outputList, &b)
+		}
+	case "AllM_Cross_B_Eff2":
+		{
+			b := output_AllM_Cross_B_eff2{}
+			outputList = append(outputList, &b)
+		}
+
 	case "U_anis":
 		{
 			b := output_U_anis{}
@@ -98,6 +114,66 @@ func (o output_AllMag) value() string {
 	string := ""
 	for _, i := range lijst {
 		string += fmt.Sprintf("\t%v\t%v\t%v", i.m[0], i.m[1], i.m[2])
+	}
+	return string
+}
+
+//OutputQuantity AllB_Eff
+type output_AllB_Eff struct {
+}
+
+func (o output_AllB_Eff) header() string {
+	header := ""
+	for range lijst {
+		header += fmt.Sprintf("\tB_Eff_x\tB_Eff_y\tB_eff_z")
+	}
+	return header
+}
+
+func (o output_AllB_Eff) value() string {
+	string := ""
+	for _, i := range lijst {
+		string += fmt.Sprintf("\t%v\t%v\t%v", i.heff[0], i.heff[1], i.heff[2])
+	}
+	return string
+}
+
+//OutputQuantity AllB_therm
+type output_AllB_Therm struct {
+}
+
+func (o output_AllB_Therm) header() string {
+	header := ""
+	for range lijst {
+		header += fmt.Sprintf("\tB_Therm_x\tB_Therm_y\tB_Therm_z")
+	}
+	return header
+}
+
+func (o output_AllB_Therm) value() string {
+	string := ""
+	for _, i := range lijst {
+		string += fmt.Sprintf("\t%v\t%v\t%v", i.thermField[0], i.thermField[1], i.thermField[2])
+	}
+	return string
+}
+
+//OutputQuantity AllM_Cross_B_eff2
+type output_AllM_Cross_B_eff2 struct {
+}
+
+func (o output_AllM_Cross_B_eff2) header() string {
+	header := ""
+	for range lijst {
+		header += fmt.Sprintf("\tM_Cross_B_eff2")
+	}
+	return header
+}
+
+func (o output_AllM_Cross_B_eff2) value() string {
+	string := ""
+	for _, i := range lijst {
+		string += fmt.Sprintf("\t%v", i.m.cross(i.heff).dot(i.m.cross(i.heff)))
 	}
 	return string
 }
