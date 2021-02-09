@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"runtime"
 	"os"
+	"runtime"
 )
 
 var f *os.File
@@ -37,11 +37,11 @@ func Output(interval float64) {
 		}
 		if Test == true {
 			name := fmt.Sprintf("table%d.txt", Counter)
-		 if runtime.GOOS == "windows" {
-			f, err = os.OpenFile(outdir+"\\"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	} else {
-			f, err = os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	}
+			if runtime.GOOS == "windows" {
+				f, err = os.OpenFile(outdir+"\\"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			} else {
+				f, err = os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			}
 			check(err)
 			//defer file.Close()
 			Counter += 1
@@ -204,20 +204,18 @@ func write(avg vector, forced bool) {
 func Save(a string) {
 	//een file openen met unieke naam (counter voor gebruiken)
 	name := fmt.Sprintf("%v%06v.txt", a, filecounter)
-	var file os.File
+	filename := ""
 	if runtime.GOOS == "windows" {
-	file, err := os.OpenFile(outdir+"\\"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-check(err)
-	defer file.Close()
-
+		filename = outdir + "\\" + name
 	} else {
-	file, err := os.OpenFile(outdir+"/"+name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-check(err)
-	defer file.Close()
-
+		filename = outdir + "/" + name
 	}
 
-		filecounter += 1
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	check(err)
+	defer file.Close()
+
+	filecounter += 1
 	switch a {
 
 	case "geometry":
