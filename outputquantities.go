@@ -54,6 +54,11 @@ func Tableadd(a string) {
 			b := output_Energy{}
 			outputList = append(outputList, &b)
 		}
+	case "Heat":
+		{
+			b := output_Heat{}
+			outputList = append(outputList, &b)
+		}
 
 	default:
 		{
@@ -201,4 +206,24 @@ func (o output_Energy) header() string {
 
 func (o output_Energy) value() string {
 	return fmt.Sprintf("\t%v\t%v\t%v\t%v\t%v", E_zeeman(), E_demag(), E_anis(), E_therm(), E_total())
+}
+
+//OutputQuantity Heat
+type output_Heat struct {
+}
+
+func (o output_Heat) header() string {
+	header := ""
+	for range lijst {
+		header += fmt.Sprintf("\tHeat")
+	}
+	return header
+}
+
+func (o output_Heat) value() string {
+	string := ""
+	for _, i := range lijst {
+		string += fmt.Sprintf("\t%v", i.heat)
+	}
+	return string
 }

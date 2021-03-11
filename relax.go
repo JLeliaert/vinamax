@@ -1,6 +1,7 @@
 package vinamax
 
 import (
+	"fmt"
 	"log"
 	"math"
 )
@@ -20,11 +21,14 @@ func Relax() {
 	}
 
 	Dt.value = 1e-10
+	dopristep()
 	Errortolerance = 1e-3
-	for totalErr > 1e-7 || magTorque > 1e-10 {
+	for totalErr > 1e-7 || magTorque > 1e-12 {
+		fmt.Println(totalErr, magTorque)
 		dopristep()
 
 		if totalErr > Errortolerance {
+			fmt.Println("undo?")
 			undobadstep()
 			if Dt.value == MinDt.value {
 				log.Fatal("Mindt is too small for your specified error tolerance")

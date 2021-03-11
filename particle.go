@@ -32,7 +32,11 @@ type particle struct {
 	tempu         vector
 	previousu     vector
 	k             [7]vector
+	k_mxB2        [7]float64
 	k_u           [7]vector
+	previousheat  float64
+	heat          float64
+	mcrossBeff2   float64
 }
 
 type Particle struct {

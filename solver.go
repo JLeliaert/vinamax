@@ -1,6 +1,7 @@
 package vinamax
 
 import (
+	//	"fmt"
 	"log"
 	"math"
 )
@@ -50,10 +51,12 @@ func SetSolver(a string) {
 
 func undobadstep() {
 	for _, p := range lijst {
+		p.heat = p.previousheat
 		p.m = p.previousm
 		p.u = p.previousu
 		p.thermField = p.thermField.times(1. * math.Sqrt(Dt.value))
 		p.rotThermField = p.rotThermField.times(1. * math.Sqrt(Dt.value))
+
 	}
 	T.value -= Dt.value
 }
@@ -83,6 +86,7 @@ func Run(time float64) {
 		case "dopri":
 			{
 				dopristep()
+				calculateheat()
 				solver.undo = false
 				T.value += Dt.value
 
@@ -159,10 +163,12 @@ func dopristep() {
 	//preparations
 	for _, p := range lijst {
 		p.tempm = p.m
-		p.previousm = p.m
 		p.tempu = p.u
-		p.previousu = p.u
+
 		if solver.undo == false {
+			p.previousm = p.m
+			p.previousu = p.u
+			p.previousheat = p.heat
 			p.setThermField()
 			p.setRotThermField()
 		} else {
@@ -174,6 +180,8 @@ func dopristep() {
 	magTorque = 0.
 	rotTorque = 0.
 
+	//////		mcrossBeff2 := p.m.cross(p.heff).dot(p.m.cross(p.heff))
+
 	//actual solver
 
 	for q := 0; q < len(solver.tt)-1; q++ {
@@ -184,8 +192,10 @@ func dopristep() {
 		for _, p := range lijst {
 			if MagDynamics {
 				p.k[q] = p.tau()
+				p.k_mxB2[q] = p.m.cross(p.heff).dot(p.m.cross(p.heff))
 
 				p.m = p.tempm
+				p.mcrossBeff2 = 0.
 				for i := 0; i < 3; i++ {
 					p.torque[i] = 0.
 					for r := 0; r <= q; r++ {
@@ -193,6 +203,12 @@ func dopristep() {
 					}
 					p.m[i] += p.torque[i]
 				}
+				if q == len(solver.tt)-2 {
+					for r := 0; r <= q; r++ {
+						p.mcrossBeff2 += (solver.bt[q][r] * p.k_mxB2[r])
+					}
+				}
+
 				p.m = norm(p.m)
 			}
 
@@ -214,6 +230,10 @@ func dopristep() {
 
 		}
 		T.value -= solver.tt[q] * Dt.value
+	}
+
+	for _, p := range lijst {
+		p.heat += p.alpha / (1. + p.alpha*p.alpha) * p.msat * gamma0 * p.mcrossBeff2 * Dt.value
 	}
 
 	if MagDynamics {
@@ -272,4 +292,12 @@ func dopristep() {
 
 	}
 
+}
+
+//todo: now this is eulerstepped... add it to dopri
+func calculateheat() {
+	for _, p := range lijst {
+		dm := (p.m.add(p.previousm.times(-1.)))
+		p.heat -= p.msat * p.thermField.dot(dm)
+	}
 }
