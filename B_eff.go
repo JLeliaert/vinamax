@@ -20,15 +20,15 @@ func Setrandomseed(a int64) {
 //sets the prefactor for the thermal fields
 func setThermPrefac() {
 	for _, p := range lijst {
-		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * Temp.value) / (gamma0 * p.msat * Volume(p.rc)))
-		p.thermRotPrefac = math.Sqrt((2. * kb * Temp.value) / (xi(p.rh)))
+		p.thermPrefac = math.Sqrt((2. * kb * p.alpha * p.temp) / (gamma0 * p.msat * Volume(p.rc)))
+		p.thermRotPrefac = math.Sqrt((2. * kb * p.temp) / (xi(p.rh)))
 	}
 }
 
 //Calculates the the thermal field B_therm working on a particle
 func (p *particle) setThermField() {
 	B_therm := vector{0., 0., 0.}
-	if Temp.value != 0 {
+	if p.temp != 0 {
 		etax := rng.NormFloat64()
 		etay := rng.NormFloat64()
 		etaz := rng.NormFloat64()

@@ -48,7 +48,6 @@ var (
 	MinDt                 = scalarvariable{"minDt", "s", "minimum allowed timestep", false, 1e-20}
 	MaxDt                 = scalarvariable{"MaxDt", "s", "maximum allowed timestep", false, 1}
 	T                     = scalarvariable{"t", "s", "time", false, 0}
-	Temp                  = scalarvariable{"temp", "K", "Temperature", false, 0.}
 	Viscosity             = scalarvariable{"viscosity", "Pa s", "Viscosity", false, 0.001}
 	Demag          bool   = true // Calculate demag
 	outdir         string        // The output directory
@@ -67,6 +66,7 @@ var (
 	Rc     = scalarvariable{"Rc", "m", "core radius", false, 1.e-8}
 	Rh     = scalarvariable{"Rh", "m", "hydrodynamic radius", false, 1.e-8}
 	Msat   = scalarvariable{"Msat", "A/m", "Saturation magnetizatoin", false, 400e3}
+	Temp   = scalarvariable{"temp", "K", "Temperature", false, 0.}
 
 	magTorque float64 = 0. //maximum torque during the simulations with temperature
 	rotTorque float64 = 0. //maximum torque during the simulations with temperature

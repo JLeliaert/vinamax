@@ -16,6 +16,7 @@ type particle struct {
 	msat    float64 // Saturation magnetisation in A/m
 	ku1     float64 // uniaxial anisotropy strenght
 	alpha   float64 // Gilbert damping constant
+	temp    float64 // temperature
 
 	//helper variables
 	demagnetising_field vector
@@ -51,8 +52,16 @@ func (p *particle) GetU() vector {
 	return p.u
 }
 
+func (p *particle) GetTemp() float64 {
+	return p.temp
+}
+
 func (p *particle) SetM(v vector) {
 	p.m = norm(v)
+}
+
+func (p *particle) SetTemp(t float64) {
+	p.temp = t
 }
 
 func (p *particle) SetMag(x, y, z float64) {
@@ -83,7 +92,7 @@ func addParticle(x, y, z float64) bool {
 		return false
 	}
 
-	a := particle{x: x, y: y, z: z, rc: Rc.value, rh: Rh.value, m: M.value, alpha: Alpha.value, msat: Msat.value, u: U_anis.value, ku1: Ku1.value}
+	a := particle{x: x, y: y, z: z, rc: Rc.value, rh: Rh.value, m: M.value, alpha: Alpha.value, msat: Msat.value, u: U_anis.value, ku1: Ku1.value, temp: Temp.value}
 	lijst = append(lijst, &a)
 
 	return true
