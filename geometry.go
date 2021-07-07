@@ -72,14 +72,14 @@ func (c Cuboid) AddParticles(n int) {
 }
 
 //returns true if the position of a particle overlaps with another particle
-//easiest implementation, assumes cubic particles instead of spheres
+//now assumes spheres instead cubic particles
 func overlap(x, y, z, r_h float64) bool {
 	for _, p := range lijst {
 		x2 := p.x
 		y2 := p.y
 		z2 := p.z
 		r_h2 := p.rh
-		if math.Abs(x-x2) < (r_h+r_h2) && math.Abs(y-y2) < (r_h+r_h2) && math.Abs(z-z2) < (r_h+r_h2) {
+		if (r_h+r_h2)-math.Sqrt(math.Pow(x-x2, 2)+math.Pow(y-y2, 2)+math.Pow(z-z2, 2)) < 1e-14 {
 			return true
 		}
 	}
