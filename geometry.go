@@ -79,7 +79,9 @@ func overlap(x, y, z, r_h float64) bool {
 		y2 := p.y
 		z2 := p.z
 		r_h2 := p.rh
-		if (r_h+r_h2)-math.Sqrt(math.Pow(x-x2, 2)+math.Pow(y-y2, 2)+math.Pow(z-z2, 2)) > 1e-14 {
+		dist := math.Sqrt(math.Pow(x-x2, 2) + math.Pow(y-y2, 2) + math.Pow(z-z2, 2))
+		//1e-13 as safety margin for numerical rounding
+		if dist < (r_h+r_h2)-1e-12 {
 			return true
 		}
 	}
